@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <STB/stb_image.h>
 
+#include "Headers/GLAbstraction.h"
+
 int main(void)
 {
     GLFWwindow* window;
@@ -12,7 +14,10 @@ int main(void)
 
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-    window = glfwCreateWindow(1800, 1100, "Null", NULL, NULL);
+    int width = 1800;
+    int height = 1100;
+
+    window = glfwCreateWindow(width, height, "Null", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -47,9 +52,25 @@ int main(void)
     glBindTexture(GL_TEXTURE_2D, texture);
 
     /* OpenGL Setup */
-    glClearColor(0.025, 0.05, 0.09, 0.85);
+    glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    // TODO: Setup other uniforms and the shaders
+    // TODO: OpenGL Stuff
+
+    // Get vertices based on height and width
+
+    VertexBuffer veretxBuffer;
+    // Pass in data?
+
+    IndexBuffer indexBuffer;
+    // Pass in data?
+
+    VertexArray vertexArray(veretxBuffer.handle);
+
+    // Get shader source code
+
+    // Create shader program object
+
+    // Set uniforms
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
@@ -58,6 +79,11 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwSwapBuffers(window);
+
+        // TODO: Event handling
+        // Resize
+        // Text Input
+        // Other character Input
 
         /* Poll for and process events */
         glfwPollEvents();
