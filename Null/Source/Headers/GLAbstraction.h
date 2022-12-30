@@ -10,8 +10,6 @@ struct Vertex
 
 class VertexBuffer
 {
-private:
-
 public:
 	VertexBuffer();
 	~VertexBuffer();
@@ -21,8 +19,6 @@ public:
 
 class IndexBuffer
 {
-private:
-
 public:
 	IndexBuffer();
 	~IndexBuffer();
@@ -32,8 +28,6 @@ public:
 
 class VertexArray
 {
-private:
-
 public:
 	VertexArray(unsigned int vertexBufferHandle);
 	~VertexArray();
@@ -43,10 +37,8 @@ public:
 
 class ShaderProgram
 {
-private:
-
 public:
-	ShaderProgram();
+	ShaderProgram(const char* vertexPath, const char* fragmentPath);
 	~ShaderProgram();
 
 	unsigned int handle;
@@ -54,8 +46,6 @@ public:
 
 class Texture
 {
-private:
-
 public:
 	Texture(const char* filename);
 	~Texture();
@@ -63,6 +53,14 @@ public:
 	unsigned int handle;
 };
 
-void CompileShaders();
+class Shaders
+{
+public: 
+	Shaders(const char* vertexPath, const char* fragmentPath);
+	~Shaders();
+
+	unsigned int vertexHandle;
+	unsigned int fragmentHandle;
+};
 
 void SetUniforms();

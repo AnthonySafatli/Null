@@ -77,26 +77,25 @@ VertexArray::~VertexArray()
 
 /* ====== Shader Program ====== */
 
-ShaderProgram::ShaderProgram() // compile shaders at start or before | maybe shader class or method?
+ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) // compile shaders at start or before | maybe shader class or method?
 {
 	handle = glCreateProgram();
 
-	// TODO: Implement shaders and shader handles
+	Shaders shaders(vertexPath, fragmentPath);
 
-	// glAttachShader(handle, vertexShaderHandle);
-	// glAttachShader(handle, fragmentShaderHandle);
+	glAttachShader(handle, shaders.vertexHandle);
+	glAttachShader(handle, shaders.fragmentHandle);
 
 	glLinkProgram(handle);
 
-	// glDetachShader(handle, vertexShaderHandle);
-	// glDetachShader(handle, fragmentShaderHandle);
+	glDetachShader(handle, shaders.vertexHandle);
+	glDetachShader(handle, shaders.fragmentHandle);
+
+	SetUniforms();
 }
 
 ShaderProgram::~ShaderProgram() 
 {
-	// glDeleteShader(vertexShaderHandle);
-	// glDeleteShader(fragmentShaderHandle);
-
 	glUseProgram(0);
 	glDeleteProgram(handle);
 }
@@ -129,14 +128,32 @@ Texture::~Texture()
 	glDeleteTextures(1, &handle);
 }
 
-/* ====== Misc ====== */
+/* ====== Shaders ====== */
 
-void CompileShaders() 
+Shaders::Shaders(const char* vertexPath, const char* fragmentPath)
 {
-	// TODO: Implement Method
+	// TODO: Implement Constructor
+
+	// load into string
+
+	// compile
+
+	// error checking
+
+	// save handles
 }
+
+Shaders::~Shaders()
+{
+	glDeleteShader(vertexHandle);
+	glDeleteShader(fragmentHandle);
+}
+
+/* ====== Misc ====== */
 
 void SetUniforms()
 {
 	// TODO: Implement Method
+
+	// TODO: Also find uniform locations for caching
 }

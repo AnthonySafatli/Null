@@ -34,7 +34,7 @@ int main(void)
 
     Texture texture("\\Resources\\Textures\\alphabet-texture.bmp");
 
-    // Get vertices based on height and width
+    // TODO: Get vertices based on height and width
 
     VertexBuffer veretxBuffer;
     // Pass in data?
@@ -44,11 +44,9 @@ int main(void)
 
     VertexArray vertexArray(veretxBuffer.handle);
 
-    CompileShaders(); // Deal with shaders here
-
-    ShaderProgram program;
-
-    SetUniforms(); // Deal with uniforms here
+    // TODO: Remove absolute paths
+    ShaderProgram program("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.vert",
+        "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.frag");
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
@@ -59,9 +57,11 @@ int main(void)
         glfwSwapBuffers(window);
 
         // TODO: Event handling
-        // Resize
-        // Text Input
-        // Other character Input
+        /* 
+        * Resize
+        * Text Input
+        * Other character Input 
+        */
 
         /* Poll for and process events */
         glfwPollEvents();
