@@ -95,8 +95,6 @@ ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) /
 
 	glDetachShader(handle, shaders.vertexHandle);
 	glDetachShader(handle, shaders.fragmentHandle);
-
-	SetUniforms();
 }
 
 ShaderProgram::~ShaderProgram() 
@@ -150,8 +148,10 @@ void Shaders::CompileVertex(const char* vertexPath)
 	while (getline(vertexStream, line))
 		vertexStringStream << line << '\n';
 
+	std::string sourceString = vertexStringStream.str();
+
 	vertexHandle = glCreateShader(GL_VERTEX_SHADER);
-	const char* source = vertexStringStream.str().c_str();
+	const char* source = sourceString.c_str();
 
 	glShaderSource(vertexHandle, 1, &source, nullptr);
 	glCompileShader(vertexHandle);
@@ -183,8 +183,10 @@ void Shaders::CompileFragment(const char* fragmentPath)
 	while (getline(fragmentStream, line))
 		fragmentStringStream << line << '\n';
 
+	std::string sourceString = fragmentStringStream.str();
+
 	fragmentHandle = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* source = fragmentStringStream.str().c_str();
+	const char* source = sourceString.c_str();
 
 	glShaderSource(fragmentHandle, 1, &source, nullptr);
 	glCompileShader(fragmentHandle);
@@ -213,11 +215,9 @@ Shaders::~Shaders()
 	glDeleteShader(fragmentHandle);
 }
 
-/* ====== Misc ====== */
+/* ====== Uniform ====== */
 
-void SetUniforms()
+Uniform::Uniform(const unsigned int shaderProgramHandle, const char* name)
 {
-	// TODO: Implement Method
-
-	// TODO: Also find uniform locations for caching
+	location = glGetUniformLocation(shaderProgramHandle, name);
 }

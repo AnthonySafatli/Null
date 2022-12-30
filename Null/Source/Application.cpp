@@ -48,6 +48,10 @@ int main(void)
     ShaderProgram program("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.vert",
         "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.frag");
 
+    Uniform u_dimensions(program.handle, "dimensions");
+    Uniform u_idealDimensions(program.handle, "idealDimensions");
+    Uniform u_tex(program.handle, "tex");
+
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {

@@ -66,5 +66,11 @@ public:
 	unsigned int fragmentHandle;
 };
 
-void SetUniforms();
+class Uniform
+{
+public: 
+	Uniform(const unsigned int shaderProgramHandle, const char* name);
+
+	int location;
+};
 
