@@ -1,10 +1,11 @@
+#include <STB/stb_image.h>
 #include <GLEW/glew.h>
 
 #include "Headers/GLAbstraction.h"
 
 /* ====== Vertex Struct ====== */
 
-Vertex::Vertex(float x, float y, float u, float v)
+Vertex::Vertex(const float x, const float y, const float u, const float v)
 {
 	position[0]  = x;
 	position[1]  = y;
@@ -100,14 +101,42 @@ ShaderProgram::~ShaderProgram()
 	glDeleteProgram(handle);
 }
 
+/* ====== Texture ====== */
+
+Texture::Texture(const char* filename)
+{
+	stbi_set_flip_vertically_on_load(1);
+
+	int texWidth, texHeight, numColourChannels;
+	unsigned char* bytes = stbi_load(filename, &texWidth, &texHeight, &numColourChannels, 4);
+
+	glGenTextures(1, &handle);
+	glBindTexture(GL_TEXTURE_2D, handle);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, handle);
+}
+
+Texture::~Texture()
+{
+	glDeleteTextures(1, &handle);
+}
+
 /* ====== Misc ====== */
 
 void CompileShaders() 
 {
-
+	// TODO: Implement Method
 }
 
 void SetUniforms()
 {
-
+	// TODO: Implement Method
 }

@@ -1,6 +1,5 @@
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
-#include <STB/stb_image.h>
 
 #include "Headers/GLAbstraction.h"
 
@@ -30,31 +29,10 @@ int main(void)
     if (glewInit())
         return -3;
 
-    /* Loading Texture */
-    stbi_set_flip_vertically_on_load(1);
-
-    int texWidth, texHeight, numColourChannels;
-    unsigned char* bytes = stbi_load("\\Resources\\Textures\\alphabet-texture.bmp", 
-        &texWidth, &texHeight, &numColourChannels, 4);
-
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    // TODO: OpenGL Stuff
+    Texture texture("\\Resources\\Textures\\alphabet-texture.bmp");
 
     // Get vertices based on height and width
 
@@ -66,11 +44,11 @@ int main(void)
 
     VertexArray vertexArray(veretxBuffer.handle);
 
-    // Get shader source code
+    CompileShaders(); // Deal with shaders here
 
     ShaderProgram program;
 
-    // Set uniforms
+    SetUniforms(); // Deal with uniforms here
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
@@ -92,7 +70,6 @@ int main(void)
     glfwTerminate();
 
     glBindTexture(GL_TEXTURE_2D, 0);
-    glDeleteTextures(1, &texture);
 
     return 0;
 }
