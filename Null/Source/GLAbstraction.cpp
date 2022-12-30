@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
 #include <STB/stb_image.h>
 #include <GLEW/glew.h>
 
@@ -132,15 +137,74 @@ Texture::~Texture()
 
 Shaders::Shaders(const char* vertexPath, const char* fragmentPath)
 {
-	// TODO: Implement Constructor
+	CompileVertex(vertexPath);
+	CompileFragment(fragmentPath);
+}
 
-	// load into string
+void Shaders::CompileVertex(const char* vertexPath)
+{
+	std::string line;
 
-	// compile
+	std::ifstream vertexStream(vertexPath);
+	std::stringstream vertexStringStream;
+	while (getline(vertexStream, line))
+		vertexStringStream << line << '\n';
 
-	// error checking
+	vertexHandle = glCreateShader(GL_VERTEX_SHADER);
+	const char* source = vertexStringStream.str().c_str();
 
-	// save handles
+	glShaderSource(vertexHandle, 1, &source, nullptr);
+	glCompileShader(vertexHandle);
+
+	int result;
+	glGetShaderiv(vertexHandle, GL_COMPILE_STATUS, &result);
+
+	if (result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(vertexHandle, GL_INFO_LOG_LENGTH, &length);
+		char* message = (char*)alloca(length * sizeof(char));
+
+		glGetShaderInfoLog(vertexHandle, length, &length, message);
+
+		std::cout << "Failed to compile vertex shader:" << std::endl;
+		std::cout << message << std::endl;
+
+		glDeleteShader(vertexHandle);
+	}
+}
+
+void Shaders::CompileFragment(const char* fragmentPath)
+{
+	std::string line;
+
+	std::ifstream fragmentStream(fragmentPath);
+	std::stringstream fragmentStringStream;
+	while (getline(fragmentStream, line))
+		fragmentStringStream << line << '\n';
+
+	fragmentHandle = glCreateShader(GL_FRAGMENT_SHADER);
+	const char* source = fragmentStringStream.str().c_str();
+
+	glShaderSource(fragmentHandle, 1, &source, nullptr);
+	glCompileShader(fragmentHandle);
+
+	int result;
+	glGetShaderiv(fragmentHandle, GL_COMPILE_STATUS, &result);
+
+	if (result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(fragmentHandle, GL_INFO_LOG_LENGTH, &length);
+		char* message = (char*)alloca(length * sizeof(char));
+
+		glGetShaderInfoLog(fragmentHandle, length, &length, message);
+
+		std::cout << "Failed to compile fragment shader:" << std::endl;
+		std::cout << message << std::endl;
+
+		glDeleteShader(fragmentHandle);
+	}
 }
 
 Shaders::~Shaders()

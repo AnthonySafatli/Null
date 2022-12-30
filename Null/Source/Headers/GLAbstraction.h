@@ -55,6 +55,9 @@ public:
 
 class Shaders
 {
+private:
+	void CompileVertex(const char* vertexPath);
+	void CompileFragment(const char* fragmentPath);
 public: 
 	Shaders(const char* vertexPath, const char* fragmentPath);
 	~Shaders();
@@ -64,3 +67,4 @@ public:
 };
 
 void SetUniforms();
+
