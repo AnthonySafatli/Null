@@ -8,7 +8,6 @@ in vec2 vTexCoords;
 out vec4 color;
 
 void main() {
-	vec4 texColour = texture(tex, vTexCoords);
-
-	color = texColour;
+	// color = texture(tex, vTexCoords);
+	color = vec4(1.0, 1.0, 1.0, 1.0);
 }

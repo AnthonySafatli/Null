@@ -32,17 +32,17 @@ int main(void)
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    Texture texture("\\Resources\\Textures\\alphabet-texture.bmp");
+    Texture texture("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\alphabet texture.png");
 
     // TODO: Get vertices based on height and width
+
+    VertexArray vertexArray();
 
     VertexBuffer veretxBuffer;
     // Pass in data?
 
     IndexBuffer indexBuffer;
     // Pass in data?
-
-    VertexArray vertexArray(veretxBuffer.handle);
 
     // TODO: Remove absolute paths
     ShaderProgram program("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.vert",
@@ -52,11 +52,18 @@ int main(void)
     Uniform u_idealDimensions(program.handle, "idealDimensions");
     Uniform u_tex(program.handle, "tex");
 
+    glUniform2f(u_dimensions.location, (float)width, (float)height);
+    glUniform2f(u_idealDimensions.location, (float)width, (float)height);
+    // glUniform1i(u_tex.location, 0);
+
+
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
         /* Drawing */
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 

@@ -25,10 +25,10 @@ VertexBuffer::VertexBuffer()
 	glGenBuffers(1, &handle);
 	
 	Vertex verticies[4] = { 
-		Vertex(-0.5,  0.5, 0.0, 0.0),
-		Vertex( 0.5,  0.5, 0.0, 0.0),
 		Vertex(-0.5, -0.5, 0.0, 0.0),
-		Vertex( 0.5, -0.5, 0.0, 0.0)
+		Vertex( 0.5,  0.5, 0.0, 0.0),
+		Vertex( 0.5, -0.5, 0.0, 0.0),
+		Vertex(-0.5,  0.5, 0.0, 0.0)
 	};
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
@@ -49,7 +49,7 @@ IndexBuffer::IndexBuffer()
 
 	unsigned int indices[] = {
 		0, 1, 2,
-		1, 3, 2
+		1, 3, 0
 	};
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
@@ -64,14 +64,19 @@ IndexBuffer::~IndexBuffer()
 
 /* ====== Vertex Array ====== */
 
-VertexArray::VertexArray(unsigned int vertexBufferHandle) // maybe pass in vertex attribute struct array?
+VertexArray::VertexArray() 
 {
 	glGenVertexArrays(1, &handle);
-
 	glBindVertexArray(handle);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferHandle);
 
-	// TODO: Implement vertex attributes
+	EnableAttribute(0, 2, GL_FLOAT, GL_FALSE, (const void*)offsetof(Vertex, position));
+	EnableAttribute(1, 2, GL_FLOAT, GL_FALSE, (const void*)offsetof(Vertex, texCoords));
+}
+
+void VertexArray::EnableAttribute(unsigned int index, int count, GLenum type, GLboolean normalized, const void* pointer)
+{
+	glEnableVertexAttribArray(index);
+	glVertexAttribPointer(index, count, type, normalized, sizeof(Vertex), pointer);
 }
 
 VertexArray::~VertexArray()
@@ -95,6 +100,8 @@ ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) /
 
 	glDetachShader(handle, shaders.vertexHandle);
 	glDetachShader(handle, shaders.fragmentHandle);
+
+	glUseProgram(handle);
 }
 
 ShaderProgram::~ShaderProgram() 
@@ -117,18 +124,22 @@ Texture::Texture(const char* filename)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, handle);
+
+	if (bytes)
+		stbi_image_free(bytes);
 }
 
 Texture::~Texture()
 {
 	glDeleteTextures(1, &handle);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /* ====== Shaders ====== */
@@ -220,4 +231,20 @@ Shaders::~Shaders()
 Uniform::Uniform(const unsigned int shaderProgramHandle, const char* name)
 {
 	location = glGetUniformLocation(shaderProgramHandle, name);
+}
+
+/* ====== Misc ====== */
+
+void GetErrors()
+{
+	GLenum error = glGetError();
+	int errorNum = 0;
+
+	while (error != GL_NO_ERROR)
+	{
+		std::cout << "OpenGL Error: " << error << std::endl;
+		errorNum++;
+
+		error = glGetError();
+	}
 }

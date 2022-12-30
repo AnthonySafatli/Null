@@ -29,8 +29,10 @@ public:
 class VertexArray
 {
 public:
-	VertexArray(unsigned int vertexBufferHandle);
+	VertexArray();
 	~VertexArray();
+
+	void EnableAttribute(unsigned int index, int size, GLenum type, GLboolean normalized, const void* pointer);
 
 	unsigned int handle;
 };
@@ -73,4 +75,6 @@ public:
 
 	int location;
 };
+
+void GetErrors();
 
