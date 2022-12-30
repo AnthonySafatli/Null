@@ -1,5 +1,13 @@
 #pragma once
 
+struct Vertex
+{
+	Vertex(float x, float y, float u, float v);
+
+	float position[2];
+	float texCoords[2];
+};
+
 class VertexBuffer
 {
 private:
@@ -43,3 +51,7 @@ public:
 
 	unsigned int handle;
 };
+
+void CompileShaders();
+
+void SetUniforms();

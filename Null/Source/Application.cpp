@@ -68,7 +68,7 @@ int main(void)
 
     // Get shader source code
 
-    // Create shader program object
+    ShaderProgram program;
 
     // Set uniforms
 
