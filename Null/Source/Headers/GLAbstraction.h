@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 struct Vertex
 {
 	Vertex(const float x, const float y, const float u, const float v);
@@ -14,6 +16,8 @@ public:
 	VertexBuffer();
 	~VertexBuffer();
 
+	void SetData(std::vector<Vertex> vertices);
+
 	unsigned int handle; 
 };
 
@@ -22,6 +26,8 @@ class IndexBuffer
 public:
 	IndexBuffer();
 	~IndexBuffer();
+
+	void SetData(std::vector<unsigned int> vertices);
 
 	unsigned int handle;
 };

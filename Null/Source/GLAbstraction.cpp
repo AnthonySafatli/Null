@@ -40,6 +40,11 @@ VertexBuffer::~VertexBuffer()
 	glDeleteBuffers(1, &handle);
 }
 
+void VertexBuffer::SetData(std::vector<Vertex> vertices)
+{
+
+}
+
 /* ====== Index Buffer ====== */
 
 IndexBuffer::IndexBuffer()
@@ -59,6 +64,11 @@ IndexBuffer::~IndexBuffer()
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &handle);
+}
+
+void IndexBuffer::SetData(std::vector<unsigned int> vertices)
+{
+
 }
 
 /* ====== Vertex Array ====== */

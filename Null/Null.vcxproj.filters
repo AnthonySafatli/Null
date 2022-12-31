@@ -36,6 +36,9 @@
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CursorController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\shader.vert" />
@@ -46,9 +49,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resources\Textures\alphabet texture.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Resources\Textures\alphabet texture.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -66,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Headers\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Headers\CursorController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

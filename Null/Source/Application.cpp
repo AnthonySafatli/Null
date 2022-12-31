@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Headers/GLAbstraction.h"
+#include "Headers/Contents.h"
 
 int main(void)
 {
@@ -34,7 +35,7 @@ int main(void)
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    VertexBuffer buffer;
+    VertexBuffer vertexBuffer;
 
     VertexArray::EnableAttributes();
 
@@ -55,20 +56,30 @@ int main(void)
     glUniform2f(u_idealDimensions.location, (float)width, (float)height);
     glUniform1i(u_tex.location, 0); 
 
-    GetErrors();
+    /* Null Setup */
+    Contents appContents;
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
         /* Drawing */
+        
+        // start event
+
+        appContents.AddCharacter('a');
+
+        vertexBuffer.SetData(appContents.GetVertices());
+        indexBuffer.SetData(appContents.GetIndices());
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 
-        // TODO: Event handling
-        /* 
+        // end event
+
+        /* TODO: Event handling
         * Resize
         * Text Input
         * Other character Input 
