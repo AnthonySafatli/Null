@@ -24,7 +24,7 @@
     <ClCompile Include="Source\GLAbstraction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor.cpp">
+    <ClCompile Include="Source\NullEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="Source\Headers\GLAbstraction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Headers\Editor.h">
+    <ClInclude Include="Source\Headers\NullEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
