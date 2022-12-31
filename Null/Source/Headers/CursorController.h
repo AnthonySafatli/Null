@@ -8,5 +8,5 @@ public:
 	void Move();
 
 	unsigned int x;
-	unsigned int y
+	unsigned int y;
 };

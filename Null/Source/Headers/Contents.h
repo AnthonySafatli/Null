@@ -21,4 +21,6 @@ public:
     StatusBar status;
     Scene currentScene;
     CursorController cursor;
+
+    float textSize;
 };

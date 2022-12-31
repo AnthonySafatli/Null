@@ -32,6 +32,9 @@ int main(void)
     if (glewInit())
         return -3;
 
+    /* Null Setup */
+    Contents appContents;
+
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
@@ -50,14 +53,13 @@ int main(void)
 
     Uniform u_dimensions(program.handle, "dimensions");
     Uniform u_idealDimensions(program.handle, "idealDimensions");
+    Uniform u_size(program.handle, "size");
     Uniform u_tex(program.handle, "tex");
 
     glUniform2f(u_dimensions.location, (float)width, (float)height);
     glUniform2f(u_idealDimensions.location, (float)width, (float)height);
+    glUniform1f(u_size.location, appContents.textSize);
     glUniform1i(u_tex.location, 0); 
-
-    /* Null Setup */
-    Contents appContents;
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
