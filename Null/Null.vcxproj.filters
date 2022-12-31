@@ -24,6 +24,9 @@
     <ClCompile Include="Source\GLAbstraction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\shader.vert" />
@@ -42,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Headers\GLAbstraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Headers\Editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

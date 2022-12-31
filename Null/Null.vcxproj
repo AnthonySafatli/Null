@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Editor.cpp" />
     <ClCompile Include="Source\GLAbstraction.cpp" />
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
@@ -100,6 +101,7 @@
     <Image Include="Resources\Textures\alphabet-texture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Headers\Editor.h" />
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

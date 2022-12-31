@@ -23,10 +23,10 @@ Vertex::Vertex(const float x, const float y, const float u, const float v)
 VertexBuffer::VertexBuffer()
 {
 	Vertex verticies[4] = { 
-		Vertex(-0.5, -0.5, 0.0, 0.0),
-		Vertex( 0.5, -0.5, 1.0, 0.0),
-		Vertex( 0.5,  0.5, 1.0, 1.0),
-		Vertex(-0.5,  0.5, 0.0, 1.0)
+		Vertex(0.0, 0.0, 0.0, 0.0),
+		Vertex(1.0, 0.0, 1.0, 0.0),
+		Vertex(1.0, 1.0, 1.0, 1.0),
+		Vertex(0.0, 1.0, 0.0, 1.0)
 	};
 
 	glGenBuffers(1, &handle);
@@ -113,7 +113,7 @@ ShaderProgram::~ShaderProgram()
 
 Texture::Texture(const char* filename)
 {
-	stbi_set_flip_vertically_on_load(1);
+	// stbi_set_flip_vertically_on_load(1);
 
 	int texWidth, texHeight, numColourChannels;
 	unsigned char* bytes = stbi_load(filename, &texWidth, &texHeight, &numColourChannels, 4);
