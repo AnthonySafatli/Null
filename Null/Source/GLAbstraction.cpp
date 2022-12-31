@@ -22,24 +22,16 @@ Vertex::Vertex(const float x, const float y, const float u, const float v)
 
 VertexBuffer::VertexBuffer()
 {
-	
-	/*Vertex verticies[4] = { 
+	Vertex verticies[4] = { 
 		Vertex(-0.5, -0.5, 0.0, 0.0),
-		Vertex( 0.5,  0.5, 0.0, 0.0),
-		Vertex( 0.5, -0.5, 0.0, 0.0),
-		Vertex(-0.5,  0.5, 0.0, 0.0)
-	};*/
-
-	float positions[] = {
-			-0.5, -0.5, 0.0, 0.0,
-			 0.5,  0.5, 0.0, 1.0,
-			 0.5, -0.5, 1.0, 0.0,
-			-0.5,  0.5, 1.0, 1.0,
+		Vertex( 0.5, -0.5, 1.0, 0.0),
+		Vertex( 0.5,  0.5, 1.0, 1.0),
+		Vertex(-0.5,  0.5, 0.0, 1.0)
 	};
 
 	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -56,7 +48,7 @@ IndexBuffer::IndexBuffer()
 
 	unsigned int indices[] = {
 		0, 1, 2,
-		1, 3, 0
+		2, 3, 0
 	};
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
@@ -80,10 +72,10 @@ VertexArray::VertexArray()
 void VertexArray::EnableAttributes()
 {
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, position)));
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (const void*)(2 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, texCoords)));
 }
 
 VertexArray::~VertexArray()
@@ -129,10 +121,7 @@ Texture::Texture(const char* filename)
 	glGenTextures(1, &handle);
 	glBindTexture(GL_TEXTURE_2D, handle);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	SetTextureSettings();
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
 
@@ -141,6 +130,17 @@ Texture::Texture(const char* filename)
 
 	if (bytes)
 		stbi_image_free(bytes);
+}
+
+void Texture::SetTextureSettings()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 Texture::~Texture()

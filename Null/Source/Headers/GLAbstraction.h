@@ -48,6 +48,9 @@ public:
 
 class Texture
 {
+private:
+	void SetTextureSettings();
+
 public:
 	Texture(const char* filename);
 	~Texture();

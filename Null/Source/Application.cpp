@@ -33,7 +33,6 @@ int main(void)
 
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
 
     VertexBuffer buffer;
 
