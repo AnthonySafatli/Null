@@ -86,9 +86,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\MainRows.cpp" />
     <ClCompile Include="Source\GLAbstraction.cpp" />
-    <ClCompile Include="Source\NullEditor.cpp" />
+    <ClCompile Include="Source\Contents.cpp" />
+    <ClCompile Include="Source\TextRow.cpp" />
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -101,8 +104,11 @@
     <Image Include="Resources\Textures\alphabet-texture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Headers\Scene.h" />
+    <ClInclude Include="Source\Headers\MainRows.h" />
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
-    <ClInclude Include="Source\Headers\NullEditor.h" />
+    <ClInclude Include="Source\Headers\Contents.h" />
+    <ClInclude Include="Source\Headers\TextRow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
