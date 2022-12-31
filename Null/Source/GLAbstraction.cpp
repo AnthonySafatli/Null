@@ -22,17 +22,24 @@ Vertex::Vertex(const float x, const float y, const float u, const float v)
 
 VertexBuffer::VertexBuffer()
 {
-	glGenBuffers(1, &handle);
 	
-	Vertex verticies[4] = { 
+	/*Vertex verticies[4] = { 
 		Vertex(-0.5, -0.5, 0.0, 0.0),
 		Vertex( 0.5,  0.5, 0.0, 0.0),
 		Vertex( 0.5, -0.5, 0.0, 0.0),
 		Vertex(-0.5,  0.5, 0.0, 0.0)
+	};*/
+
+	float positions[] = {
+			-0.5, -0.5, 0.0, 0.0,
+			 0.5,  0.5, 0.0, 1.0,
+			 0.5, -0.5, 1.0, 0.0,
+			-0.5,  0.5, 1.0, 1.0,
 	};
 
+	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vertex), verticies, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -68,15 +75,15 @@ VertexArray::VertexArray()
 {
 	glGenVertexArrays(1, &handle);
 	glBindVertexArray(handle);
-
-	EnableAttribute(0, 2, GL_FLOAT, GL_FALSE, (const void*)offsetof(Vertex, position));
-	EnableAttribute(1, 2, GL_FLOAT, GL_FALSE, (const void*)offsetof(Vertex, texCoords));
 }
 
-void VertexArray::EnableAttribute(unsigned int index, int count, GLenum type, GLboolean normalized, const void* pointer)
+void VertexArray::EnableAttributes()
 {
-	glEnableVertexAttribArray(index);
-	glVertexAttribPointer(index, count, type, normalized, sizeof(Vertex), pointer);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (const void*)(2 * sizeof(float)));
 }
 
 VertexArray::~VertexArray()
@@ -87,7 +94,7 @@ VertexArray::~VertexArray()
 
 /* ====== Shader Program ====== */
 
-ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) // compile shaders at start or before | maybe shader class or method?
+ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) 
 {
 	handle = glCreateProgram();
 

@@ -36,7 +36,7 @@
     <Image Include="Resources\Textures\alphabet texture.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Resources\Textures\alphabet-texture.bmp">
+    <Image Include="Resources\Textures\alphabet texture.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\alphabet texture.png" />
-    <Image Include="Resources\Textures\alphabet-texture.bmp" />
+    <Image Include="Resources\Textures\alphabet texture.bmp" />
     <Image Include="Resources\Textures\alphabet-texture.png" />
   </ItemGroup>
   <ItemGroup>

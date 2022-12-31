@@ -32,7 +32,7 @@ public:
 	VertexArray();
 	~VertexArray();
 
-	void EnableAttribute(unsigned int index, int size, GLenum type, GLboolean normalized, const void* pointer);
+	static void EnableAttributes();
 
 	unsigned int handle;
 };

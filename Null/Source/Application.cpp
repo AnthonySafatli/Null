@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -31,22 +33,20 @@ int main(void)
 
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 
-    Texture texture("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\alphabet texture.png");
+    VertexBuffer buffer;
 
-    // TODO: Get vertices based on height and width
-
-    VertexArray vertexArray();
-
-    VertexBuffer veretxBuffer;
-    // Pass in data?
+    VertexArray::EnableAttributes();
 
     IndexBuffer indexBuffer;
-    // Pass in data?
+    
+    ShaderProgram program(
+        "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.vert",
+        "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.frag"
+    );
 
-    // TODO: Remove absolute paths
-    ShaderProgram program("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.vert",
-        "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.frag");
+    Texture texture("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\alphabet texture.png");
 
     Uniform u_dimensions(program.handle, "dimensions");
     Uniform u_idealDimensions(program.handle, "idealDimensions");
@@ -54,8 +54,9 @@ int main(void)
 
     glUniform2f(u_dimensions.location, (float)width, (float)height);
     glUniform2f(u_idealDimensions.location, (float)width, (float)height);
-    // glUniform1i(u_tex.location, 0);
+    glUniform1i(u_tex.location, 0); 
 
+    GetErrors();
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
@@ -74,7 +75,6 @@ int main(void)
         * Other character Input 
         */
 
-        /* Poll for and process events */
         glfwPollEvents();
     }
 
