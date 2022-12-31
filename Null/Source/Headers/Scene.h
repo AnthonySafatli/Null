@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GLAbstraction.h"
 #include "TextRow.h"
 
 #include <vector>
@@ -8,6 +9,8 @@ class Scene
 {
 public:
 	Scene();
+
+	std::vector<Vertex> GetVertices();
 
 	static Scene WelcomeScene();
 	static Scene NotebookScene();

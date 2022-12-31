@@ -1,10 +1,19 @@
 #include "Headers/Scene.h"
 
+#include "Headers/GLAbstraction.h"
+
+#include <vector>
+
 /* ====== Scene ====== */
 
 Scene::Scene()
 {
 
+}
+
+std::vector<Vertex> Scene::GetVertices()
+{
+    return std::vector<Vertex>();
 }
 
 Scene Scene::WelcomeScene()
