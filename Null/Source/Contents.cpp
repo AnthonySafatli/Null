@@ -1,8 +1,9 @@
 #include "Headers/Contents.h"
+#include "Headers/Character.h"
 
 /* ====== Contents ====== */
 
-Contents::Contents() : textSize(0.1), cursor(0, 0)
+Contents::Contents() : textSize(0.1), cursor(0, 0), charAmount(0)
 {
 	// Only run once at beginning of program
 }
@@ -14,6 +15,25 @@ void Contents::AddCharacter(char ch)
 	// use column in cursor controller to see how many more characters
 	// multiply by 4 to get how many vertices to skip
 	// add vertices at that index
+	
+	// Add vertices
+	TexCoords texCoords = GetCoords(ch);
+
+	vertices.push_back(Vertex(charAmount      , 0.0, charAmount, 0.0, texCoords.u               , texCoords.v               ));
+	vertices.push_back(Vertex(charAmount + 1.0, 0.0, charAmount, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               ));
+	vertices.push_back(Vertex(charAmount + 1.0, 1.0, charAmount, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0)));
+	vertices.push_back(Vertex(charAmount      , 1.0, charAmount, 0.0, texCoords.u               , texCoords.v + (1.0 / 10.0)));
+
+	// Add indices
+	int startIndex = charAmount * 4;
+	indices.push_back(startIndex);
+	indices.push_back(startIndex + 1);
+	indices.push_back(startIndex + 2);
+	indices.push_back(startIndex + 2);
+	indices.push_back(startIndex + 3);
+	indices.push_back(startIndex);
+
+	charAmount++;
 }
 
 void Contents::RemoveCharacter()

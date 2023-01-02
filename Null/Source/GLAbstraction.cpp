@@ -25,7 +25,7 @@ Vertex::Vertex(const float x, const float y, const float ax, const float ay, con
 
 VertexBuffer::VertexBuffer()
 {
-	TexCoords texA = GetCoords('A');
+	TexCoords texA = GetCoords('>');
 
 	Vertex verticies[4] = {  
 		Vertex(0.0, 0.0, 0.0, 0.0, texA.u               , texA.v               ),
@@ -34,6 +34,7 @@ VertexBuffer::VertexBuffer()
 		Vertex(0.0, 1.0, 0.0, 0.0, texA.u               , texA.v + (1.0 / 10.0)),
 	};  
 
+	// TODO: Pass in no data, but allocate a lot
 	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_DYNAMIC_DRAW);
@@ -47,7 +48,7 @@ VertexBuffer::~VertexBuffer()
 
 void VertexBuffer::SetData(std::vector<Vertex> vertices)
 {
-
+	// TODO: Set data here
 }
 
 /* ====== Index Buffer ====== */
@@ -61,6 +62,8 @@ IndexBuffer::IndexBuffer()
 		 2,  3,  0,
 	};
 
+
+	// TODO: Pass no data, but allocate a lot
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
 }
@@ -73,7 +76,7 @@ IndexBuffer::~IndexBuffer()
 
 void IndexBuffer::SetData(std::vector<unsigned int> vertices)
 {
-
+	// TODO: Set data here
 }
 
 /* ====== Vertex Array ====== */

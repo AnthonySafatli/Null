@@ -64,6 +64,8 @@ int main(void)
     glUniform1f(u_size.location, appContents.textSize);
     glUniform1i(u_tex.location, 0); 
 
+    bool sceneChanged = false;
+
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
@@ -71,26 +73,34 @@ int main(void)
         
         // start event
 
-        appContents.AddCharacter('a');
+        appContents.AddCharacter('>');
 
         vertexBuffer.SetData(appContents.vertices);
         indexBuffer.SetData(appContents.indices);
 
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glDrawElements(GL_TRIANGLES, 3 * 2, GL_UNSIGNED_INT, nullptr);
-
-        glfwSwapBuffers(window);
+        sceneChanged = true;
 
         // end event
 
-        /* TODO: Event handling
-        * Resize
-        * Text Input
-        * Other character Input 
-        */
+        if (sceneChanged)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwPollEvents();
+            glDrawElements(GL_TRIANGLES, 3 * 2, GL_UNSIGNED_INT, nullptr);
+
+            glfwSwapBuffers(window);
+
+
+            /* TODO: Event handling
+            * Resize
+            * Text Input
+            * Other character Input
+            */
+
+            glfwPollEvents();
+        }
+
+        sceneChanged = false;
     }
 
     glfwTerminate();
