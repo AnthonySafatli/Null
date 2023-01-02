@@ -9,7 +9,7 @@ class TextRow
 public:
 	TextRow();
 
-	std::vector<Vertex> GetVertices();
+	std::vector<Vertex> GetVertices(const float rowNumber, const float startLetterPos);
 
 	std::vector<char> text;
 

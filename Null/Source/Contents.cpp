@@ -2,7 +2,7 @@
 
 /* ====== Contents ====== */
 
-Contents::Contents() : textSize(10)
+Contents::Contents() : textSize(10), cursor(0, 0)
 {
 	// Only run once at beginning of program
 }
@@ -12,7 +12,7 @@ void Contents::AddCharacter(char ch)
 
 }
 
-std::vector<Vertex> Contents::GetVertices() // make pointer or something so no copy data
+std::vector<Vertex> Contents::GetVertices() // make return value a pointer or something so no copy data
 {
 	// optimize vectors
 

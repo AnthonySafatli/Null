@@ -3,7 +3,7 @@
 class CursorController
 {
 public:
-	CursorController();
+	CursorController(int x, int y);
 
 	void Move();
 
