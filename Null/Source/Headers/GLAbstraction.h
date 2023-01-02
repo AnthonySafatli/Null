@@ -4,9 +4,10 @@
 
 struct Vertex
 {
-	Vertex(const float x, const float y, const float u, const float v);
+	Vertex(const float x, const float y, const float ax, const float ay, const float u, const float v);
 
 	float position[2];
+	float anchor[2];
 	float texCoords[2];
 };
 

@@ -78,7 +78,7 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, 3 * 2, GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 

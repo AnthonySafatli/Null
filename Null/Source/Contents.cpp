@@ -2,7 +2,7 @@
 
 /* ====== Contents ====== */
 
-Contents::Contents() : textSize(10), cursor(0, 0)
+Contents::Contents() : textSize(0.1), cursor(0, 0)
 {
 	// Only run once at beginning of program
 }

@@ -6,21 +6,25 @@ uniform vec2 idealDimensions;
 uniform float size;
 
 layout (location = 0) in vec2 position;
-layout (location = 1) in vec2 texCoords;
+layout (location = 1) in vec2 anchor;
+layout (location = 2) in vec2 texCoords;
 
 out vec2 vTexCoords;
 
 void main() {
 	vTexCoords = texCoords;
 
+	// scale using size
+	vec2 scaled = position - anchor;
+	scaled *= size;
+	scaled += anchor;
+
 	// const pixel size conversions
-	vec2 updatedPos = idealDimensions / dimensions * position;
+	vec2 updatedPos = idealDimensions / dimensions * scaled;
 
 	// screen space conversions
-	vec2 finalPos = updatedPos * 2 - 1;
-	finalPos.y *= -1;
+	vec2 screenSpace = updatedPos * 2 - 1;
+	screenSpace.y *= -1;
 
-	// TODO: Edit using size
-
-	gl_Position = vec4(finalPos, 0.0, 1.0);
+	gl_Position = vec4(screenSpace, 0.0, 1.0);
 }

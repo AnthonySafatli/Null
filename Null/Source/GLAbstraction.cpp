@@ -11,10 +11,12 @@
 
 /* ====== Vertex Struct ====== */
 
-Vertex::Vertex(const float x, const float y, const float u, const float v)
+Vertex::Vertex(const float x, const float y, const float ax, const float ay, const float u, const float v)
 {
 	position[0]  = x;
 	position[1]  = y;
+	anchor[0] = ax;
+	anchor[1] = ay;
 	texCoords[0] = u;
 	texCoords[1] = v;
 }
@@ -23,13 +25,13 @@ Vertex::Vertex(const float x, const float y, const float u, const float v)
 
 VertexBuffer::VertexBuffer()
 {
-	TexCoords tex = GetCoords('A');
+	TexCoords texA = GetCoords('A');
 
 	Vertex verticies[4] = {  
-		Vertex(0.0, 0.0, tex.u               , tex.v               ),
-		Vertex(1.0, 0.0, tex.u + (1.0 / 10.0), tex.v               ),
-		Vertex(1.0, 1.0, tex.u + (1.0 / 10.0), tex.v + (1.0 / 10.0)),
-		Vertex(0.0, 1.0, tex.u               , tex.v + (1.0 / 10.0))
+		Vertex(0.0, 0.0, 0.0, 0.0, texA.u               , texA.v               ),
+		Vertex(1.0, 0.0, 0.0, 0.0, texA.u + (1.0 / 10.0), texA.v               ),
+		Vertex(1.0, 1.0, 0.0, 0.0, texA.u + (1.0 / 10.0), texA.v + (1.0 / 10.0)),
+		Vertex(0.0, 1.0, 0.0, 0.0, texA.u               , texA.v + (1.0 / 10.0)),
 	};  
 
 	glGenBuffers(1, &handle);
@@ -55,8 +57,8 @@ IndexBuffer::IndexBuffer()
 	glGenBuffers(1, &handle);
 
 	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
+		 0,  1,  2,
+		 2,  3,  0,
 	};
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
@@ -88,7 +90,10 @@ void VertexArray::EnableAttributes()
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, position)));
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, texCoords)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, anchor)));
+	
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, texCoords)));
 }
 
 VertexArray::~VertexArray()
