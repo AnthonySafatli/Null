@@ -10,8 +10,6 @@ class Scene
 public:
 	Scene();
 
-	std::vector<Vertex> GetVertices();
-
 	static Scene WelcomeScene();
 	static Scene NotebookScene();
 	static Scene TextEditor();

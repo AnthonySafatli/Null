@@ -13,14 +13,15 @@ public:
     Contents();
 
     void AddCharacter(char ch);
-
-    std::vector<Vertex> GetVertices();
-    std::vector<unsigned int> GetIndices();
+    void RemoveCharacter();
 
     CommandRow command;
     StatusBar status;
     Scene currentScene;
     CursorController cursor;
+
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
 
     float textSize;
 };

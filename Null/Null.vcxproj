@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\CursorController.cpp" />
+    <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\MainRows.cpp" />
@@ -104,6 +105,7 @@
     <Image Include="Resources\Textures\alphabet-texture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Headers\Character.h" />
     <ClInclude Include="Source\Headers\CursorController.h" />
     <ClInclude Include="Source\Headers\Scene.h" />
     <ClInclude Include="Source\Headers\MainRows.h" />

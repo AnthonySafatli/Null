@@ -11,11 +11,6 @@ Scene::Scene()
 
 }
 
-std::vector<Vertex> Scene::GetVertices()
-{
-    return std::vector<Vertex>();
-}
-
 Scene Scene::WelcomeScene()
 {
     return Scene();

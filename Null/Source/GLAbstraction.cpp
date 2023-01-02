@@ -7,6 +7,7 @@
 #include <GLEW/glew.h>
 
 #include "Headers/GLAbstraction.h"
+#include "Headers/Character.h"
 
 /* ====== Vertex Struct ====== */
 
@@ -22,12 +23,14 @@ Vertex::Vertex(const float x, const float y, const float u, const float v)
 
 VertexBuffer::VertexBuffer()
 {
-	Vertex verticies[4] = { 
-		Vertex(0.0, 0.0, 0.0, 0.0),
-		Vertex(1.0, 0.0, 1.0, 0.0),
-		Vertex(1.0, 1.0, 1.0, 1.0),
-		Vertex(0.0, 1.0, 0.0, 1.0)
-	};
+	TexCoords tex = GetCoords('A');
+
+	Vertex verticies[4] = {  
+		Vertex(0.0, 0.0, tex.u               , tex.v               ),
+		Vertex(1.0, 0.0, tex.u + (1.0 / 10.0), tex.v               ),
+		Vertex(1.0, 1.0, tex.u + (1.0 / 10.0), tex.v + (1.0 / 10.0)),
+		Vertex(0.0, 1.0, tex.u               , tex.v + (1.0 / 10.0))
+	};  
 
 	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);

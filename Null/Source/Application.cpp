@@ -16,8 +16,11 @@ int main(void)
 
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-    int width = 1800;
-    int height = 1100;
+    //int width = 1800;
+    //int height = 1100;
+
+    int width = 800;
+    int height = 1400;
 
     window = glfwCreateWindow(width, height, "Null", NULL, NULL);
     if (!window)
@@ -70,8 +73,8 @@ int main(void)
 
         appContents.AddCharacter('a');
 
-        vertexBuffer.SetData(appContents.GetVertices());
-        indexBuffer.SetData(appContents.GetIndices());
+        vertexBuffer.SetData(appContents.vertices);
+        indexBuffer.SetData(appContents.indices);
 
         glClear(GL_COLOR_BUFFER_BIT);
 

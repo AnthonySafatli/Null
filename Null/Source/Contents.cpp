@@ -9,28 +9,14 @@ Contents::Contents() : textSize(10), cursor(0, 0)
 
 void Contents::AddCharacter(char ch)
 {
-
+	// use cursor controller to find which row cursor is on
+	// use text.size() for all rows above cursor to see how many characters to skip
+	// use column in cursor controller to see how many more characters
+	// multiply by 4 to get how many vertices to skip
+	// add vertices at that index
 }
 
-std::vector<Vertex> Contents::GetVertices() // make return value a pointer or something so no copy data
+void Contents::RemoveCharacter()
 {
-	// optimize vectors
-
-	std::vector<Vertex> contents;
-
-	std::vector<Vertex> commandContents = command.GetVertices();
-	contents.insert(contents.end(), commandContents.begin(), commandContents.end());
-
-	std::vector<Vertex> statusContents = status.GetVertices();
-	contents.insert(contents.end(), statusContents.begin(), statusContents.end());
-
-	std::vector<Vertex> sceneContents = status.GetVertices();
-	contents.insert(contents.end(), sceneContents.begin(), sceneContents.end());
-
-	return contents;
-}
-
-std::vector<unsigned int> Contents::GetIndices()
-{
-	return std::vector<unsigned int>();
+	// same as adding but not
 }
