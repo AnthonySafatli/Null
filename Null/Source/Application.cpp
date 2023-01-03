@@ -70,7 +70,9 @@ int main(void)
         // Initial Render
 
         appContents.AddCharacter('>');
-        appContents.AddCharacter('a');
+        appContents.AddSpace();
+        appContents.AddCharacter('b');
+        appContents.AddCharacter('c');
 
         vertexBuffer.SetData(appContents.vertices);
         indexBuffer.SetData(appContents.indices);
@@ -93,8 +95,8 @@ int main(void)
 
         // appContents.AddCharacter('>');
 
-        vertexBuffer.SetData(appContents.vertices);
-        indexBuffer.SetData(appContents.indices);
+        //vertexBuffer.SetData(appContents.vertices);
+        //indexBuffer.SetData(appContents.indices);
 
         sceneChanged = true;
 
@@ -104,7 +106,7 @@ int main(void)
         {
             glClear(GL_COLOR_BUFFER_BIT);
 
-            glDrawElements(GL_TRIANGLES, 3 * 2, GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
 
             glfwSwapBuffers(window);
 

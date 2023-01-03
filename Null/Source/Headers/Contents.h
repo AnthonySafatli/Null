@@ -13,6 +13,8 @@ public:
     Contents();
 
     void AddCharacter(char ch);
+    void AddSpace();
+    void AddTab();
     void RemoveCharacter();
 
     CommandRow command;
@@ -24,5 +26,6 @@ public:
     std::vector<unsigned int> indices;
 
     int charAmount;
+    int tabAmount;
     float textSize;
 };

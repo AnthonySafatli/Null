@@ -1,9 +1,11 @@
 #include "Headers/Contents.h"
 #include "Headers/Character.h"
 
+#include <iostream>
+
 /* ====== Contents ====== */
 
-Contents::Contents() : textSize(0.1), cursor(0, 0), charAmount(0)
+Contents::Contents() : textSize(1), cursor(0, 0), charAmount(0), tabAmount(4)
 {
 	// Only run once at beginning of program
 }
@@ -19,10 +21,10 @@ void Contents::AddCharacter(char ch)
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	vertices.push_back(Vertex(charAmount      , 0.0, charAmount, 0.0, texCoords.u               , texCoords.v               ));
-	vertices.push_back(Vertex(charAmount + 1.0, 0.0, charAmount, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               ));
-	vertices.push_back(Vertex(charAmount + 1.0, 1.0, charAmount, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0)));
-	vertices.push_back(Vertex(charAmount      , 1.0, charAmount, 0.0, texCoords.u               , texCoords.v + (1.0 / 10.0)));
+	vertices.push_back(Vertex((charAmount * 0.1)      , 0.0, (charAmount * 0.1), 0.0, texCoords.u               , texCoords.v               ));
+	vertices.push_back(Vertex((charAmount * 0.1) + 0.1, 0.0, (charAmount * 0.1), 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               ));
+	vertices.push_back(Vertex((charAmount * 0.1) + 0.1, 0.1, (charAmount * 0.1), 0.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0)));
+	vertices.push_back(Vertex((charAmount * 0.1)      , 0.1, (charAmount * 0.1), 0.0, texCoords.u               , texCoords.v + (1.0 / 10.0)));
 
 	// Add indices
 	int startIndex = charAmount * 4;
@@ -33,7 +35,17 @@ void Contents::AddCharacter(char ch)
 	indices.push_back(startIndex + 3);
 	indices.push_back(startIndex);
 
-	//charAmount++;
+	charAmount++;
+}
+
+void Contents::AddSpace()
+{
+	charAmount++;
+}
+
+void Contents::AddTab()
+{
+	charAmount += tabAmount;
 }
 
 void Contents::RemoveCharacter()
