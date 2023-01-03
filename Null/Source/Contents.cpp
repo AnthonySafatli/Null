@@ -33,7 +33,7 @@ void Contents::AddCharacter(char ch)
 	indices.push_back(startIndex + 3);
 	indices.push_back(startIndex);
 
-	charAmount++;
+	//charAmount++;
 }
 
 void Contents::RemoveCharacter()

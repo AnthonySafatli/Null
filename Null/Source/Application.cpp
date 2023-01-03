@@ -16,11 +16,13 @@ int main(void)
 
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-    //int width = 1800;
-    //int height = 1100;
+    // int width = 1800;
+    // int height = 1100;
 
     int width = 800;
     int height = 1400;
+
+    int maxSquaresToRender = 1000;
 
     window = glfwCreateWindow(width, height, "Null", NULL, NULL);
     if (!window)
@@ -41,12 +43,12 @@ int main(void)
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    VertexBuffer vertexBuffer;
+    VertexBuffer vertexBuffer(maxSquaresToRender);
 
     VertexArray::EnableAttributes();
 
-    IndexBuffer indexBuffer;
-    
+    IndexBuffer indexBuffer(maxSquaresToRender);
+
     ShaderProgram program(
         "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.vert",
         "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\shader.frag"
@@ -62,7 +64,23 @@ int main(void)
     glUniform2f(u_dimensions.location, (float)width, (float)height);
     glUniform2f(u_idealDimensions.location, (float)width, (float)height);
     glUniform1f(u_size.location, appContents.textSize);
-    glUniform1i(u_tex.location, 0); 
+    glUniform1i(u_tex.location, 0);
+
+    {
+        // Initial Render
+
+        appContents.AddCharacter('>');
+        appContents.AddCharacter('a');
+
+        vertexBuffer.SetData(appContents.vertices);
+        indexBuffer.SetData(appContents.indices);
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
+
+        glfwSwapBuffers(window);
+    }
 
     bool sceneChanged = false;
 
@@ -73,7 +91,7 @@ int main(void)
         
         // start event
 
-        appContents.AddCharacter('>');
+        // appContents.AddCharacter('>');
 
         vertexBuffer.SetData(appContents.vertices);
         indexBuffer.SetData(appContents.indices);

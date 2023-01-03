@@ -23,21 +23,18 @@ Vertex::Vertex(const float x, const float y, const float ax, const float ay, con
 
 /* ====== Vertex Buffer ====== */
 
-VertexBuffer::VertexBuffer()
+VertexBuffer::VertexBuffer(const int maxSquares)
 {
-	TexCoords texA = GetCoords('>');
-
-	Vertex verticies[4] = {  
+	/*Vertex verticies[4] = {  
 		Vertex(0.0, 0.0, 0.0, 0.0, texA.u               , texA.v               ),
 		Vertex(1.0, 0.0, 0.0, 0.0, texA.u + (1.0 / 10.0), texA.v               ),
 		Vertex(1.0, 1.0, 0.0, 0.0, texA.u + (1.0 / 10.0), texA.v + (1.0 / 10.0)),
 		Vertex(0.0, 1.0, 0.0, 0.0, texA.u               , texA.v + (1.0 / 10.0)),
-	};  
+	};*/  
 
-	// TODO: Pass in no data, but allocate a lot
 	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, maxSquares * 4 * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -48,24 +45,17 @@ VertexBuffer::~VertexBuffer()
 
 void VertexBuffer::SetData(std::vector<Vertex> vertices)
 {
-	// TODO: Set data here
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), &vertices[0]);
 }
 
 /* ====== Index Buffer ====== */
 
-IndexBuffer::IndexBuffer()
+IndexBuffer::IndexBuffer(const int maxSquares)
 {
 	glGenBuffers(1, &handle);
 
-	unsigned int indices[] = {
-		 0,  1,  2,
-		 2,  3,  0,
-	};
-
-
-	// TODO: Pass no data, but allocate a lot
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, maxSquares * 6 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer()
@@ -74,9 +64,9 @@ IndexBuffer::~IndexBuffer()
 	glDeleteBuffers(1, &handle);
 }
 
-void IndexBuffer::SetData(std::vector<unsigned int> vertices)
+void IndexBuffer::SetData(std::vector<unsigned int> indices)
 {
-	// TODO: Set data here
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), &indices[0]);
 }
 
 /* ====== Vertex Array ====== */

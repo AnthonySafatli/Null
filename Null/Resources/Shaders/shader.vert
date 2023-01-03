@@ -3,6 +3,8 @@
 
 uniform vec2 dimensions;
 uniform vec2 idealDimensions;
+uniform float idealRatio; // idealDimensions / currentDimensions
+uniform float aspectRatioCalcs; // calcs for aspect ratio stuff
 uniform float size;
 
 layout (location = 0) in vec2 position;

@@ -14,7 +14,7 @@ struct Vertex
 class VertexBuffer
 {
 public:
-	VertexBuffer();
+	VertexBuffer(const int maxSquares);
 	~VertexBuffer();
 
 	void SetData(std::vector<Vertex> vertices);
@@ -25,10 +25,10 @@ public:
 class IndexBuffer
 {
 public:
-	IndexBuffer();
+	IndexBuffer(const int maxSquares);
 	~IndexBuffer();
 
-	void SetData(std::vector<unsigned int> vertices);
+	void SetData(std::vector<unsigned int> indices);
 
 	unsigned int handle;
 };
