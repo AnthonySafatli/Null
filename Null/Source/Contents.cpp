@@ -27,7 +27,7 @@ void Contents::AddCharacter(char ch)
 	vertices.push_back(Vertex((charAmount * 0.1)      , 0.1, (charAmount * 0.1), 0.0, texCoords.u               , texCoords.v + (1.0 / 10.0)));
 
 	// Add indices
-	int startIndex = charAmount * 4;
+	int startIndex = vertices.size() - 4;
 	indices.push_back(startIndex);
 	indices.push_back(startIndex + 1);
 	indices.push_back(startIndex + 2);

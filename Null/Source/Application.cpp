@@ -71,6 +71,7 @@ int main(void)
 
         appContents.AddCharacter('>');
         appContents.AddSpace();
+        appContents.AddCharacter('a');
         appContents.AddCharacter('b');
         appContents.AddCharacter('c');
 
@@ -91,16 +92,16 @@ int main(void)
     {
         /* Drawing */
         
-        // start event
+        /* keyboard event
 
-        // appContents.AddCharacter('>');
+        appContents.AddCharacter(character);
 
-        //vertexBuffer.SetData(appContents.vertices);
-        //indexBuffer.SetData(appContents.indices);
+        vertexBuffer.SetData(appContents.vertices);
+        indexBuffer.SetData(appContents.indices);
 
         sceneChanged = true;
 
-        // end event
+        */
 
         if (sceneChanged)
         {
@@ -116,9 +117,9 @@ int main(void)
             * Text Input
             * Other character Input
             */
-
-            glfwPollEvents();
         }
+
+        glfwPollEvents();
 
         sceneChanged = false;
     }
