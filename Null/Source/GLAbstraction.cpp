@@ -11,10 +11,10 @@
 
 /* ====== Vertex Struct ====== */
 
-Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column) : row(row), column(column)
+Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight) : row(row), column(column), highlight(highlight)
 {
-	position[0] = x;
-	position[1] = y;
+	reletivePosition[0] = x;
+	reletivePosition[1] = y;
 
 	texCoords[0] = u;
 	texCoords[1] = v;
@@ -79,7 +79,7 @@ VertexArray::VertexArray()
 void VertexArray::EnableAttributes()
 {
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, position)));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, reletivePosition)));
 	
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, texCoords)));
@@ -89,6 +89,10 @@ void VertexArray::EnableAttributes()
 
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, column)));
+
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, highlight)));
+
 }
 
 VertexArray::~VertexArray()

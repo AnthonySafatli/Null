@@ -70,6 +70,7 @@ int main(void)
     appContents.AddCharacter('>'); // remove later
     appContents.AddCharacter('a'); // remove later
 
+
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {

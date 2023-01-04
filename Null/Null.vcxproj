@@ -99,7 +99,6 @@
   <ItemGroup>
     <None Include="Resources\Shaders\fragment.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
-    <None Include="Resources\Shaders\oldvertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\alphabet texture.png" />

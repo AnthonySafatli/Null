@@ -4,12 +4,13 @@
 
 struct Vertex
 {
-	Vertex(const float x, const float y, const float u, const float v, const float row, const float column);
+	Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight);
 
-	float position[2];
+	float reletivePosition[2];
 	float texCoords[2];
 	float row;
 	float column;
+	unsigned int highlight;
 };
 
 class VertexBuffer

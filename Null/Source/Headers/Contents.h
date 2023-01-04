@@ -16,6 +16,7 @@ public:
     void AddSpace();
     void AddTab();
     void RemoveCharacter();
+    void Return();
 
     CommandRow command;
     StatusBar status;
@@ -25,7 +26,6 @@ public:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
-    int charAmount;
     int tabAmount;
     float textSize;
 };
