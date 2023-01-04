@@ -5,7 +5,7 @@
 
 /* ====== Contents ====== */
 
-Contents::Contents() : textSize(1), cursor(0, 0), charAmount(0), tabAmount(4)
+Contents::Contents() : textSize(0.5), cursor(0, 0), charAmount(0), tabAmount(4)
 {
 	// Only run once at beginning of program
 }
@@ -24,10 +24,10 @@ void Contents::AddCharacter(char ch)
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , 10.0, 10.0));
-	vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , 10.0, 10.0));
-	vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), 10.0, 10.0));
-	vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), 10.0, 10.0));
+	vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , 0.0, charAmount));
+	vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , 0.0, charAmount));
+	vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), 0.0, charAmount));
+	vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), 0.0, charAmount));
 
 	// Add indices
 	int startIndex = vertices.size() - 4;
@@ -48,7 +48,8 @@ void Contents::AddSpace()
 
 void Contents::AddTab()
 {
-	charAmount += tabAmount;
+	for (int i = 0; i < tabAmount; i++)
+		AddSpace();
 }
 
 void Contents::RemoveCharacter()

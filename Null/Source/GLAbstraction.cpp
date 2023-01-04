@@ -11,16 +11,13 @@
 
 /* ====== Vertex Struct ====== */
 
-Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column)
+Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column) : row(row), column(column)
 {
 	position[0] = x;
 	position[1] = y;
 
 	texCoords[0] = u;
 	texCoords[1] = v;
-
-	this->row = row;
-	this->column = column;
 }
 
 /* ====== Vertex Buffer ====== */
@@ -87,10 +84,10 @@ void VertexArray::EnableAttributes()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, texCoords)));
 
-	glDisableVertexAttribArray(2);
+	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, row)));
 
-	glDisableVertexAttribArray(3);
+	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, column)));
 }
 

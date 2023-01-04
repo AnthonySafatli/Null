@@ -19,7 +19,7 @@ void main() {
 	// calculate position
 	vec2 newPosition = position * 0.1 * size;
 	newPosition.y += row * 0.1 * size;
-	newPosition.x += row * 0.1 * size;
+	newPosition.x += column * 0.1 * size; 
 
 	// const pixel size conversions
 	vec2 constPixel = idealRatio * newPosition;

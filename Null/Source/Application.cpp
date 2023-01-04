@@ -68,6 +68,7 @@ int main(void)
     glUniform1i(u_tex.location, 0);
 
     appContents.AddCharacter('>'); // remove later
+    appContents.AddCharacter('a'); // remove later
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
