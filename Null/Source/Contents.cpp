@@ -1,15 +1,21 @@
 #include "Headers/Contents.h"
 #include "Headers/Character.h"
 
+#include "GLFW/glfw3.h"
+
 #include <iostream>
 
 /* ====== Contents ====== */
 
-Contents::Contents() : textSize(0.5), cursor(0, 0), tabAmount(4)
-{
-	// Only run once at beginning of program
+float Contents::textSize = 0.5;
+CursorController Contents::cursor = CursorController(0, 0);
+int Contents::tabAmount = 4;
+std::vector<Vertex> Contents::vertices;
+std::vector<unsigned int> Contents::indices;
 
-	// TODO: initialize command row and status bar and add vertices to buffers
+void Contents::ProcessKey(const int key, const int action, const int mods)
+{
+	std::cout << key << std::endl;
 }
 
 void Contents::AddCharacter(char ch)
@@ -21,8 +27,6 @@ void Contents::AddCharacter(char ch)
 	// multiply by 4 to get how many vertices to skip
 	// add vertices at that index
 	// add character to proper TextRow
-
-	
 
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);

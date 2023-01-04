@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GLFW/glfw3.h"
+
 #include "GLAbstraction.h"
 #include "MainRows.h"
 #include "Scene.h"
@@ -9,23 +11,26 @@
 
 class Contents
 {
-public:
+private:
     Contents();
 
-    void AddCharacter(char ch);
-    void AddSpace();
-    void AddTab();
-    void RemoveCharacter();
-    void Return();
+    static void AddCharacter(char ch);
+    static void AddSpace();
+    static void AddTab();
+    static void RemoveCharacter();
+    static void Return();
 
-    CommandRow command;
-    StatusBar status;
-    Scene currentScene;
-    CursorController cursor;
+public:
+    static void ProcessKey(const int key, const int action, const int mods);
 
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+    static CommandRow command;
+    static StatusBar status;
+    static Scene currentScene;
+    static CursorController cursor;
 
-    int tabAmount;
-    float textSize;
+    static std::vector<Vertex> vertices;
+    static std::vector<unsigned int> indices;
+
+    static int tabAmount;
+    static float textSize;
 };

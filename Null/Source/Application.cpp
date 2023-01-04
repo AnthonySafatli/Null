@@ -6,6 +6,8 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/Contents.h"
 
+void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 int main(void)
 {
     GLFWwindow* window;
@@ -36,12 +38,11 @@ int main(void)
 
     glfwMakeContextCurrent(window);
 
+    glfwSetKeyCallback(window, ProcessKey);
+
     /* Initialize GLEW */
     if (glewInit())
         return -3;
-
-    /* Null Setup */
-    Contents appContents;
 
     /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
@@ -64,12 +65,8 @@ int main(void)
     Uniform u_tex(program.handle, "tex");
 
     glUniform2f(u_idealRatio.location, (float)width / (float)idealWidth, (float)height / (float)idealHeight);
-    glUniform1f(u_size.location, appContents.textSize);
+    glUniform1f(u_size.location, Contents::textSize);
     glUniform1i(u_tex.location, 0);
-
-    appContents.AddCharacter('>'); // remove later
-    appContents.AddCharacter('a'); // remove later
-
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
@@ -99,12 +96,12 @@ int main(void)
         Other character Input
         */
         
-        vertexBuffer.SetData(appContents.vertices);
-        indexBuffer.SetData(appContents.indices);
+        vertexBuffer.SetData(Contents::vertices);
+        indexBuffer.SetData(Contents::indices);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, Contents::indices.size(), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 
@@ -116,4 +113,10 @@ int main(void)
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return 0;
+}
+
+void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action != 1)
+        Contents::ProcessKey(key, action, mods);
 }
