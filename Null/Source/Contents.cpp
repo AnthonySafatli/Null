@@ -17,6 +17,7 @@ void Contents::AddCharacter(char ch)
 	// use column in cursor controller to see how many more characters
 	// multiply by 4 to get how many vertices to skip
 	// add vertices at that index
+	// add character to proper TextRow
 	
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);

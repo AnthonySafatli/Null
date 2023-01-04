@@ -19,8 +19,11 @@ int main(void)
     // int width = 1800;
     // int height = 1100;
 
+    int idealWidth = 800;
+    int idealHeight = 1400; // move to app contents
+    
     int width = 800;
-    int height = 1400;
+    int height = 1400; // move to app contents
 
     int maxSquaresToRender = 1000;
 
@@ -56,36 +59,15 @@ int main(void)
 
     Texture texture("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\alphabet texture.png");
 
-    Uniform u_dimensions(program.handle, "dimensions");
-    Uniform u_idealDimensions(program.handle, "idealDimensions");
+    Uniform u_idealRatio(program.handle, "idealRatio");
     Uniform u_size(program.handle, "size");
     Uniform u_tex(program.handle, "tex");
 
-    glUniform2f(u_dimensions.location, (float)width, (float)height);
-    glUniform2f(u_idealDimensions.location, (float)width, (float)height);
+    glUniform2f(u_idealRatio.location, (float)width / (float)idealWidth, (float)height / (float)idealHeight);
     glUniform1f(u_size.location, appContents.textSize);
     glUniform1i(u_tex.location, 0);
 
-    {
-        // Initial Render
-
-        appContents.AddCharacter('>');
-        appContents.AddSpace();
-        appContents.AddCharacter('a');
-        appContents.AddCharacter('b');
-        appContents.AddCharacter('c');
-
-        vertexBuffer.SetData(appContents.vertices);
-        indexBuffer.SetData(appContents.indices);
-
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
-
-        glfwSwapBuffers(window);
-    }
-
-    bool sceneChanged = false;
+    appContents.AddCharacter('>'); // remove later
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
@@ -101,27 +83,30 @@ int main(void)
 
         sceneChanged = true;
 
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
+
+        glfwSwapBuffers(window);
+
+
+        TODO: 
+        Event handling
+        Resize
+        Text Input
+        Other character Input
         */
+        
+        vertexBuffer.SetData(appContents.vertices);
+        indexBuffer.SetData(appContents.indices);
 
-        if (sceneChanged)
-        {
-            glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-            glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
 
-            glfwSwapBuffers(window);
+        glfwSwapBuffers(window);
 
-
-            /* TODO: Event handling
-            * Resize
-            * Text Input
-            * Other character Input
-            */
-        }
-
-        glfwPollEvents();
-
-        sceneChanged = false;
+        glfwWaitEvents();
     }
 
     glfwTerminate();

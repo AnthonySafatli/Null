@@ -1,10 +1,8 @@
 // VERTEX
 #version 330 core
 
-uniform vec2 dimensions;
-uniform vec2 idealDimensions;
-uniform float idealRatio; // idealDimensions / currentDimensions
-uniform float aspectRatioCalcs; // calcs for aspect ratio stuff
+uniform vec2 idealRatio; // idealDimensions / currentDimensions
+// uniform float aspectRatioCalcs; // calcs for aspect ratio stuff
 uniform float size;
 
 layout (location = 0) in vec2 position;
@@ -22,7 +20,7 @@ void main() {
 	scaled += anchor;
 
 	// const pixel size conversions
-	vec2 updatedPos = idealDimensions / dimensions * scaled;
+	vec2 updatedPos = idealRatio * scaled;
 
 	// screen space conversions
 	vec2 screenSpace = updatedPos * 2 - 1;
