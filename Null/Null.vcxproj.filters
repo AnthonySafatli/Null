@@ -44,8 +44,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\shader.vert" />
-    <None Include="Resources\Shaders\shader.frag" />
+    <None Include="Resources\Shaders\oldvertex.glsl" />
+    <None Include="Resources\Shaders\fragment.glsl" />
+    <None Include="Resources\Shaders\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\alphabet-texture.png">

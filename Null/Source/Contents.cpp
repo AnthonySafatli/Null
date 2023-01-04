@@ -19,13 +19,15 @@ void Contents::AddCharacter(char ch)
 	// add vertices at that index
 	// add character to proper TextRow
 	
+	//int rowNumber;
+
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	vertices.push_back(Vertex((charAmount * 0.1)      , 0.0, (charAmount * 0.1), 0.0, texCoords.u               , texCoords.v               ));
-	vertices.push_back(Vertex((charAmount * 0.1) + 0.1, 0.0, (charAmount * 0.1), 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               ));
-	vertices.push_back(Vertex((charAmount * 0.1) + 0.1, 0.1, (charAmount * 0.1), 0.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0)));
-	vertices.push_back(Vertex((charAmount * 0.1)      , 0.1, (charAmount * 0.1), 0.0, texCoords.u               , texCoords.v + (1.0 / 10.0)));
+	vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , 10.0, 10.0));
+	vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , 10.0, 10.0));
+	vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), 10.0, 10.0));
+	vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), 10.0, 10.0));
 
 	// Add indices
 	int startIndex = vertices.size() - 4;
