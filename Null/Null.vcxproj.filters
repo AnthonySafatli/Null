@@ -51,7 +51,7 @@
     <Image Include="Resources\Textures\alphabet-texture.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Resources\Textures\alphabet texture.png">
+    <Image Include="Resources\Textures\font texture.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -15,7 +15,7 @@ std::vector<unsigned int> Contents::indices;
 
 void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-		
+	// TODO: Implement 'Home' 'End' 'Delete' 'Del' and other shortcuts
 }
 
 void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
