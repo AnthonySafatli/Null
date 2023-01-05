@@ -95,11 +95,11 @@ void Contents::AddCharacter(char ch)
 	// Get offset from rows
 	if (cursor.y > 0)
 	{
-		offset += command.text.text.size() * 4;
+		offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
 
 		for (int i = 0; i < cursor.y - 1; i++)
 		{
-			offset += currentScene.text[i].text.size() * 4;
+			offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
 		}
 	}
 
@@ -134,20 +134,17 @@ void Contents::AddCharacter(char ch)
 	indices.push_back(startIndex + 3);
 	indices.push_back(startIndex);
 
+	// Add letter to memory
+	SaveChar(ch);
+
 	// Move cursor forwards
 	cursor.Move(RIGHT);
-
-	// Add letter to memory
-	if (cursor.y == 0)
-		command.text.text.push_back(ch);
-	else
-		currentScene.text[cursor.y - 1].text.push_back(ch);
 }
 
 void Contents::AddSpace()
 {
-	cursor.x++;
-	// TODO: Add space to something
+	SaveChar(' ');
+	cursor.Move(RIGHT);
 }
 
 void Contents::AddTab()
@@ -174,4 +171,22 @@ void Contents::Return()
 	
 	cursor.y++;
 	cursor.x = 0;
+}
+
+void Contents::SaveChar(char ch)
+{
+	if (cursor.y == 0)
+	{
+		if (command.text.text.size() == 0)
+			command.text.text.push_back(ch);
+		else
+			command.text.text.insert(command.text.text.begin() + cursor.x, ch);
+	}
+	else
+	{
+		if (currentScene.text[cursor.y - 1].text.size() == 0)
+			currentScene.text[cursor.y - 1].text.push_back(ch);
+		else
+			currentScene.text[cursor.y - 1].text.insert(currentScene.text[cursor.y - 1].text.begin() + cursor.x, ch);
+	}
 }

@@ -2,14 +2,14 @@
 
 /* ====== CommandRow ====== */
 
-CommandRow::CommandRow()
+CommandRow::CommandRow() : text()
 {
 
 }
 
 /* ====== StatusBar ====== */
 
-StatusBar::StatusBar()
+StatusBar::StatusBar() : text()
 {
 
 }

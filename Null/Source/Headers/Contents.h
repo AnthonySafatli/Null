@@ -27,6 +27,8 @@ class Contents
 private:
     Contents();
 
+    static void SaveChar(char ch);
+
 public:
     static void AddSpace();
     static void AddCharacter(char ch);

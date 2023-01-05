@@ -6,7 +6,7 @@
 
 /* ====== Scene ====== */
 
-Scene::Scene()
+Scene::Scene() : text()
 {
 
 }

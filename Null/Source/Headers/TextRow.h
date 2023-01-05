@@ -11,5 +11,5 @@ public:
 
 	std::vector<char> text;
 
-	// create static way to search for texture coords for a letter
+	int whiteSpaceCount;
 };
