@@ -19,21 +19,41 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 	if (action == GLFW_RELEASE)
 		return;
 
-	if (key == TAB)
+	// std::cout << key << std::endl;
+
+	if (key == KEYCODE_TAB)
 		AddTab();
-	else if (key == ENTER)
+	else if (key == KEYCODE_ENTER)
 		Return();
-	else if (key == DEL)
+	else if (key == KEYCODE_DEL)
 		RemoveCharacter(true);
-	else if (key == DELETE)
+	else if (key == KEYCODE_DELETE)
 		RemoveCharacter(false);
-	else if (key == HOME)
+
+	else if (key == KEYCODE_HOME)
 	{
 		// TODO: Implement 'Home'
 	}
-	else if (key == END)
+	else if (key == KEYCODE_END)
 	{
 		// TODO: Implement 'End'
+	}
+
+	else if (key == KEYCODE_RIGHT)
+	{
+		cursor.Move(RIGHT);
+	}
+	else if (key == KEYCODE_LEFT)
+	{
+		cursor.Move(LEFT);
+	}
+	else if (key == KEYCODE_UP)
+	{
+		cursor.Move(UP);
+	}
+	else if (key == KEYCODE_DOWN)
+	{
+		cursor.Move(DOWN);
 	}
 
 	// TODO: Implement shortcuts
@@ -41,7 +61,7 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 
 void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
 {
-	if (codepoint == SPACE)
+	if (codepoint == KEYCODE_SPACE)
 		AddSpace();
 
 	else if (codepoint > 32 && codepoint < 128)

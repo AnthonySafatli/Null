@@ -9,13 +9,18 @@
 
 #include <vector>
 
-#define ENTER  257
-#define TAB    258
-#define DEL    259
-#define DELETE 261
-#define HOME   268
-#define END    321
-#define SPACE  32
+#define KEYCODE_ENTER  257
+#define KEYCODE_TAB    258
+#define KEYCODE_DEL    259
+#define KEYCODE_DELETE 261
+#define KEYCODE_RIGHT  262    
+#define KEYCODE_LEFT   263
+#define KEYCODE_UP     265
+#define KEYCODE_DOWN   264
+#define KEYCODE_HOME   268
+#define KEYCODE_END    321
+
+#define KEYCODE_SPACE  32
 
 class Contents
 {
