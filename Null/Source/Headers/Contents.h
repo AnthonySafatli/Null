@@ -9,6 +9,13 @@
 
 #include <vector>
 
+#define ENTER  257
+#define DEL    259
+#define DELETE 261
+#define HOME   268
+#define END    321
+#define SPACE  32
+
 class Contents
 {
 private:
@@ -17,7 +24,7 @@ private:
     static void AddCharacter(char ch);
     static void AddSpace();
     static void AddTab();
-    static void RemoveCharacter();
+    static void RemoveCharacter(bool left);
     static void Return();
 
 public:

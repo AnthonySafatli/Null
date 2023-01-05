@@ -15,18 +15,47 @@ std::vector<unsigned int> Contents::indices;
 
 void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	// TODO: Implement 'Del', 'Enter', 'Home', 'End', 'Delete', and other shortcuts
+	if (action == GLFW_RELEASE)
+		return;
+
+	if (key == ENTER)
+	{
+		Return();
+	}
+	else if (key == DEL)
+	{
+		RemoveCharacter(true);
+	}
+	else if (key == DELETE)
+	{
+		RemoveCharacter(false);
+	}
+	else if (key == HOME)
+	{
+		// TODO: Implement 'Home'
+	}
+	else if (key == END)
+	{
+		// TODO: Implement 'End'
+	}
+
+	// TODO: Implement shortcuts
 }
 
 void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
 {
-	if (codepoint > 32 && codepoint < 128)
+	if (codepoint == SPACE)
+		AddSpace();
+
+	else if (codepoint > 32 && codepoint < 128)
 		AddCharacter(codepoint);
 }
 
 void Contents::OnResize(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+
+	// TODO: glUniform2f();
 }
 
 void Contents::AddCharacter(char ch)
@@ -63,6 +92,7 @@ void Contents::AddCharacter(char ch)
 
 void Contents::AddSpace()
 {
+	cursor.screenX++;
 	// TODO: Add space to something
 }
 
@@ -72,12 +102,22 @@ void Contents::AddTab()
 		AddSpace();
 }
 
-void Contents::RemoveCharacter()
+void Contents::RemoveCharacter(bool left)
 {
-	// same as adding but not
+	if (left)
+	{
+		// TODO: Implement 'Del'
+	}
+	else
+	{
+		// TODO: Implement 'Delete'
+	}
 }
 
 void Contents::Return()
 {
 	// TODO: Execute command if on CommandRow
+
+	cursor.screenY++;
+	cursor.screenX = 0;
 }
