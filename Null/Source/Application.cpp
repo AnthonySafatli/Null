@@ -8,9 +8,9 @@
 
 int main(void)
 {
+    /* Initialize GLFW */
     GLFWwindow* window;
 
-    /* Initialize GLFW and Window */
     if (!glfwInit())
         return -1;
 
@@ -19,9 +19,6 @@ int main(void)
     // int width = 1800;
     // int height = 1100;
 
-    int idealWidth = 800;
-    int idealHeight = 1400; // move to app contents
-    
     int width = 800;
     int height = 1400; // move to app contents
 
@@ -38,12 +35,12 @@ int main(void)
 
     glfwSetKeyCallback(window, Contents::ProcessKey);
     glfwSetCharCallback(window, Contents::ProcessChar);
+    glfwSetFramebufferSizeCallback(window, Contents::OnResize);
 
-    /* Initialize GLEW */
+    /* OpenGL Setup */
     if (glewInit())
         return -3;
 
-    /* OpenGL Setup */
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
     VertexBuffer vertexBuffer(maxSquaresToRender);
@@ -63,15 +60,13 @@ int main(void)
     Uniform u_size(program.handle, "size");
     Uniform u_tex(program.handle, "tex");
 
-    glUniform2f(u_idealRatio.location, (float)width / (float)idealWidth, (float)height / (float)idealHeight);
+    glUniform2f(u_idealRatio.location, 1.0, 1.0);
     glUniform1f(u_size.location, Contents::textSize);
     glUniform1i(u_tex.location, 0);
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
-        /* Drawing */
-
         // TODO: Resize event
         
         vertexBuffer.SetData(Contents::vertices);
@@ -87,8 +82,6 @@ int main(void)
     }
 
     glfwTerminate();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
 
     return 0;
 }

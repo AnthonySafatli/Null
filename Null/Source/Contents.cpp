@@ -15,13 +15,18 @@ std::vector<unsigned int> Contents::indices;
 
 void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	// TODO: Implement 'Home' 'End' 'Delete' 'Del' and other shortcuts
+	// TODO: Implement 'Del', 'Enter', 'Home', 'End', 'Delete', and other shortcuts
 }
 
 void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
 {
 	if (codepoint > 32 && codepoint < 128)
 		AddCharacter(codepoint);
+}
+
+void Contents::OnResize(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 void Contents::AddCharacter(char ch)
@@ -53,7 +58,7 @@ void Contents::AddCharacter(char ch)
 
 	cursor.Move(RIGHT);
 
-	// Add char to vector
+	// TODO: Add char to vector
 }
 
 void Contents::AddSpace()
@@ -74,6 +79,5 @@ void Contents::RemoveCharacter()
 
 void Contents::Return()
 {
-	// if on command row, execute command
-	// else create new text row
+	// TODO: Execute command if on CommandRow
 }

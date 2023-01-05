@@ -23,6 +23,7 @@ private:
 public:
     static void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void ProcessChar(GLFWwindow* window, unsigned int codepoint);
+    static void OnResize(GLFWwindow* window, int width, int height);
 
     static CommandRow command;
     static StatusBar status;
