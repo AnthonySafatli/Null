@@ -1,8 +1,7 @@
 // VERTEX
 #version 330 core
 
-uniform vec2 idealRatio;
-// uniform float aspectRatioCalcs; // calcs for aspect ratio stuff
+uniform vec2 idealRatio; // idealSize / currentSize
 uniform float size;
 uniform int sceneRowIndex;
 
