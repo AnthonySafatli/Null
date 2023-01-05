@@ -104,7 +104,26 @@ void Contents::AddCharacter(char ch)
 	}
 
 	// Get offset from columns
-	offset += cursor.x * 4;
+	int whiteSpaceCountSoFar = 0;
+
+	if (cursor.y == 0)
+	{
+		for (int i = 0; i < cursor.x; i++)
+		{
+			if (command.text.text[i] == ' ')
+				whiteSpaceCountSoFar++;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < cursor.x; i++)
+		{
+			if (currentScene.text[cursor.y - 1].text[i] == ' ')
+				whiteSpaceCountSoFar++;
+		}
+	}
+
+	offset += (cursor.x - whiteSpaceCountSoFar) * 4;
 
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
@@ -143,7 +162,56 @@ void Contents::AddCharacter(char ch)
 
 void Contents::AddSpace()
 {
+	int offset = 0;
+
+	// Get offset from rows
+	if (cursor.y > 0)
+	{
+		offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
+
+		for (int i = 0; i < cursor.y - 1; i++)
+		{
+			offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
+		}
+	}
+
+	// Get offset from columns
+	int whiteSpaceCountSoFar = 0;
+
+	if (cursor.y == 0)
+	{
+		for (int i = 0; i < cursor.x; i++)
+		{
+			if (command.text.text[i] == ' ')
+				whiteSpaceCountSoFar++;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < cursor.x; i++)
+		{
+			if (currentScene.text[cursor.y - 1].text[i] == ' ')
+				whiteSpaceCountSoFar++;
+		}
+	}
+
+	offset += (cursor.x - whiteSpaceCountSoFar) * 4;
+
+	// Edit the vertices after
+	int columnSize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+
+	for (int i = 0; i < columnSize - cursor.x; i++)
+	{
+		vertices[offset++].column++;
+		vertices[offset++].column++;
+		vertices[offset++].column++;
+		vertices[offset++].column++;
+	}
+
+	// Add letter to memory
 	SaveChar(' ');
+
+	// Move cursor forwards
 	cursor.Move(RIGHT);
 }
 
@@ -169,6 +237,7 @@ void Contents::Return()
 {
 	// TODO: Execute command if on CommandRow
 	
+	currentScene.text.push_back(TextRow()); 
 	cursor.y++;
 	cursor.x = 0;
 }
