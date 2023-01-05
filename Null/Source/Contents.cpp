@@ -8,11 +8,15 @@
 
 /* ====== Contents ====== */
 
-float Contents::textSize = 0.3;
+CommandRow Contents::command = CommandRow();
+Scene Contents::currentScene = Scene();
 CursorController Contents::cursor = CursorController(0, 0);
-int Contents::tabAmount = 4;
+
 std::vector<Vertex> Contents::vertices;
 std::vector<unsigned int> Contents::indices;
+
+float Contents::textSize = 0.3;
+int Contents::tabAmount = 4;
 
 void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -83,15 +87,43 @@ void Contents::AddCharacter(char ch)
 	// use column in cursor controller to see how many more characters
 	// multiply by 4 to get how many vertices to skip
 	// add vertices at that index
+	// edit any vertices on same row that come after
 	// add character to proper TextRow
+
+	int offset = 0;
+
+	// Get offset from rows
+	if (cursor.y > 0)
+	{
+		offset += command.text.text.size() * 4;
+
+		for (int i = 0; i < cursor.y - 1; i++)
+		{
+			offset += currentScene.text[i].text.size() * 4;
+		}
+	}
+
+	// Get offset from columns
+	offset += cursor.x * 4;
 
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , cursor.screenY, cursor.screenX, 0.0));
-	vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , cursor.screenY, cursor.screenX, 0.0));
-	vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), cursor.screenY, cursor.screenX, 0.0));
-	vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), cursor.screenY, cursor.screenX, 0.0));
+	vertices.insert(vertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , cursor.y - cursor.sceneStartIndex, cursor.x, 0.0));
+	vertices.insert(vertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , cursor.y - cursor.sceneStartIndex, cursor.x, 0.0));
+	vertices.insert(vertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), cursor.y - cursor.sceneStartIndex, cursor.x, 0.0));
+	vertices.insert(vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), cursor.y - cursor.sceneStartIndex, cursor.x, 0.0));
+
+	// Edit the vertices after
+	int columnSize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+
+	for (int i = 0; i < columnSize - cursor.x; i++)
+	{
+		vertices[offset++].column++;
+		vertices[offset++].column++;
+		vertices[offset++].column++;
+		vertices[offset++].column++;
+	}
 
 	// Add indices
 	int startIndex = vertices.size() - 4;
@@ -102,14 +134,19 @@ void Contents::AddCharacter(char ch)
 	indices.push_back(startIndex + 3);
 	indices.push_back(startIndex);
 
+	// Move cursor forwards
 	cursor.Move(RIGHT);
 
-	// TODO: Add char to vector
+	// Add letter to memory
+	if (cursor.y == 0)
+		command.text.text.push_back(ch);
+	else
+		currentScene.text[cursor.y - 1].text.push_back(ch);
 }
 
 void Contents::AddSpace()
 {
-	cursor.screenX++;
+	cursor.x++;
 	// TODO: Add space to something
 }
 
@@ -135,6 +172,6 @@ void Contents::Return()
 {
 	// TODO: Execute command if on CommandRow
 	
-	cursor.screenY++;
-	cursor.screenX = 0;
+	cursor.y++;
+	cursor.x = 0;
 }

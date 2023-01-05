@@ -1,6 +1,6 @@
 #include "Headers/CursorController.h"
 
-CursorController::CursorController(int x, int y) : screenX(x), screenY(y), sceneStartIndex(0)
+CursorController::CursorController(int x, int y) : x(x), y(y), sceneStartIndex(0)
 {
 
 }
@@ -12,16 +12,16 @@ void CursorController::Move(const Direction dir)
 	switch (dir)
 	{
 	case UP:
-		screenY--;
+		y--;
 		break;
 	case DOWN:
-		screenY++;
+		y++;
 		break;
 	case RIGHT:
-		screenX++;
+		x++;
 		break;
 	case LEFT:
-		screenX--;
+		x--;
 		break;
 	default:
 		break;

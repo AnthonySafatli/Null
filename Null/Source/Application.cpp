@@ -41,6 +41,7 @@ int main(void)
 
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
+    // move to app contents
     VertexBuffer vertexBuffer(maxSquaresToRender);
 
     VertexArray::EnableAttributes();

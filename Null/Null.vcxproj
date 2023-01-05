@@ -101,7 +101,6 @@
     <None Include="Resources\Shaders\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Textures\alphabet-texture.png" />
     <Image Include="Resources\Textures\font texture.png" />
   </ItemGroup>
   <ItemGroup>

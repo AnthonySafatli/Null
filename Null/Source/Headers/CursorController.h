@@ -9,7 +9,7 @@ public:
 
 	void Move(const Direction dir);
 
-	unsigned int screenX;
-	unsigned int screenY;
+	unsigned int x;
+	unsigned int y;
 	unsigned int sceneStartIndex; // the index of the first row in the Scene
 };
