@@ -6,8 +6,6 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/Contents.h"
 
-void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
-
 int main(void)
 {
     GLFWwindow* window;
@@ -38,7 +36,8 @@ int main(void)
 
     glfwMakeContextCurrent(window);
 
-    glfwSetKeyCallback(window, ProcessKey);
+    glfwSetKeyCallback(window, Contents::ProcessKey);
+    glfwSetCharCallback(window, Contents::ProcessChar);
 
     /* Initialize GLEW */
     if (glewInit())
@@ -72,29 +71,8 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         /* Drawing */
-        
-        /* keyboard event
 
-        appContents.AddCharacter(character);
-
-        vertexBuffer.SetData(appContents.vertices);
-        indexBuffer.SetData(appContents.indices);
-
-        sceneChanged = true;
-
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
-
-        glfwSwapBuffers(window);
-
-
-        TODO: 
-        Event handling
-        Resize
-        Text Input
-        Other character Input
-        */
+        // TODO: Resize event
         
         vertexBuffer.SetData(Contents::vertices);
         indexBuffer.SetData(Contents::indices);
@@ -113,10 +91,4 @@ int main(void)
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return 0;
-}
-
-void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (action != 1)
-        Contents::ProcessKey(key, action, mods);
 }

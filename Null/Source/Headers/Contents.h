@@ -21,7 +21,8 @@ private:
     static void Return();
 
 public:
-    static void ProcessKey(const int key, const int action, const int mods);
+    static void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void ProcessChar(GLFWwindow* window, unsigned int codepoint);
 
     static CommandRow command;
     static StatusBar status;

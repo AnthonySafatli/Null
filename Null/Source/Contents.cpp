@@ -13,9 +13,15 @@ int Contents::tabAmount = 4;
 std::vector<Vertex> Contents::vertices;
 std::vector<unsigned int> Contents::indices;
 
-void Contents::ProcessKey(const int key, const int action, const int mods)
+void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	std::cout << key << std::endl;
+		
+}
+
+void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
+{
+	if (codepoint > 32 && codepoint < 128)
+		AddCharacter(codepoint);
 }
 
 void Contents::AddCharacter(char ch)
@@ -46,6 +52,8 @@ void Contents::AddCharacter(char ch)
 	indices.push_back(startIndex);
 
 	cursor.Move(RIGHT);
+
+	// Add char to vector
 }
 
 void Contents::AddSpace()
