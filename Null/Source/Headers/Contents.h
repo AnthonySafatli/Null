@@ -10,6 +10,7 @@
 #include <vector>
 
 #define ENTER  257
+#define TAB    258
 #define DEL    259
 #define DELETE 261
 #define HOME   268
@@ -21,13 +22,13 @@ class Contents
 private:
     Contents();
 
-    static void AddCharacter(char ch);
-    static void AddSpace();
     static void AddTab();
     static void RemoveCharacter(bool left);
     static void Return();
 
 public:
+    static void AddSpace();
+    static void AddCharacter(char ch);
     static void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void ProcessChar(GLFWwindow* window, unsigned int codepoint);
     static void OnResize(GLFWwindow* window, int width, int height);

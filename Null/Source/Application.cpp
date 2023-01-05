@@ -65,8 +65,6 @@ int main(void)
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
-        // TODO: Resize event
-        
         vertexBuffer.SetData(Contents::vertices);
         indexBuffer.SetData(Contents::indices);
 

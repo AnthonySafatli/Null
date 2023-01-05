@@ -4,10 +4,11 @@
 #include "GLFW/glfw3.h"
 
 #include <iostream>
+#include <string>
 
 /* ====== Contents ====== */
 
-float Contents::textSize = 0.5;
+float Contents::textSize = 0.3;
 CursorController Contents::cursor = CursorController(0, 0);
 int Contents::tabAmount = 4;
 std::vector<Vertex> Contents::vertices;
@@ -18,18 +19,14 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 	if (action == GLFW_RELEASE)
 		return;
 
-	if (key == ENTER)
-	{
+	if (key == TAB)
+		AddTab();
+	else if (key == ENTER)
 		Return();
-	}
 	else if (key == DEL)
-	{
 		RemoveCharacter(true);
-	}
 	else if (key == DELETE)
-	{
 		RemoveCharacter(false);
-	}
 	else if (key == HOME)
 	{
 		// TODO: Implement 'Home'
@@ -117,7 +114,7 @@ void Contents::RemoveCharacter(bool left)
 void Contents::Return()
 {
 	// TODO: Execute command if on CommandRow
-
+	
 	cursor.screenY++;
 	cursor.screenX = 0;
 }
