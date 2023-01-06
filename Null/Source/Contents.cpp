@@ -219,7 +219,7 @@ void Contents::RemoveCharacter(bool left)
 		// Get offset from columns
 		int whiteSpaceCountSoFar = 0;
 
-		for (int i = 0; i < cursorPos - 1; i++)
+		for (int i = 0; i < cursorPos; i++)
 		{
 			if (currentScene.text[cursor.y].text[i] == ' ')
 				whiteSpaceCountSoFar++;

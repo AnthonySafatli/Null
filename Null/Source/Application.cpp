@@ -27,6 +27,7 @@ int main(void)
 
     glfwMakeContextCurrent(window);
 
+    // Make "middle man" static class for callbacks, call non static contents class (maybe rename class aswell)
     glfwSetKeyCallback(window, Contents::ProcessKey);
     glfwSetCharCallback(window, Contents::ProcessChar);
     glfwSetFramebufferSizeCallback(window, Contents::OnResize);
@@ -37,7 +38,7 @@ int main(void)
 
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    // move to app contents
+    // TODO: move to app contents
     VertexBuffer vertexBuffer(maxSquaresToRender);
 
     VertexArray::EnableAttributes();
