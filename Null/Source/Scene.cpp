@@ -8,7 +8,7 @@
 
 Scene::Scene() : text()
 {
-
+    text.push_back(TextRow());
 }
 
 Scene Scene::WelcomeScene()

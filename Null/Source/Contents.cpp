@@ -8,7 +8,7 @@
 
 /* ====== Contents ====== */
 
-CommandRow Contents::command = CommandRow();
+// CommandRow Contents::command = CommandRow();
 Scene Contents::currentScene = Scene();
 CursorController Contents::cursor = CursorController(0, 0);
 
@@ -17,6 +17,9 @@ std::vector<unsigned int> Contents::indices;
 
 float Contents::textSize = 0.3;
 int Contents::tabAmount = 4;
+
+int Contents::width = 1800;
+int Contents::height = 1100;
 
 void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -72,36 +75,20 @@ void Contents::OnResize(GLFWwindow* window, int width, int height)
 void Contents::AddCharacter(char ch)
 {
 	int offset = 0;
-
+	
 	// Get offset from rows
-	if (cursor.y > 0)
+	for (int i = 0; i < cursor.y; i++)
 	{
-		offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
-
-		for (int i = 0; i < cursor.y - 1; i++)
-		{
-			offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
-		}
+		offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
 	}
 
 	// Get offset from columns
 	int whiteSpaceCountSoFar = 0;
-
-	if (cursor.y == 0)
+	
+	for (int i = 0; i < cursor.x; i++)
 	{
-		for (int i = 0; i < cursor.x; i++)
-		{
-			if (command.text.text[i] == ' ')
-				whiteSpaceCountSoFar++;
-		}
-	}
-	else
-	{
-		for (int i = 0; i < cursor.x; i++)
-		{
-			if (currentScene.text[cursor.y - 1].text[i] == ' ')
-				whiteSpaceCountSoFar++;
-		}
+		if (currentScene.text[cursor.y].text[i] == ' ')
+			whiteSpaceCountSoFar++;
 	}
 
 	offset += (cursor.x - whiteSpaceCountSoFar) * 4;
@@ -115,7 +102,7 @@ void Contents::AddCharacter(char ch)
 	vertices.insert(vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), cursor.y - cursor.sceneStartIndex, cursor.x, 0.0));
 
 	// Edit the vertices after
-	int columnSize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+	int columnSize = currentScene.text[cursor.y].text.size();
 
 	for (int i = 0; i < columnSize - cursor.x; i++)
 	{
@@ -146,40 +133,24 @@ void Contents::AddSpace()
 	int offset = 0;
 
 	// Get offset from rows
-	if (cursor.y > 0)
+	for (int i = 0; i < cursor.y; i++)
 	{
-		offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
-
-		for (int i = 0; i < cursor.y - 1; i++)
-		{
-			offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
-		}
+		offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
 	}
 
 	// Get offset from columns
 	int whiteSpaceCountSoFar = 0;
 
-	if (cursor.y == 0)
+	for (int i = 0; i < cursor.x; i++)
 	{
-		for (int i = 0; i < cursor.x; i++)
-		{
-			if (command.text.text[i] == ' ')
-				whiteSpaceCountSoFar++;
-		}
-	}
-	else
-	{
-		for (int i = 0; i < cursor.x; i++)
-		{
-			if (currentScene.text[cursor.y - 1].text[i] == ' ')
-				whiteSpaceCountSoFar++;
-		}
+		if (currentScene.text[cursor.y].text[i] == ' ')
+			whiteSpaceCountSoFar++;
 	}
 
 	offset += (cursor.x - whiteSpaceCountSoFar) * 4;
 
 	// Edit the vertices after
-	int columnSize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+	int columnSize = currentScene.text[cursor.y].text.size();
 
 	for (int i = 0; i < columnSize - cursor.x; i++)
 	{
@@ -193,10 +164,7 @@ void Contents::AddSpace()
 	SaveChar(' ');
 
 	// Increment whitespace counter
-	if (cursor.y == 0)
-		command.text.whiteSpaceCount++;
-	else
-		currentScene.text[cursor.y - 1].whiteSpaceCount++;
+	currentScene.text[cursor.y].whiteSpaceCount++;
 
 	// Move cursor forwards
 	cursor.Move(RIGHT);
@@ -220,20 +188,19 @@ void Contents::RemoveCharacter(bool left)
 		if (cursor.x < 0)
 			return;
 
-		characterToDelete = cursor.y == 0 ? command.text.text[cursor.x - 1] : currentScene.text[cursor.y - 1].text[cursor.x - 1];
+		characterToDelete = currentScene.text[cursor.y].text[cursor.x - 1];
 
 		cursorPos = cursor.x - 1;
-
 	}
 	else
 	{
 		// Get character to delete
-		int charArraySize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+		int charArraySize = currentScene.text[cursor.y].text.size();
 
 		if (cursor.x >= charArraySize)
 			return;
 
-		characterToDelete = cursor.y == 0 ? command.text.text[cursor.x] : currentScene.text[cursor.y - 1].text[cursor.x];
+		characterToDelete = currentScene.text[cursor.y].text[cursor.x];
 
 		cursorPos = cursor.x;
 	}
@@ -243,36 +210,19 @@ void Contents::RemoveCharacter(bool left)
 	// Remove vertices
 	if (characterToDelete != ' ')
 	{
-
 		// Get offset from rows
-		if (cursor.y > 0)
+		for (int i = 0; i < cursor.y; i++)
 		{
-			offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
-
-			for (int i = 0; i < cursor.y - 1; i++)
-			{
-				offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
-			}
+			offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
 		}
 
 		// Get offset from columns
 		int whiteSpaceCountSoFar = 0;
 
-		if (cursor.y == 0)
+		for (int i = 0; i < cursorPos - 1; i++)
 		{
-			for (int i = 0; i < cursorPos; i++)
-			{
-				if (command.text.text[i] == ' ')
-					whiteSpaceCountSoFar++;
-			}
-		}
-		else
-		{
-			for (int i = 0; i < cursorPos - 1; i++)
-			{
-				if (currentScene.text[cursor.y - 1].text[i] == ' ')
-					whiteSpaceCountSoFar++;
-			}
+			if (currentScene.text[cursor.y].text[i] == ' ')
+				whiteSpaceCountSoFar++;
 		}
 
 		offset += (cursorPos - whiteSpaceCountSoFar) * 4;
@@ -283,7 +233,7 @@ void Contents::RemoveCharacter(bool left)
 	}
 
 	// Edit vertices after
-	int columnSize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+	int columnSize = currentScene.text[cursor.y].text.size();
 
 	if (!left)
 		cursor.Move(RIGHT);
@@ -297,10 +247,7 @@ void Contents::RemoveCharacter(bool left)
 	}
 
 	// Remove character from memory
-	if (cursor.y == 0)
-		command.text.text.erase(command.text.text.begin() + cursorPos);
-	else
-		currentScene.text[cursor.y - 1].text.erase(currentScene.text[cursor.y - 1].text.begin() + cursorPos);
+	currentScene.text[cursor.y].text.erase(currentScene.text[cursor.y].text.begin() + cursorPos);
 
 	// Move cursor
 	cursor.Move(LEFT);
@@ -317,18 +264,8 @@ void Contents::Return()
 
 void Contents::SaveChar(char ch)
 {
-	if (cursor.y == 0)
-	{
-		if (command.text.text.size() == 0)
-			command.text.text.push_back(ch);
-		else
-			command.text.text.insert(command.text.text.begin() + cursor.x, ch);
-	}
+	if (currentScene.text[cursor.y].text.size() == 0)
+		currentScene.text[cursor.y].text.push_back(ch);
 	else
-	{
-		if (currentScene.text[cursor.y - 1].text.size() == 0)
-			currentScene.text[cursor.y - 1].text.push_back(ch);
-		else
-			currentScene.text[cursor.y - 1].text.insert(currentScene.text[cursor.y - 1].text.begin() + cursor.x, ch);
-	}
+		currentScene.text[cursor.y].text.insert(currentScene.text[cursor.y].text.begin() + cursor.x, ch);
 }

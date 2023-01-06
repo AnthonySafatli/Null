@@ -16,13 +16,9 @@ int main(void)
 
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-    // move to app contents
-    int width = 1800;  // Ideal: 800 
-    int height = 1100; // Ideal: 1400
-
     int maxSquaresToRender = 1000;
 
-    window = glfwCreateWindow(width, height, "Null", NULL, NULL);
+    window = glfwCreateWindow(Contents::width, Contents::height, "Null", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -59,7 +55,7 @@ int main(void)
     Uniform u_size(program.handle, "size");
     Uniform u_tex(program.handle, "tex");
 
-    glUniform2f(u_idealRatio.location, 800.0 / 1800.0, 1400.0 / 1100.0);
+    glUniform2f(u_idealRatio.location, IDEAL_WIDTH / 1800.0, IDEAL_HEIGHT / 1100.0);
     glUniform1f(u_size.location, Contents::textSize);
     glUniform1i(u_tex.location, 0);
 

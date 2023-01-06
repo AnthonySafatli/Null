@@ -21,7 +21,7 @@ void CursorController::Move(const Direction dir)
 
 	case DOWN:
 
-		if (y > Contents::currentScene.text.size())
+		if (y >= Contents::currentScene.text.size())
 			y++;
 
 		break;
@@ -35,7 +35,7 @@ void CursorController::Move(const Direction dir)
 
 	case RIGHT:
 
-		TextRow currentRow = Contents::cursor.y == 0 ? Contents::command.text : Contents::currentScene.text[Contents::cursor.y - 1];
+		TextRow currentRow = Contents::currentScene.text[Contents::cursor.y];
 		if (x < currentRow.text.size())
 			x++;
 

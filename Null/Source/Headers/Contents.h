@@ -9,6 +9,9 @@
 
 #include <vector>
 
+#define IDEAL_WIDTH    800
+#define IDEAL_HEIGHT   1400
+
 #define KEYCODE_ENTER  257
 #define KEYCODE_TAB    258
 #define KEYCODE_DEL    259
@@ -40,8 +43,8 @@ public:
     static void ProcessChar(GLFWwindow* window, unsigned int codepoint);
     static void OnResize(GLFWwindow* window, int width, int height);
 
-    static CommandRow command;
-    static StatusBar status;
+    // static CommandRow command;
+    // static StatusBar status;
     static Scene currentScene;
     static CursorController cursor;
 
@@ -50,4 +53,9 @@ public:
 
     static int tabAmount;
     static float textSize;
+
+    static int width;
+    static int height;
+    static const int idealWidth;
+    static const int idealHeight;
 };
