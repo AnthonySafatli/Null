@@ -9,9 +9,6 @@
 
 #include <vector>
 
-#define IDEAL_WIDTH    800
-#define IDEAL_HEIGHT   1400
-
 #define KEYCODE_ENTER  257
 #define KEYCODE_TAB    258
 #define KEYCODE_DEL    259
@@ -28,34 +25,35 @@
 class Contents
 {
 private:
-    Contents();
 
-    static void SaveChar(char ch);
+    void SaveChar(char ch);
 
 public:
-    static void AddSpace();
-    static void AddCharacter(char ch);
-    static void AddTab();
-    static void RemoveCharacter(bool left);
-    static void Return();
+    Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY);
 
-    static void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
-    static void ProcessChar(GLFWwindow* window, unsigned int codepoint);
-    static void OnResize(GLFWwindow* window, int width, int height);
+    void AddSpace();
+    void AddCharacter(char ch);
+    void AddTab();
+    void RemoveCharacter(bool left);
+    void Return();
 
-    // static CommandRow command;
-    // static StatusBar status;
-    static Scene currentScene;
-    static CursorController cursor;
+    void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
+    void ProcessChar(GLFWwindow* window, unsigned int codepoint);
+    void OnResize(GLFWwindow* window, int width, int height);
 
-    static std::vector<Vertex> vertices;
-    static std::vector<unsigned int> indices;
+    // CommandRow command;
+    // StatusBar status;
+    Scene currentScene;
+    CursorController cursor;
 
-    static int tabAmount;
-    static float textSize;
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
 
-    static int width;
-    static int height;
-    static const int idealWidth;
-    static const int idealHeight;
+    int tabAmount;
+    float textSize;
+
+    int width;
+    int height;
+    const int idealWidth;
+    const int idealHeight;
 };

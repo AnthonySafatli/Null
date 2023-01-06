@@ -9,17 +9,13 @@
 /* ====== Contents ====== */
 
 // CommandRow Contents::command = CommandRow();
-Scene Contents::currentScene = Scene();
-CursorController Contents::cursor = CursorController(0, 0);
 
-std::vector<Vertex> Contents::vertices;
-std::vector<unsigned int> Contents::indices;
-
-float Contents::textSize = 0.3;
-int Contents::tabAmount = 4;
-
-int Contents::width = 1800;
-int Contents::height = 1100;
+Contents::Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY) 
+	: idealWidth(800), idealHeight(1400), 
+		width(width), height(height), tabAmount(tabAmount), textSize(textSize),
+		vertices(), indices(), currentScene(), cursor(startX, startY)
+{
+}
 
 void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -45,13 +41,13 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 	}
 
 	else if (key == KEYCODE_RIGHT)
-		cursor.Move(RIGHT);
+		cursor.Move(currentScene, cursor.y, RIGHT);
 	else if (key == KEYCODE_LEFT)
-		cursor.Move(LEFT);
+		cursor.Move(currentScene, cursor.y, LEFT);
 	else if (key == KEYCODE_UP)
-		cursor.Move(UP);
+		cursor.Move(currentScene, cursor.y, UP);
 	else if (key == KEYCODE_DOWN)
-		cursor.Move(DOWN);
+		cursor.Move(currentScene, cursor.y, DOWN);
 
 	// TODO: Implement shortcuts
 }
@@ -125,7 +121,7 @@ void Contents::AddCharacter(char ch)
 	SaveChar(ch);
 
 	// Move cursor forwards
-	cursor.Move(RIGHT);
+	cursor.Move(currentScene, cursor.y, RIGHT);
 }
 
 void Contents::AddSpace()
@@ -167,7 +163,7 @@ void Contents::AddSpace()
 	currentScene.text[cursor.y].whiteSpaceCount++;
 
 	// Move cursor forwards
-	cursor.Move(RIGHT);
+	cursor.Move(currentScene, cursor.y, RIGHT);
 }
 
 void Contents::AddTab()
@@ -236,7 +232,7 @@ void Contents::RemoveCharacter(bool left)
 	int columnSize = currentScene.text[cursor.y].text.size();
 
 	if (!left)
-		cursor.Move(RIGHT);
+		cursor.Move(currentScene, cursor.y, RIGHT);
 
 	for (int i = 0; i < columnSize - cursor.x; i++)
 	{
@@ -250,7 +246,7 @@ void Contents::RemoveCharacter(bool left)
 	currentScene.text[cursor.y].text.erase(currentScene.text[cursor.y].text.begin() + cursorPos);
 
 	// Move cursor
-	cursor.Move(LEFT);
+	cursor.Move(currentScene, cursor.y, LEFT);
 }
 
 void Contents::Return()

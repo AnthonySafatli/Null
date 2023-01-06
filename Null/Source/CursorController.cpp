@@ -3,10 +3,9 @@
 
 CursorController::CursorController(int x, int y) : x(x), y(y), sceneStartIndex(0)
 {
-
 }
 
-void CursorController::Move(const Direction dir)
+void CursorController::Move(Scene currentScene, int cursorY, const Direction dir)
 {
 	// TODO: Proper bounds checking
 
@@ -21,7 +20,7 @@ void CursorController::Move(const Direction dir)
 
 	case DOWN:
 
-		if (y >= Contents::currentScene.text.size())
+		if (y >= currentScene.text.size())
 			y++;
 
 		break;
@@ -32,7 +31,7 @@ void CursorController::Move(const Direction dir)
 
 	case RIGHT:
 
-		TextRow currentRow = Contents::currentScene.text[Contents::cursor.y];
+		TextRow currentRow = currentScene.text[cursorY];
 		if (x < currentRow.text.size())
 			x++;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Scene.h"
+
 enum Direction { UP, DOWN, RIGHT, LEFT };
 
 class CursorController
@@ -7,7 +9,7 @@ class CursorController
 public:
 	CursorController(int x, int y);
 
-	void Move(const Direction dir);
+	void Move(Scene currentScene, int cursorY, const Direction dir);
 
 	unsigned int x;
 	unsigned int y;
