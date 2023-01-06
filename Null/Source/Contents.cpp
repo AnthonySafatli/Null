@@ -232,7 +232,60 @@ void Contents::RemoveCharacter(bool left)
 {
 	if (left)
 	{
-		// TODO: Implement 'Del'
+		// Get character to delete
+		char characterToDelete = cursor.y == 0 ? command.text.text[cursor.x - 1] : currentScene.text[cursor.y - 1].text[cursor.x - 1];
+
+		// Remove vertices
+		if (characterToDelete != ' ')
+		{
+			int offset = 0;
+
+			// Get offset from rows
+			if (cursor.y > 0)
+			{
+				offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
+
+				for (int i = 0; i < cursor.y - 1; i++)
+				{
+					offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
+				}
+			}
+
+			// Get offset from columns
+			int whiteSpaceCountSoFar = 0;
+
+			if (cursor.y == 0)
+			{
+				for (int i = 0; i < cursor.x - 1; i++)
+				{
+					if (command.text.text[i] == ' ')
+						whiteSpaceCountSoFar++;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < cursor.x - 1; i++)
+				{
+					if (currentScene.text[cursor.y - 1].text[i] == ' ')
+						whiteSpaceCountSoFar++;
+				}
+			}
+
+			offset += (cursor.x - whiteSpaceCountSoFar - 1) * 4;
+
+			// Remove vertices
+			vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
+			for (int i = 0; i < 6; i++) indices.pop_back();
+		}
+
+		// Remove character from memory
+		if (cursor.y == 0)
+			command.text.text.erase(command.text.text.begin() + cursor.x - 1);
+		else
+			currentScene.text[cursor.y - 1].text.erase(currentScene.text[cursor.y - 1].text.begin() + cursor.x - 1);
+
+		// Move character
+		cursor.Move(LEFT);
 	}
 	else
 	{

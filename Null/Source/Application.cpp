@@ -66,10 +66,10 @@ int main(void)
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
+        glClear(GL_COLOR_BUFFER_BIT);
+
         vertexBuffer.SetData(Contents::vertices);
         indexBuffer.SetData(Contents::indices);
-
-        glClear(GL_COLOR_BUFFER_BIT);
 
         glDrawElements(GL_TRIANGLES, Contents::indices.size(), GL_UNSIGNED_INT, nullptr);
 
