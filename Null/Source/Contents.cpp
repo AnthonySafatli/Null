@@ -64,6 +64,7 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 }
 
 void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
+
 {
 	if (codepoint == KEYCODE_SPACE)
 		AddSpace();
@@ -210,6 +211,12 @@ void Contents::AddSpace()
 
 	// Add letter to memory
 	SaveChar(' ');
+
+	// Increment whitespace counter
+	if (cursor.y == 0)
+		command.text.whiteSpaceCount++;
+	else
+		currentScene.text[cursor.y - 1].whiteSpaceCount++;
 
 	// Move cursor forwards
 	cursor.Move(RIGHT);
