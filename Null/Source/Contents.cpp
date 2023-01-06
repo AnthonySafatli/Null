@@ -23,8 +23,6 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 	if (action == GLFW_RELEASE)
 		return;
 
-	// std::cout << key << std::endl;
-
 	if (key == KEYCODE_TAB)
 		AddTab();
 	else if (key == KEYCODE_ENTER)
@@ -44,27 +42,18 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 	}
 
 	else if (key == KEYCODE_RIGHT)
-	{
 		cursor.Move(RIGHT);
-	}
 	else if (key == KEYCODE_LEFT)
-	{
 		cursor.Move(LEFT);
-	}
 	else if (key == KEYCODE_UP)
-	{
 		cursor.Move(UP);
-	}
 	else if (key == KEYCODE_DOWN)
-	{
 		cursor.Move(DOWN);
-	}
 
 	// TODO: Implement shortcuts
 }
 
 void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
-
 {
 	if (codepoint == KEYCODE_SPACE)
 		AddSpace();
@@ -82,15 +71,6 @@ void Contents::OnResize(GLFWwindow* window, int width, int height)
 
 void Contents::AddCharacter(char ch)
 {
-	// TODO: Stuff for AddCharacter()
-	// use cursor controller to find which row cursor is on
-	// use text.size() for all rows above cursor to see how many characters to skip
-	// use column in cursor controller to see how many more characters
-	// multiply by 4 to get how many vertices to skip
-	// add vertices at that index
-	// edit any vertices on same row that come after
-	// add character to proper TextRow
-
 	int offset = 0;
 
 	// Get offset from rows
@@ -230,67 +210,100 @@ void Contents::AddTab()
 
 void Contents::RemoveCharacter(bool left)
 {
+	char characterToDelete;
+
+	int cursorPos;
+
 	if (left)
 	{
 		// Get character to delete
-		char characterToDelete = cursor.y == 0 ? command.text.text[cursor.x - 1] : currentScene.text[cursor.y - 1].text[cursor.x - 1];
+		if (cursor.x < 0)
+			return;
 
-		// Remove vertices
-		if (characterToDelete != ' ')
-		{
-			int offset = 0;
+		characterToDelete = cursor.y == 0 ? command.text.text[cursor.x - 1] : currentScene.text[cursor.y - 1].text[cursor.x - 1];
 
-			// Get offset from rows
-			if (cursor.y > 0)
-			{
-				offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
+		cursorPos = cursor.x - 1;
 
-				for (int i = 0; i < cursor.y - 1; i++)
-				{
-					offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
-				}
-			}
-
-			// Get offset from columns
-			int whiteSpaceCountSoFar = 0;
-
-			if (cursor.y == 0)
-			{
-				for (int i = 0; i < cursor.x - 1; i++)
-				{
-					if (command.text.text[i] == ' ')
-						whiteSpaceCountSoFar++;
-				}
-			}
-			else
-			{
-				for (int i = 0; i < cursor.x - 1; i++)
-				{
-					if (currentScene.text[cursor.y - 1].text[i] == ' ')
-						whiteSpaceCountSoFar++;
-				}
-			}
-
-			offset += (cursor.x - whiteSpaceCountSoFar - 1) * 4;
-
-			// Remove vertices
-			vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
-			for (int i = 0; i < 6; i++) indices.pop_back();
-		}
-
-		// Remove character from memory
-		if (cursor.y == 0)
-			command.text.text.erase(command.text.text.begin() + cursor.x - 1);
-		else
-			currentScene.text[cursor.y - 1].text.erase(currentScene.text[cursor.y - 1].text.begin() + cursor.x - 1);
-
-		// Move character
-		cursor.Move(LEFT);
 	}
 	else
 	{
-		// TODO: Implement 'Delete'
+		// Get character to delete
+		int charArraySize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+
+		if (cursor.x >= charArraySize)
+			return;
+
+		characterToDelete = cursor.y == 0 ? command.text.text[cursor.x] : currentScene.text[cursor.y - 1].text[cursor.x];
+
+		cursorPos = cursor.x;
 	}
+
+	int offset = 0;
+
+	// Remove vertices
+	if (characterToDelete != ' ')
+	{
+
+		// Get offset from rows
+		if (cursor.y > 0)
+		{
+			offset += (command.text.text.size() - command.text.whiteSpaceCount) * 4;
+
+			for (int i = 0; i < cursor.y - 1; i++)
+			{
+				offset += (currentScene.text[i].text.size() - currentScene.text[i].whiteSpaceCount) * 4;
+			}
+		}
+
+		// Get offset from columns
+		int whiteSpaceCountSoFar = 0;
+
+		if (cursor.y == 0)
+		{
+			for (int i = 0; i < cursorPos; i++)
+			{
+				if (command.text.text[i] == ' ')
+					whiteSpaceCountSoFar++;
+			}
+		}
+		else
+		{
+			for (int i = 0; i < cursorPos - 1; i++)
+			{
+				if (currentScene.text[cursor.y - 1].text[i] == ' ')
+					whiteSpaceCountSoFar++;
+			}
+		}
+
+		offset += (cursorPos - whiteSpaceCountSoFar) * 4;
+
+		// Remove vertices
+		vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
+		for (int i = 0; i < 6; i++) indices.pop_back();
+	}
+
+	// Edit vertices after
+	int columnSize = cursor.y == 0 ? command.text.text.size() : currentScene.text[cursor.y - 1].text.size();
+
+	if (!left)
+		cursor.Move(RIGHT);
+
+	for (int i = 0; i < columnSize - cursor.x; i++)
+	{
+		vertices[offset++].column--;
+		vertices[offset++].column--;
+		vertices[offset++].column--;
+		vertices[offset++].column--;
+	}
+
+	// Remove character from memory
+	if (cursor.y == 0)
+		command.text.text.erase(command.text.text.begin() + cursorPos);
+	else
+		currentScene.text[cursor.y - 1].text.erase(currentScene.text[cursor.y - 1].text.begin() + cursorPos);
+
+	// Move cursor
+	cursor.Move(LEFT);
 }
 
 void Contents::Return()
