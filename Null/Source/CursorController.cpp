@@ -8,7 +8,7 @@ CursorController::CursorController(int x, int y) : x(x), y(y), sceneStartIndex(0
 
 void CursorController::Move(const Direction dir)
 {
-	// TODO: Bounds checking
+	// TODO: Proper bounds checking
 
 	switch (dir)
 	{
@@ -27,18 +27,9 @@ void CursorController::Move(const Direction dir)
 		break;
 
 	case LEFT:
-
-		if (x > 0)
-			x--;
-
+		x--;
 		break;
-
-	case RIGHT:
-
-		TextRow currentRow = Contents::cursor.y == 0 ? Contents::command.text : Contents::currentScene.text[Contents::cursor.y - 1];
-		if (x < currentRow.text.size())
-			x++;
-
+	default:
 		break;
 	}
 }
