@@ -118,7 +118,7 @@ void Contents::RemoveCharacterFromLeft()
 {
 	// Error check
 	if (cursor.x <= 0)
-		return;
+		return; // TODO: add row to line before
 
 	// Calculate vertex offset
 	int offset = 0;
@@ -134,7 +134,7 @@ void Contents::RemoveCharacterFromLeft()
 	vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
 
 	// Edit vertices after
-	for (int i = 0; i < (currentScene.text[cursor.y].text.size() - cursor.x) * 4; i++)
+	while (offset < vertices.size())
 		vertices[offset++].column--;
 
 	// Remove indices
@@ -151,7 +151,7 @@ void Contents::RemoveCharacterFromRight()
 {
 	// Error check
 	if (cursor.x >= currentScene.text[cursor.y].text.size())
-		return;
+		return; // TODO: add row after to the row
 
 	// Calculate vertex offset
 	int offset = 0;
@@ -167,7 +167,7 @@ void Contents::RemoveCharacterFromRight()
 	vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
 
 	// Edit vertices after
-	for (int i = 0; i < (currentScene.text[cursor.y].text.size() - cursor.x - 4) * 4; i++)
+	while (offset < vertices.size())
 		vertices[offset++].column--;
 
 	// Remove indices
