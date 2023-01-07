@@ -2,13 +2,15 @@
 
 #include <GLFW/glfw3.h>
 
+#include "Contents.h"
+
 class CallBack
 {
 private:
 	CallBack();
 
 public:
-	// static Contents TargetContents;
+	static Contents TargetContents;
 
 	static void KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void CharCallBack(GLFWwindow* window, unsigned int codepoint);

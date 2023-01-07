@@ -17,7 +17,7 @@ Contents::Contents(const int width, const int height, const int tabAmount, const
 {
 }
 
-void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods)
+void Contents::ProcessKey(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
@@ -52,7 +52,7 @@ void Contents::ProcessKey(GLFWwindow* window, int key, int scancode, int action,
 	// TODO: Implement shortcuts
 }
 
-void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
+void Contents::ProcessChar(unsigned int codepoint)
 {
 	if (codepoint == KEYCODE_SPACE)
 		AddSpace();
@@ -61,7 +61,7 @@ void Contents::ProcessChar(GLFWwindow* window, unsigned int codepoint)
 		AddCharacter(codepoint);
 }
 
-void Contents::OnResize(GLFWwindow* window, int width, int height)
+void Contents::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 

@@ -37,9 +37,9 @@ public:
     void RemoveCharacter(bool left);
     void Return();
 
-    void ProcessKey(GLFWwindow* window, int key, int scancode, int action, int mods);
-    void ProcessChar(GLFWwindow* window, unsigned int codepoint);
-    void OnResize(GLFWwindow* window, int width, int height);
+    void ProcessKey(int key, int action, int mods);
+    void ProcessChar(unsigned int codepoint);
+    void OnResize(int width, int height);
 
     // CommandRow command;
     // StatusBar status;

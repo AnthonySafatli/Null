@@ -7,10 +7,10 @@
 #include "Headers/Contents.h"
 #include "Headers/CallBack.h"
 
+Contents appContents = Contents(1800, 1100, 4, 0.3, 0, 0);
+
 int main(void)
 {
-    Contents appContents = Contents(1800, 1100, 4, 0.3, 0, 0);
-
     /* Initialize GLFW */
     GLFWwindow* window;
 
