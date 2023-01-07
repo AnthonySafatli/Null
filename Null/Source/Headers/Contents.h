@@ -33,9 +33,6 @@ public:
     /* Constructor */
     Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY);
 
-    /* Method */
-    void GLInit();
-
     /* Text Methods */
     void AddCharacter(char ch);
     void RemoveCharacterFromLeft();
@@ -47,6 +44,10 @@ public:
     void ProcessKey(int key, int action, int mods);
     void ProcessChar(unsigned int codepoint);
     void OnResize(int width, int height);
+    
+    /* OpenGL Methods */
+    void GLInit();
+    void SetData();
 
     /* OpenGL Variables */
     VertexBuffer vertexBuffer;

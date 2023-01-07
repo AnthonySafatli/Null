@@ -40,6 +40,12 @@ void Contents::GLInit()
 	u_tex.Init(shaderProgram.handle, "tex");
 }
 
+void Contents::SetData()
+{
+	vertexBuffer.SetData(vertices);
+	indexBuffer.SetData(indices);
+}
+
 void Contents::ProcessKey(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
@@ -129,6 +135,9 @@ void Contents::AddCharacter(char ch)
 
 	// Move cursor forwards
 	cursor.Move(RIGHT);
+
+	// Update OpenGL
+	SetData();
 }
 
 void Contents::AddTab()
@@ -168,6 +177,9 @@ void Contents::RemoveCharacterFromLeft()
 
 	// Move cursor
 	cursor.Move(LEFT);
+
+	// Update OpenGL
+	SetData();
 }
 
 void Contents::RemoveCharacterFromRight()
@@ -198,6 +210,9 @@ void Contents::RemoveCharacterFromRight()
 
 	// Remove letter from memory
 	currentScene.text[cursor.y].text.erase(currentScene.text[cursor.y].text.begin() + cursor.x);
+
+	// Update OpenGl
+	SetData();
 }
 
 void Contents::Return()

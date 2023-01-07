@@ -52,9 +52,6 @@ int main(void)
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        appContents.vertexBuffer.SetData(appContents.vertices);
-        appContents.indexBuffer.SetData(appContents.indices);
-
         glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
