@@ -22,18 +22,15 @@ Vertex::Vertex(const float x, const float y, const float u, const float v, const
 
 /* ====== Vertex Buffer ====== */
 
-VertexBuffer::VertexBuffer(const int maxSquares)
+VertexBuffer::VertexBuffer() : handle(0)
 {
-	/*Vertex verticies[4] = {  
-		Vertex(0.0, 0.0, 0.0, 0.0, texA.u               , texA.v               ),
-		Vertex(1.0, 0.0, 0.0, 0.0, texA.u + (1.0 / 10.0), texA.v               ),
-		Vertex(1.0, 1.0, 0.0, 0.0, texA.u + (1.0 / 10.0), texA.v + (1.0 / 10.0)),
-		Vertex(0.0, 1.0, 0.0, 0.0, texA.u               , texA.v + (1.0 / 10.0)),
-	};*/  
+}
 
+void VertexBuffer::Init()
+{
 	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, maxSquares * 4 * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, MAX_SQAURES_TO_RENDER * 4 * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -50,12 +47,16 @@ void VertexBuffer::SetData(std::vector<Vertex> vertices)
 
 /* ====== Index Buffer ====== */
 
-IndexBuffer::IndexBuffer(const int maxSquares)
+IndexBuffer::IndexBuffer() : handle(0)
+{
+}
+
+void IndexBuffer::Init()
 {
 	glGenBuffers(1, &handle);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, maxSquares * 6 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_SQAURES_TO_RENDER * 6 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer()
@@ -72,7 +73,11 @@ void IndexBuffer::SetData(std::vector<unsigned int> indices)
 
 /* ====== Vertex Array ====== */
 
-VertexArray::VertexArray() 
+VertexArray::VertexArray() : handle(0)
+{
+}
+
+void VertexArray::Init()
 {
 	glGenVertexArrays(1, &handle);
 	glBindVertexArray(handle);
@@ -105,7 +110,11 @@ VertexArray::~VertexArray()
 
 /* ====== Shader Program ====== */
 
-ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) 
+ShaderProgram::ShaderProgram() : handle(0)
+{
+}
+
+void ShaderProgram::Init(const char* vertexPath, const char* fragmentPath)
 {
 	handle = glCreateProgram();
 
@@ -130,7 +139,11 @@ ShaderProgram::~ShaderProgram()
 
 /* ====== Texture ====== */
 
-Texture::Texture(const char* filename)
+Texture::Texture() : handle(0)
+{
+}
+
+void Texture::Init(const char* filename)
 {
 	// stbi_set_flip_vertically_on_load(1);
 
@@ -254,7 +267,11 @@ Shaders::~Shaders()
 
 /* ====== Uniform ====== */
 
-Uniform::Uniform(const unsigned int shaderProgramHandle, const char* name)
+Uniform::Uniform()
+{
+}
+
+void Uniform::Init(const unsigned int shaderProgramHandle, const char* name)
 {
 	location = glGetUniformLocation(shaderProgramHandle, name);
 }

@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#define MAX_SQAURES_TO_RENDER 1000
+
 struct Vertex
 {
 	Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight);
@@ -16,9 +18,10 @@ struct Vertex
 class VertexBuffer
 {
 public:
-	VertexBuffer(const int maxSquares);
+	VertexBuffer();
 	~VertexBuffer();
 
+	void Init();
 	void SetData(std::vector<Vertex> vertices);
 
 	unsigned int handle; 
@@ -27,9 +30,10 @@ public:
 class IndexBuffer
 {
 public:
-	IndexBuffer(const int maxSquares);
+	IndexBuffer();
 	~IndexBuffer();
 
+	void Init();
 	void SetData(std::vector<unsigned int> indices);
 
 	unsigned int handle;
@@ -41,6 +45,8 @@ public:
 	VertexArray();
 	~VertexArray();
 
+	void Init();
+
 	static void EnableAttributes();
 
 	unsigned int handle;
@@ -49,8 +55,10 @@ public:
 class ShaderProgram
 {
 public:
-	ShaderProgram(const char* vertexPath, const char* fragmentPath);
+	ShaderProgram();
 	~ShaderProgram();
+
+	void Init(const char* vertexPath, const char* fragmentPath);
 
 	unsigned int handle;
 };
@@ -61,8 +69,10 @@ private:
 	void SetTextureSettings();
 
 public:
-	Texture(const char* filename);
+	Texture();
 	~Texture();
+
+	void Init(const char* filename);
 
 	unsigned int handle;
 };
@@ -72,6 +82,7 @@ class Shaders
 private:
 	void CompileVertex(const char* vertexPath);
 	void CompileFragment(const char* fragmentPath);
+
 public: 
 	Shaders(const char* vertexPath, const char* fragmentPath);
 	~Shaders();
@@ -83,7 +94,9 @@ public:
 class Uniform
 {
 public: 
-	Uniform(const unsigned int shaderProgramHandle, const char* name);
+	Uniform();
+
+	void Init(const unsigned int shaderProgramHandle, const char* name);
 
 	int location;
 };

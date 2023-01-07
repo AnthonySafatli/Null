@@ -13,8 +13,31 @@
 Contents::Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY) 
 	: idealWidth(800), idealHeight(1400), 
 		width(width), height(height), tabAmount(tabAmount), textSize(textSize),
-		vertices(), indices(), currentScene(), cursor(startX, startY)
+		vertices(), indices(), currentScene(), cursor(startX, startY),
+		vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
+		u_idealRatio(), u_size(), u_tex()
 {
+}
+
+void Contents::GLInit()
+{
+	vertexBuffer.Init();
+
+	vertexArray.Init();
+	VertexArray::EnableAttributes();
+
+	indexBuffer.Init();
+
+	shaderProgram.Init(
+		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\vertex.glsl",
+		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\fragment.glsl"
+	);
+
+	texture.Init("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\font texture.png");
+
+	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
+	u_size.Init(shaderProgram.handle, "size");
+	u_tex.Init(shaderProgram.handle, "tex");
 }
 
 void Contents::ProcessKey(int key, int action, int mods)

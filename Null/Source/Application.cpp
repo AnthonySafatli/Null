@@ -31,8 +31,6 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     /* Setup Callbacks */
-    // CallBack::TargetContents = appContents;
-
     glfwSetKeyCallback(window, CallBack::KeyCallBack);
     glfwSetCharCallback(window, CallBack::CharCallBack);
     glfwSetFramebufferSizeCallback(window, CallBack::FrameBuffeResizeCallBack);
@@ -43,35 +41,19 @@ int main(void)
 
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
-    // TODO: move to app contents
-    VertexBuffer vertexBuffer(maxSquaresToRender);
+    appContents.GLInit();
 
-    VertexArray::EnableAttributes();
-
-    IndexBuffer indexBuffer(maxSquaresToRender);
-
-    ShaderProgram program(
-        "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\vertex.glsl",
-        "C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\fragment.glsl"
-    );
-    
-    Texture texture("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\font texture.png");
-
-    Uniform u_idealRatio(program.handle, "idealRatio");
-    Uniform u_size(program.handle, "size");
-    Uniform u_tex(program.handle, "tex");
-
-    glUniform2f(u_idealRatio.location, appContents.idealWidth / 1800.0, appContents.idealHeight / 1100.0);
-    glUniform1f(u_size.location, appContents.textSize);
-    glUniform1i(u_tex.location, 0);
+    glUniform2f(appContents.u_idealRatio.location, appContents.idealWidth / 1800.0, appContents.idealHeight / 1100.0);
+    glUniform1f(appContents.u_size.location, appContents.textSize);
+    glUniform1i(appContents.u_tex.location, 0);
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vertexBuffer.SetData(appContents.vertices);
-        indexBuffer.SetData(appContents.indices);
+        appContents.vertexBuffer.SetData(appContents.vertices);
+        appContents.indexBuffer.SetData(appContents.indices);
 
         glDrawElements(GL_TRIANGLES, appContents.indices.size(), GL_UNSIGNED_INT, nullptr);
 

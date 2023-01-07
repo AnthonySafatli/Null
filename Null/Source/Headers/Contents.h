@@ -26,34 +26,57 @@ class Contents
 {
 private:
 
+    /* Private */
     void SaveChar(char ch);
 
 public:
+    /* Constructor */
     Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY);
 
+    /* Method */
+    void GLInit();
+
+    /* Text Methods */
     void AddCharacter(char ch);
     void RemoveCharacterFromLeft();
     void RemoveCharacterFromRight();
     void AddTab();
     void Return();
 
+    /* CallBack Methods */
     void ProcessKey(int key, int action, int mods);
     void ProcessChar(unsigned int codepoint);
     void OnResize(int width, int height);
 
+    /* OpenGL Variables */
+    VertexBuffer vertexBuffer;
+    IndexBuffer indexBuffer;
+    VertexArray vertexArray;
+    ShaderProgram shaderProgram;
+    Texture texture;
+    Uniform u_idealRatio;
+    Uniform u_size;
+    Uniform u_tex;
+
+    /* Text Variables */
     // CommandRow command;
-    // StatusBar status;
     Scene currentScene;
+    // StatusBar status;
     CursorController cursor;
 
+    /* Vectors */
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
+    /* Text Properties */
     int tabAmount;
     float textSize;
 
+    /* Window Properties */
     int width;
     int height;
+
+    /* Constants */
     const int idealWidth;
     const int idealHeight;
 };
