@@ -2,6 +2,7 @@
 #include "Headers/Character.h"
 
 #include "GLFW/glfw3.h"
+#include "Headers/Uniforms.h"
 
 #include <iostream>
 #include <string>
@@ -87,7 +88,10 @@ void Contents::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	// TODO: Change idealRatio uniform (glUniform2f(u_idealRatio.location, idealWidth / width, idealHeight / height);)
+	UpdateUniform2f(u_idealRatio.location, (float) idealWidth / (float) width, (float) idealHeight / (float) height);
+
+	this->width = width;
+	this->height = height;
 }
 
 void Contents::AddCharacter(char ch)

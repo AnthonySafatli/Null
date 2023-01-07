@@ -6,6 +6,7 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/Contents.h"
 #include "Headers/CallBack.h"
+#include "Headers/Uniforms.h"
 
 Contents appContents = Contents(1800, 1100, 4, 0.3, 0, 0);
 
@@ -43,7 +44,7 @@ int main(void)
 
     appContents.GLInit();
 
-    glUniform2f(appContents.u_idealRatio.location, appContents.idealWidth / 1800.0, appContents.idealHeight / 1100.0);
+    glUniform2f(appContents.u_idealRatio.location, (float) appContents.idealWidth / (float) appContents.width, (float) appContents.idealHeight / (float) appContents.height);
     glUniform1f(appContents.u_size.location, appContents.textSize);
     glUniform1i(appContents.u_tex.location, 0);
 
@@ -62,4 +63,9 @@ int main(void)
     glfwTerminate();
 
     return 0;
+}
+
+void UpdateUniform2f(const unsigned int location, const float v1, const float v2)
+{
+    glUniform2f(location, v1, v2);
 }

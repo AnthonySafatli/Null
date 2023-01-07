@@ -113,6 +113,7 @@
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
     <ClInclude Include="Source\Headers\Contents.h" />
     <ClInclude Include="Source\Headers\TextRow.h" />
+    <ClInclude Include="Source\Headers\Uniforms.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
