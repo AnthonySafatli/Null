@@ -31,10 +31,10 @@ private:
 public:
     Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY);
 
-    void AddSpace();
     void AddCharacter(char ch);
+    void RemoveCharacterFromLeft();
+    void RemoveCharacterFromRight();
     void AddTab();
-    void RemoveCharacter(bool left);
     void Return();
 
     void ProcessKey(int key, int action, int mods);

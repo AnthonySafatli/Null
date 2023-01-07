@@ -2,14 +2,14 @@
 
 #include "Scene.h"
 
-enum Direction { UP, DOWN, RIGHT, LEFT };
+enum Direction { UP, DOWN, RIGHT, LEFT, HOME, END };
 
 class CursorController
 {
 public:
 	CursorController(int x, int y);
 
-	void Move(Scene currentScene, int cursorY, const Direction dir);
+	void Move(const Direction dir);
 
 	unsigned int x;
 	unsigned int y;

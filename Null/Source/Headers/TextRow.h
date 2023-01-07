@@ -10,6 +10,4 @@ public:
 	TextRow();
 
 	std::vector<char> text;
-
-	int whiteSpaceCount;
 };

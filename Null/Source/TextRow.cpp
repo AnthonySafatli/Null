@@ -2,6 +2,6 @@
 
 /* ====== TextRow ====== */
 
-TextRow::TextRow() : text(), whiteSpaceCount(0)
+TextRow::TextRow() : text()
 {
 }
