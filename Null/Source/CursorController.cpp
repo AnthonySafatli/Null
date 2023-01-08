@@ -3,7 +3,7 @@
 
 extern Contents appContents;
 
-CursorController::CursorController(int x, int y) : x(x), y(y), sceneStartIndex(0)
+CursorController::CursorController(int x, int y) : x(x), y(y), sceneStartRowIndex(0), sceneStartColumnIndex(0), sceneLeftBarrier(3)
 {
 }
 
@@ -22,13 +22,16 @@ void CursorController::Move(const Direction dir)
 
 	case DOWN:
 
-		if (y >= appContents.currentScene.text.size())
+		if (y < appContents.currentScene.rows.size())
 			y++;
 
 		break;
 
 	case LEFT:
-		x--;
+
+		if (x > sceneLeftBarrier)
+			x--;
+
 		break;
 
 	case HOME:
@@ -45,7 +48,7 @@ void CursorController::Move(const Direction dir)
 
 	case RIGHT:
 
-		TextRow currentRow = appContents.currentScene.text[appContents.cursor.y];
+		TextRow currentRow = appContents.currentScene.rows[appContents.cursor.y];
 		if (x < currentRow.text.size())
 			x++;
 

@@ -16,6 +16,6 @@ public:
 	static Scene SettingsScene();
 	static Scene PropertiesScene();
 
-	std::vector<TextRow> text;
+	std::vector<TextRow> rows;
 };
 

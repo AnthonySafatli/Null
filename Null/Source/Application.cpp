@@ -8,7 +8,7 @@
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
 
-Contents appContents = Contents(1800, 1100, 4, 0.3, 0, 0);
+Contents appContents = Contents(1800, 1100, 4, 0.3);
 
 int main(void)
 {
@@ -47,6 +47,8 @@ int main(void)
     glUniform2f(appContents.u_idealRatio.location, (float) appContents.idealWidth / (float) appContents.width, (float) appContents.idealHeight / (float) appContents.height);
     glUniform1f(appContents.u_size.location, appContents.textSize);
     glUniform1i(appContents.u_tex.location, 0);
+
+    appContents.TextInit();
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))

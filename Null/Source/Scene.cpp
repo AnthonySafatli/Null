@@ -6,9 +6,9 @@
 
 /* ====== Scene ====== */
 
-Scene::Scene() : text()
+Scene::Scene() : rows()
 {
-    text.push_back(TextRow());
+    rows.push_back(TextRow());
 }
 
 Scene Scene::WelcomeScene()

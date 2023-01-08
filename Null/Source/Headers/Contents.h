@@ -31,9 +31,12 @@ private:
 
 public:
     /* Constructor */
-    Contents(const int width, const int height, const int tabAmount, const float textSize, const int startX, const int startY);
+    Contents(const int width, const int height, const int tabAmount, const float textSize);
+
+    void TextInit();
 
     /* Text Methods */
+    void IncrementBarrier();
     void AddCharacter(char ch);
     void RemoveCharacterFromLeft();
     void RemoveCharacterFromRight();

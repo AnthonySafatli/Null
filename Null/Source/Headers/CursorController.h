@@ -13,5 +13,7 @@ public:
 
 	unsigned int x;
 	unsigned int y;
-	unsigned int sceneStartIndex; // the index of the first row in the Scene
+	unsigned int sceneStartRowIndex;    // the index of the first row in the Scene
+	unsigned int sceneStartColumnIndex; // the index of the first column in the Scene
+	unsigned int sceneLeftBarrier;      // amount of columns that are not accessible to cursor to left
 };
