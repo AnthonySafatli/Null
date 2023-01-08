@@ -164,9 +164,27 @@ void Contents::AddTab()
 
 void Contents::RemoveCharacterFromLeft()
 {
-	// Error check
+	// Delete Row
 	if (cursor.textX <= cursor.sceneLeftBarrier)
-		return; // TODO: add row to line before
+	{
+		cursor.textY--;
+		cursor.textX = currentScene.rows[cursor.textY].text.size(); // cursor.Move(END);
+
+		int size = currentScene.rows[cursor.textY + 1].text.size();
+
+		for (int i = cursor.sceneLeftBarrier; i < size; i++)
+			AddCharacter(currentScene.rows[cursor.textY + 1].text[i]);
+
+		currentScene.rows.erase(currentScene.rows.begin() + cursor.textY + 1);
+
+		for (int i = 0; i < size * 6; i++) indices.pop_back();
+
+		cursor.textX = currentScene.rows[cursor.textY].text.size() - size;
+
+		SetData();
+
+		return;
+	}
 
 	// Calculate offset
 	int offset = (cursor.textX - 1) * 4;
