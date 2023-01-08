@@ -3,7 +3,8 @@
 
 extern Contents appContents;
 
-CursorController::CursorController(int x, int y) : x(x), y(y), sceneStartRowIndex(0), sceneStartColumnIndex(0), sceneLeftBarrier(3)
+CursorController::CursorController(int x, int y) 
+	: textX(0), textY(0), screenX(x), screenY(y), sceneStartRowIndex(0), sceneStartColumnIndex(0), sceneLeftBarrier(3)
 {
 }
 
@@ -13,27 +14,6 @@ void CursorController::Move(const Direction dir)
 
 	switch (dir)
 	{
-	case UP:
-
-		if (y > 0)
-			y--;
-
-		break;
-
-	case DOWN:
-
-		if (y < appContents.currentScene.rows.size())
-			y++;
-
-		break;
-
-	case LEFT:
-
-		if (x > sceneLeftBarrier)
-			x--;
-
-		break;
-
 	case HOME:
 
 		// TODO: Implement 'HOME'
@@ -45,12 +25,33 @@ void CursorController::Move(const Direction dir)
 		// TODO: Implement 'END'
 
 		break;
+	
+	case UP:
+
+		if (textY > 0)
+			textY--;
+
+		break;
+
+	case DOWN:
+
+		if (textY < appContents.currentScene.rows.size())
+			textY++;
+
+		break;
+
+	case LEFT:
+
+		if (textX > sceneLeftBarrier)
+			textX--;
+
+		break;
 
 	case RIGHT:
 
-		TextRow currentRow = appContents.currentScene.rows[appContents.cursor.y];
-		if (x < currentRow.text.size())
-			x++;
+		TextRow currentRow = appContents.currentScene.rows[textY];
+		if (textX < currentRow.text.size())
+			textX++;
 
 		break;
 	}

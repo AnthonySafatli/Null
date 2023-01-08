@@ -9,5 +9,6 @@ class TextRow
 public:
 	TextRow();
 
+	std::vector<Vertex> vertices;
 	std::vector<char> text;
 };

@@ -67,7 +67,6 @@ public:
     CursorController cursor;
 
     /* Vectors */
-    std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
     /* Text Properties */

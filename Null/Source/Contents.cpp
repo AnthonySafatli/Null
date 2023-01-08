@@ -14,7 +14,7 @@
 Contents::Contents(const int width, const int height, const int tabAmount, const float textSize) 
 	: idealWidth(800), idealHeight(1400), 
 		width(width), height(height), tabAmount(tabAmount), textSize(textSize),
-		vertices(), indices(), currentScene(), cursor(0, 0),
+		indices(), currentScene(), cursor(0, 0),
 		vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 		u_idealRatio(), u_size(), u_tex()
 {
@@ -43,6 +43,11 @@ void Contents::GLInit()
 
 void Contents::SetData()
 {
+	std::vector<Vertex> vertices;
+
+	for (TextRow row : currentScene.rows)
+		vertices.insert(vertices.end(), row.vertices.begin(), row.vertices.end());
+
 	vertexBuffer.SetData(vertices);
 	indexBuffer.SetData(indices);
 }
@@ -98,7 +103,7 @@ void Contents::IncrementBarrier()
 {
 	for (TextRow row : currentScene.rows)
 	{
-		cursor.x = 0;
+		cursor.textX = 0;
 		AddCharacter(' ');
 	}
 
@@ -108,36 +113,32 @@ void Contents::IncrementBarrier()
 void Contents::AddCharacter(char ch)
 {
 	// Get vertex offset
-	int offset = 0;
-	
-	for (int i = 0; i < cursor.y; i++)
-		offset += currentScene.rows[i].text.size();
-
-	offset += cursor.x;
-
-	offset *= 4;
+	int offset = cursor.textX * 4;
 
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	vertices.insert(vertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , cursor.y - cursor.sceneStartRowIndex, cursor.x, 0.0));
-	vertices.insert(vertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , cursor.y - cursor.sceneStartRowIndex, cursor.x, 0.0));
-	vertices.insert(vertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), cursor.y - cursor.sceneStartRowIndex, cursor.x, 0.0));
-	vertices.insert(vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), cursor.y - cursor.sceneStartRowIndex, cursor.x, 0.0));
+	currentScene.rows[cursor.textY].vertices.insert(currentScene.rows[cursor.textY].vertices.begin() + offset++,    // Add Vertex 1
+		Vertex(0.0, 0.0, texCoords.u, texCoords.v, cursor.textY, cursor.textX, 0.0));
+	currentScene.rows[cursor.textY].vertices.insert(currentScene.rows[cursor.textY].vertices.begin() + offset++,    // Add Vertex 2
+		Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, cursor.textY, cursor.textX, 0.0));
+	currentScene.rows[cursor.textY].vertices.insert(currentScene.rows[cursor.textY].vertices.begin() + offset++,    // Add Vertex 3
+		Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), cursor.textY, cursor.textX, 0.0)); 
+	currentScene.rows[cursor.textY].vertices.insert(currentScene.rows[cursor.textY].vertices.begin() + offset++,    // Add Vertex 4
+		Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), cursor.textY, cursor.textX, 0.0));                
+
 
 	// Edit the vertices after
-	int columnSize = currentScene.rows[cursor.y].text.size();
-
-	for (int i = 0; i < columnSize - cursor.x; i++)
+	for (int i = offset / 4 - 1; i < currentScene.rows[cursor.textY].text.size(); i++)
 	{
-		vertices[offset++].column++;
-		vertices[offset++].column++;
-		vertices[offset++].column++;
-		vertices[offset++].column++;
+		currentScene.rows[cursor.textY].vertices[offset++].column++;
+		currentScene.rows[cursor.textY].vertices[offset++].column++;
+		currentScene.rows[cursor.textY].vertices[offset++].column++;
+		currentScene.rows[cursor.textY].vertices[offset++].column++;
 	}
 
 	// Add indices
-	int startIndex = vertices.size() - 4;
+	int startIndex = indices.size() / 6 * 4;
 	indices.push_back(startIndex);
 	indices.push_back(startIndex + 1);
 	indices.push_back(startIndex + 2);
@@ -164,31 +165,23 @@ void Contents::AddTab()
 void Contents::RemoveCharacterFromLeft()
 {
 	// Error check
-	if (cursor.x <= 0)
+	if (cursor.textX <= cursor.sceneLeftBarrier)
 		return; // TODO: add row to line before
 
-	// Calculate vertex offset
-	int offset = 0;
-
-	for (int i = 0; i < cursor.y; i++)
-		offset += currentScene.rows[i].text.size();
-
-	offset += cursor.x - 1;
-
-	offset *= 4;
+	// Calculate offset
+	int offset = (cursor.textX - 1) * 4;
 
 	// Remove vertices
-	vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
+	currentScene.rows[cursor.textY].vertices.erase(currentScene.rows[cursor.textY].vertices.begin() + offset, currentScene.rows[cursor.textY].vertices.begin() + offset + 4);
 
-	// Edit vertices after
-	while (offset < vertices.size())
-		vertices[offset++].column--;
+	while (offset < currentScene.rows[cursor.textY].vertices.size())
+		currentScene.rows[cursor.textY].vertices[offset++].column--;
 
 	// Remove indices
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from memory
-	currentScene.rows[cursor.y].text.erase(currentScene.rows[cursor.y].text.begin() + cursor.x - 1);
+	currentScene.rows[cursor.textY].text.erase(currentScene.rows[cursor.textY].text.begin() + cursor.textX - 1);
 
 	// Move cursor
 	cursor.Move(LEFT);
@@ -200,31 +193,24 @@ void Contents::RemoveCharacterFromLeft()
 void Contents::RemoveCharacterFromRight()
 {
 	// Error check
-	if (cursor.x >= currentScene.rows[cursor.y].text.size())
+	if (cursor.textX >= currentScene.rows[cursor.textY].text.size())
 		return; // TODO: add row after to the row
 
 	// Calculate vertex offset
-	int offset = 0;
-
-	for (int i = 0; i < cursor.y; i++)
-		offset += currentScene.rows[i].text.size();
-
-	offset += cursor.x;
-
-	offset *= 4;
+	int offset = cursor.textX * 4;
 
 	// Remove vertices
-	vertices.erase(vertices.begin() + offset, vertices.begin() + offset + 4);
+	currentScene.rows[cursor.textY].vertices.erase(currentScene.rows[cursor.textY].vertices.begin() + offset, currentScene.rows[cursor.textY].vertices.begin() + offset + 4);
 
 	// Edit vertices after
-	while (offset < vertices.size())
-		vertices[offset++].column--;
+	while (offset < currentScene.rows[cursor.textY].vertices.size())
+		currentScene.rows[cursor.textY].vertices[offset++].column--;
 
 	// Remove indices
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from memory
-	currentScene.rows[cursor.y].text.erase(currentScene.rows[cursor.y].text.begin() + cursor.x);
+	currentScene.rows[cursor.textY].text.erase(currentScene.rows[cursor.textY].text.begin() + cursor.textY);
 
 	// Update OpenGl
 	SetData();
@@ -239,8 +225,8 @@ void Contents::Return()
 
 void Contents::SaveChar(char ch)
 {
-	if (currentScene.rows[cursor.y].text.size() == 0)
-		currentScene.rows[cursor.y].text.push_back(ch);
+	if (currentScene.rows[cursor.textY].text.size() == 0)
+		currentScene.rows[cursor.textY].text.push_back(ch);
 	else
-		currentScene.rows[cursor.y].text.insert(currentScene.rows[cursor.y].text.begin() + cursor.x, ch);
+		currentScene.rows[cursor.textY].text.insert(currentScene.rows[cursor.textY].text.begin() + cursor.textX, ch);
 }

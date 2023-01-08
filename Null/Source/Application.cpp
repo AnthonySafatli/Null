@@ -3,7 +3,6 @@
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Headers/GLAbstraction.h"
 #include "Headers/Contents.h"
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
@@ -41,6 +40,7 @@ int main(void)
         return -3;
 
     glClearColor(0.03, 0.05, 0.09, 0.85);
+    // glClearColor(0.03, 0.05, 0.09, 0.05);
 
     appContents.GLInit();
 

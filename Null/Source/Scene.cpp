@@ -22,7 +22,7 @@ void Scene::AddNumber()
 
     rows.push_back(TextRow());
     appContents.cursor.Move(DOWN);
-    appContents.cursor.x = 0;
+    appContents.cursor.textX = 0;
 
     std::string rowNumberString = std::to_string(rows.size());
 
@@ -30,7 +30,7 @@ void Scene::AddNumber()
     while (i < rowNumberString.size())
     {
         appContents.AddCharacter(rowNumberString.at(rowNumberString.size() - i - 1));
-        appContents.cursor.x = 0;
+        appContents.cursor.textX = 0;
         i++;
     }
 
@@ -40,7 +40,7 @@ void Scene::AddNumber()
         i++;
     }
 
-    appContents.cursor.x = appContents.cursor.sceneLeftBarrier - 1;
+    appContents.cursor.textX = appContents.cursor.sceneLeftBarrier - 1;
     appContents.AddCharacter(' ');
 }
 
@@ -48,7 +48,7 @@ void Scene::AddTilda()
 {
     rows.push_back(TextRow());
     appContents.cursor.Move(DOWN);
-    appContents.cursor.x = 0;
+    appContents.cursor.textX = 0;
 
     appContents.AddCharacter('~');
     appContents.AddCharacter(' ');

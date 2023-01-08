@@ -2,6 +2,6 @@
 
 /* ====== TextRow ====== */
 
-TextRow::TextRow() : text()
+TextRow::TextRow() : vertices(), text()
 {
 }
