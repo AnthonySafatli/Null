@@ -48,7 +48,7 @@ int main(void)
     glUniform1f(appContents.u_size.location, appContents.textSize);
     glUniform1i(appContents.u_tex.location, 0);
 
-    appContents.TextInit();
+    appContents.currentScene.TextInit();
 
     /* Main loop */
     while (!glfwWindowShouldClose(window))

@@ -20,13 +20,6 @@ Contents::Contents(const int width, const int height, const int tabAmount, const
 {
 }
 
-void Contents::TextInit()
-{
-	AddCharacter(' ');
-	AddCharacter('1');
-	AddCharacter(' ');
-}
-
 void Contents::GLInit()
 {
 	vertexBuffer.Init();
@@ -241,31 +234,7 @@ void Contents::Return()
 {
 	// TODO: Execute command if on CommandRow
 	
-	if (currentScene.rows.size() == 99)
-		IncrementBarrier();
-
-	currentScene.rows.push_back(TextRow()); 
-	cursor.Move(DOWN);
-	cursor.x = 0;
-
-	std::string rowNumberString = std::to_string(currentScene.rows.size());
-
-	int i = 0;
-	while (i < rowNumberString.size())
-	{
-		AddCharacter(rowNumberString.at(rowNumberString.size() - i - 1));
-		cursor.x = 0;
-		i++;
-	}
-	
-	while (i < cursor.sceneLeftBarrier - 1)
-	{
-		AddCharacter(' ');
-		i++;
-	}
-
-	cursor.x = cursor.sceneLeftBarrier - 1;
-	AddCharacter(' ');
+	currentScene.Return();
 }
 
 void Contents::SaveChar(char ch)

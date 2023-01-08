@@ -5,10 +5,20 @@
 
 #include <vector>
 
+enum LineNumType { NUMBERED, TILDA, NONE };
+
 class Scene
 {
+private:
+
+	void AddNumber();
+	void AddTilda();
+
 public:
 	Scene();
+
+	void TextInit();
+	void Return();
 
 	static Scene WelcomeScene();
 	static Scene NotebookScene();
@@ -17,5 +27,7 @@ public:
 	static Scene PropertiesScene();
 
 	std::vector<TextRow> rows;
+
+	LineNumType type;
 };
 
