@@ -46,6 +46,8 @@ int main(void)
 
     glUniform2f(appContents.u_idealRatio.location, (float) appContents.idealWidth / (float) appContents.width, (float) appContents.idealHeight / (float) appContents.height);
     glUniform1f(appContents.u_size.location, appContents.textSize);
+    glUniform1i(appContents.u_sceneRowIndex.location, 0);
+    glUniform1i(appContents.u_sceneColumnIndex.location, 0);
     glUniform1i(appContents.u_tex.location, 0);
 
     appContents.currentScene.TextInit();
@@ -70,4 +72,14 @@ int main(void)
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)
 {
     glUniform2f(location, v1, v2);
+}
+
+void Contents::SetRowIndex(const int index)
+{
+    glUniform1i(appContents.u_sceneRowIndex.location, index);
+}
+
+void Contents::SetColumnIndex(const int index)
+{
+    glUniform1i(appContents.u_sceneColumnIndex.location, index);
 }

@@ -49,6 +49,9 @@ public:
     /* OpenGL Methods */
     void GLInit();
     void SetData();
+    void SetRowIndex(const int index);
+    void SetColumnIndex(const int index);
+
 
     /* OpenGL Variables */
     VertexBuffer vertexBuffer;
@@ -58,6 +61,8 @@ public:
     Texture texture;
     Uniform u_idealRatio;
     Uniform u_size;
+    Uniform u_sceneRowIndex;
+    Uniform u_sceneColumnIndex;
     Uniform u_tex;
 
     /* Text Variables */
@@ -72,6 +77,8 @@ public:
     /* Text Properties */
     int tabAmount;
     float textSize;
+    int rowIndex;
+    int columnIndex;
 
     /* Window Properties */
     int width;

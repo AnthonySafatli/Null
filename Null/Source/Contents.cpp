@@ -13,10 +13,10 @@
 
 Contents::Contents(const int width, const int height, const int tabAmount, const float textSize) 
 	: idealWidth(800), idealHeight(1400), 
-		width(width), height(height), tabAmount(tabAmount), textSize(textSize),
+		width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0),
 		indices(), currentScene(), cursor(0, 0),
 		vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
-		u_idealRatio(), u_size(), u_tex()
+		u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
 }
 
@@ -38,6 +38,8 @@ void Contents::GLInit()
 
 	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
 	u_size.Init(shaderProgram.handle, "size");
+	u_sceneRowIndex.Init(shaderProgram.handle, "sceneRowIndex");
+	u_sceneColumnIndex.Init(shaderProgram.handle, "sceneColumnIndex");
 	u_tex.Init(shaderProgram.handle, "tex");
 }
 
