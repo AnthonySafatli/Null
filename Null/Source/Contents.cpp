@@ -254,7 +254,20 @@ void Contents::Return()
 {
 	// TODO: Execute command if on CommandRow
 	
+	// Delete characters after cursor
+	std::vector<char> letters(currentScene.rows[cursor.textY].text.begin() + cursor.textX, currentScene.rows[cursor.textY].text.end());
+
+	int size = currentScene.rows[cursor.textY].text.size();
+	for (int i = cursor.textX; i < size; i++) 
+		RemoveCharacterFromRight();
+
+	// Return
 	currentScene.Return();
+
+	// Add characters back
+	for (char ch : letters) AddCharacter(ch);
+
+	cursor.textX = cursor.sceneLeftBarrier;
 }
 
 void Contents::SaveChar(char ch)

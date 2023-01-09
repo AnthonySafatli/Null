@@ -16,13 +16,16 @@ void CursorController::Move(const Direction dir)
 	{
 	case HOME:
 
-		// TODO: Implement 'HOME'
+		textX = sceneLeftBarrier;
+
+		for (int i = sceneLeftBarrier; appContents.currentScene.rows[textY].text[i] == ' '; i++)
+			textX++;
 
 		break;
 
 	case END:
 
-		// TODO: Implement 'END'
+		textX = appContents.currentScene.rows[textY].text.size();
 
 		break;
 	

@@ -17,7 +17,7 @@
 #define KEYCODE_LEFT   263
 #define KEYCODE_UP     265
 #define KEYCODE_DOWN   264
-#define KEYCODE_HOME   268
+#define KEYCODE_HOME   327
 #define KEYCODE_END    321
 
 #define KEYCODE_SPACE  32
