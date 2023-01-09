@@ -168,7 +168,7 @@ void Contents::RemoveCharacterFromLeft()
 	if (cursor.textX <= cursor.sceneLeftBarrier)
 	{
 		cursor.textY--;
-		cursor.textX = currentScene.rows[cursor.textY].text.size(); // cursor.Move(END);
+		cursor.textX = currentScene.rows[cursor.textY].text.size();
 
 		int size = currentScene.rows[cursor.textY + 1].text.size();
 
@@ -179,7 +179,7 @@ void Contents::RemoveCharacterFromLeft()
 
 		for (int i = 0; i < size * 6; i++) indices.pop_back();
 
-		cursor.textX = currentScene.rows[cursor.textY].text.size() - size;
+		cursor.textX = currentScene.rows[cursor.textY].text.size() - size + cursor.sceneLeftBarrier;
 
 		SetData();
 
@@ -210,9 +210,25 @@ void Contents::RemoveCharacterFromLeft()
 
 void Contents::RemoveCharacterFromRight()
 {
-	// Error check
+	// Delete row
 	if (cursor.textX >= currentScene.rows[cursor.textY].text.size())
-		return; // TODO: add row after to the row
+	{
+		int size = currentScene.rows[cursor.textY + 1].text.size();
+
+		for (int i = cursor.sceneLeftBarrier; i < size; i++)
+			AddCharacter(currentScene.rows[cursor.textY + 1].text[i]);
+
+		currentScene.rows.erase(currentScene.rows.begin() + cursor.textY + 1);
+
+		for (int i = 0; i < size * 6; i++) indices.pop_back();
+
+		cursor.textX = currentScene.rows[cursor.textY].text.size() - size + cursor.sceneLeftBarrier;
+
+		SetData();
+
+		return; 
+	}
+
 
 	// Calculate vertex offset
 	int offset = cursor.textX * 4;
