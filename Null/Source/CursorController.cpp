@@ -5,14 +5,16 @@
 
 extern Contents appContents;
 
-CursorController::CursorController(int x, int y) 
-	: textX(0), textY(0), screenX(x), screenY(y), sceneStartRowIndex(0), sceneStartColumnIndex(0), sceneLeftBarrier(3)
+CursorController::CursorController(int x, int y)
+	: textX(0), textY(0), screenX(x), screenY(y), commandX(3), isOnCommand(false),
+	  sceneStartRowIndex(0), sceneStartColumnIndex(0), sceneLeftBarrier(3)
 {
 }
 
 void CursorController::Move(const Direction dir)
 {
 	// TODO: Proper bounds checking
+	// TODO: Add Command bounds checking
 
 	switch (dir)
 	{
@@ -33,19 +35,31 @@ void CursorController::Move(const Direction dir)
 	
 	case UP:
 
-		if (textY > -1)
+		if (isOnCommand)
+			break;
+
+		if (textY > 0)
 			textY--;
 
 		break;
 
 	case DOWN:
 
-		if (textY < (int) appContents.currentScene.rows.size() - 1)
+		if (isOnCommand)
+			break;
+
+		if (textY < appContents.currentScene.rows.size() - 1)
 			textY++;
 
 		break;
 
 	case LEFT:
+
+		if (isOnCommand)
+		{
+			commandX--;
+			break;
+		}
 
 		if (textX > sceneLeftBarrier)
 			textX--;
@@ -54,9 +68,9 @@ void CursorController::Move(const Direction dir)
 
 	case RIGHT:
 
-		if (textY == -1)
+		if (isOnCommand)
 		{
-			textX++;
+			commandX++;
 			break;
 		}
 

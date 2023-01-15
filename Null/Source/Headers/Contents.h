@@ -9,6 +9,7 @@
 
 #include <vector>
 
+#define KEYCODE_ESCAPE 256
 #define KEYCODE_ENTER  257
 #define KEYCODE_TAB    258
 #define KEYCODE_DEL    259
@@ -38,7 +39,9 @@ public:
     void AddCharacter(const char ch);
     void AddCharacterCommand(const char ch);
     void RemoveCharacterFromLeft();
+    void RemoveCharacterFromLeftCommand();
     void RemoveCharacterFromRight();
+    void RemoveCharacterFromRightCommand();
     void AddTab();
     void Return();
 

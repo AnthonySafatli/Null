@@ -45,7 +45,7 @@ int main(void)
     appContents.GLInit();
 
     glUniform2f(appContents.u_idealRatio.location, (float) appContents.idealWidth / (float) appContents.width, (float) appContents.idealHeight / (float) appContents.height);
-    glUniform1f(appContents.u_size.location, appContents.textSize);
+    glUniform1f(appContents.u_size.location, 0.1 * appContents.textSize);
     glUniform1i(appContents.u_sceneRowIndex.location, 0);
     glUniform1i(appContents.u_sceneColumnIndex.location, 0);
     glUniform1i(appContents.u_tex.location, 0);

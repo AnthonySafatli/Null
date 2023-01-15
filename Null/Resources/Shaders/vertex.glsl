@@ -30,9 +30,9 @@ void main() {
 	actualRow += 0.5;
 
 	// calculate position
-	vec2 position = reletivePosition * 0.1 * size;
-	position.y += actualRow * 0.1 * size;
-	position.x += actualColumn * 0.1 * size; 
+	vec2 position = reletivePosition * size;
+	position.y += actualRow * size;
+	position.x += actualColumn * size; 
 
 	// const pixel size conversions
 	vec2 constPixel = idealRatio * position;

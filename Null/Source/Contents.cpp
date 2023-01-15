@@ -70,6 +70,8 @@ void Contents::ProcessKey(int key, int action, int mods)
 	if (action == GLFW_RELEASE)
 		return;
 
+	if (key == KEYCODE_ESCAPE)
+		cursor.isOnCommand = !cursor.isOnCommand;
 	if (key == KEYCODE_TAB)
 		AddTab();
 	else if (key == KEYCODE_ENTER)
@@ -99,7 +101,7 @@ void Contents::ProcessKey(int key, int action, int mods)
 void Contents::ProcessChar(unsigned int codepoint)
 {
 	if (codepoint > 31 && codepoint < 128)
-		if (cursor.textY < 0)
+		if (cursor.isOnCommand)
 			AddCharacterCommand(codepoint);
 		else 
 			AddCharacter(codepoint);
@@ -115,7 +117,7 @@ void Contents::OnResize(int width, int height)
 	this->height = height;
 }
 
-void Contents::IncrementBarrier()
+void Contents::IncrementBarrier() // UNTESTED CODE!!
 {
 	for (TextRow row : currentScene.rows)
 	{
@@ -174,23 +176,31 @@ void Contents::AddCharacter(const char ch)
 
 void Contents::AddCharacterCommand(const char ch)
 {
-	int offset = (cursor.textX - 2) * 4;
+	int offset = (cursor.commandX - 2) * 4;
 
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
+	// Insert once by making array
 	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 1
-		Vertex(0.0, 0.0, texCoords.u, texCoords.v, cursor.textY, cursor.textX, 0.0));
+		Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1.0, cursor.commandX, 0.0));
 	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 2
-		Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, cursor.textY, cursor.textX, 0.0));
+		Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1.0, cursor.commandX, 0.0));
 	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 3
-		Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), cursor.textY, cursor.textX, 0.0));
+		Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1.0, cursor.commandX, 0.0));
 	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 4
-		Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), cursor.textY, cursor.textX, 0.0));
+		Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1.0, cursor.commandX, 0.0));
 
 
 	// Edit the vertices after
-	// TODO: Implement going back to edit text
+	int commandTextAmount = command.text.vertices.size() / 4 - 1;
+	for (int i = offset / 4 - 1; i < commandTextAmount; i++)
+	{
+		command.text.vertices[offset++].column++;
+		command.text.vertices[offset++].column++;
+		command.text.vertices[offset++].column++;
+		command.text.vertices[offset++].column++;
+	}
 
 	// Add indices
 	int startIndex = indices.size() / 6 * 4;
@@ -210,12 +220,25 @@ void Contents::AddCharacterCommand(const char ch)
 
 void Contents::AddTab()
 {
+	if (cursor.isOnCommand)
+	{
+		// Add intellisense (maybe)
+
+		return;
+	}
+
 	for (int i = 0; i < tabAmount; i++)
 		AddCharacter(' ');
 }
 
 void Contents::RemoveCharacterFromLeft()
 {
+	if (cursor.isOnCommand)
+	{
+		RemoveCharacterFromLeftCommand();
+		return;
+	}
+
 	// Delete Row
 	if (cursor.textX <= cursor.sceneLeftBarrier)
 	{
@@ -260,8 +283,19 @@ void Contents::RemoveCharacterFromLeft()
 	SetData();
 }
 
+void Contents::RemoveCharacterFromLeftCommand()
+{
+
+}
+
 void Contents::RemoveCharacterFromRight()
 {
+	if (cursor.isOnCommand)
+	{
+		RemoveCharacterFromRightCommand();
+		return;
+	}
+
 	// Delete row
 	if (cursor.textX >= currentScene.rows[cursor.textY].text.size())
 	{
@@ -302,10 +336,25 @@ void Contents::RemoveCharacterFromRight()
 	SetData();
 }
 
+void Contents::RemoveCharacterFromRightCommand()
+{
+
+}
+
 void Contents::Return()
 {
-	// TODO: Execute command if on CommandRow
-	
+	if (cursor.isOnCommand)
+	{
+		cursor.isOnCommand = false;
+		command.text.vertices.erase(command.text.vertices.begin() + 4, command.text.vertices.end());
+		// Remove Indices
+		
+		// TODO: Execute command if on CommandRow
+
+		SetData();
+		return;
+	}
+
 	// Delete characters after cursor
 	std::vector<char> letters(currentScene.rows[cursor.textY].text.begin() + cursor.textX, currentScene.rows[cursor.textY].text.end());
 
