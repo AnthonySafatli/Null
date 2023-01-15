@@ -1,4 +1,4 @@
-#include "Headers/Contents.h"
+#include "Headers/NullEditor.h"
 #include "Headers/Character.h"
 
 #include "GLFW/glfw3.h"
@@ -9,9 +9,7 @@
 
 /* ====== Contents ====== */
 
-// CommandRow Contents::command = CommandRow();
-
-Contents::Contents(const int width, const int height, const int tabAmount, const float textSize) 
+NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400), 
 		width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0),
 		indices(), currentScene(), cursor(0, 0),
@@ -29,7 +27,7 @@ Contents::Contents(const int width, const int height, const int tabAmount, const
 	}
 }
 
-void Contents::GLInit()
+void NullEditor::GLInit()
 {
 	vertexBuffer.Init();
 
@@ -52,7 +50,7 @@ void Contents::GLInit()
 	u_tex.Init(shaderProgram.handle, "tex");
 }
 
-void Contents::SetData()
+void NullEditor::SetData()
 {
 	std::vector<Vertex> vertices;
 
@@ -65,7 +63,7 @@ void Contents::SetData()
 	indexBuffer.SetData(indices);
 }
 
-void Contents::ProcessKey(int key, int action, int mods)
+void NullEditor::ProcessKey(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
@@ -98,7 +96,7 @@ void Contents::ProcessKey(int key, int action, int mods)
 	// TODO: Implement shortcuts
 }
 
-void Contents::ProcessChar(unsigned int codepoint)
+void NullEditor::ProcessChar(unsigned int codepoint)
 {
 	if (codepoint > 31 && codepoint < 128)
 		if (cursor.isOnCommand)
@@ -107,7 +105,7 @@ void Contents::ProcessChar(unsigned int codepoint)
 			AddCharacter(codepoint);
 }
 
-void Contents::OnResize(int width, int height)
+void NullEditor::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
@@ -117,7 +115,7 @@ void Contents::OnResize(int width, int height)
 	this->height = height;
 }
 
-void Contents::IncrementBarrier() // UNTESTED CODE!!
+void NullEditor::IncrementBarrier() // UNTESTED CODE!!
 {
 	for (TextRow row : currentScene.rows)
 	{
@@ -128,7 +126,7 @@ void Contents::IncrementBarrier() // UNTESTED CODE!!
 	cursor.sceneLeftBarrier++;
 }
 
-void Contents::AddCharacter(const char ch)
+void NullEditor::AddCharacter(const char ch)
 {
 	// Get vertex offset
 	int offset = cursor.textX * 4;
@@ -174,7 +172,7 @@ void Contents::AddCharacter(const char ch)
 	SetData();
 }
 
-void Contents::AddCharacterCommand(const char ch)
+void NullEditor::AddCharacterCommand(const char ch)
 {
 	int offset = (cursor.commandX - 2) * 4;
 
@@ -218,7 +216,7 @@ void Contents::AddCharacterCommand(const char ch)
 	SetData();
 }
 
-void Contents::AddTab()
+void NullEditor::AddTab()
 {
 	if (cursor.isOnCommand)
 	{
@@ -231,7 +229,7 @@ void Contents::AddTab()
 		AddCharacter(' ');
 }
 
-void Contents::RemoveCharacterFromLeft()
+void NullEditor::RemoveCharacterFromLeft()
 {
 	if (cursor.isOnCommand)
 	{
@@ -283,12 +281,12 @@ void Contents::RemoveCharacterFromLeft()
 	SetData();
 }
 
-void Contents::RemoveCharacterFromLeftCommand()
+void NullEditor::RemoveCharacterFromLeftCommand()
 {
 
 }
 
-void Contents::RemoveCharacterFromRight()
+void NullEditor::RemoveCharacterFromRight()
 {
 	if (cursor.isOnCommand)
 	{
@@ -336,12 +334,12 @@ void Contents::RemoveCharacterFromRight()
 	SetData();
 }
 
-void Contents::RemoveCharacterFromRightCommand()
+void NullEditor::RemoveCharacterFromRightCommand()
 {
 
 }
 
-void Contents::Return()
+void NullEditor::Return()
 {
 	if (cursor.isOnCommand)
 	{
@@ -371,7 +369,7 @@ void Contents::Return()
 	cursor.textX = cursor.sceneLeftBarrier;
 }
 
-void Contents::SaveChar(char ch)
+void NullEditor::SaveChar(char ch)
 {
 	if (currentScene.rows[cursor.textY].text.size() == 0)
 		currentScene.rows[cursor.textY].text.push_back(ch);

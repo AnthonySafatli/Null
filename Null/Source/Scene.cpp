@@ -1,14 +1,14 @@
 #include "Headers/Scene.h"
 
 #include "Headers/GLAbstraction.h"
-#include "Headers/Contents.h"
+#include "Headers/NullEditor.h"
 
 #include <vector>
 #include <string>
 
 /* ====== Scene ====== */
 
-extern Contents appContents;
+extern NullEditor appContents;
 
 Scene::Scene() : rows(), type(NUMBERED)
 {

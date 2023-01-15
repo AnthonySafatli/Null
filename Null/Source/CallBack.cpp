@@ -1,9 +1,9 @@
 #include "Headers/CallBack.h"
-#include "Headers/Contents.h"
+#include "Headers/NullEditor.h"
 
 /* ====== CallBack ====== */
 
-extern Contents appContents;
+extern NullEditor appContents;
 
 void CallBack::KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
 {

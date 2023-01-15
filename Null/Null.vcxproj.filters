@@ -24,7 +24,7 @@
     <ClCompile Include="Source\GLAbstraction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Contents.cpp">
+    <ClCompile Include="Source\NullEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainRows.cpp">
@@ -42,15 +42,15 @@
     <ClCompile Include="Source\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CallBack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\fragment.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Textures\alphabet-texture.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Resources\Textures\font texture.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -59,7 +59,7 @@
     <ClInclude Include="Source\Headers\GLAbstraction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Headers\Contents.h">
+    <ClInclude Include="Source\Headers\NullEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Headers\MainRows.h">
@@ -75,6 +75,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Headers\Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Headers\CallBack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Headers\Uniforms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

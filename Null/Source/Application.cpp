@@ -3,11 +3,11 @@
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Headers/Contents.h"
+#include "Headers/NullEditor.h"
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
 
-Contents appContents = Contents(1800, 1100, 4, 0.3);
+NullEditor appContents = NullEditor(1800, 1100, 4, 0.3);
 
 int main(void)
 {
@@ -74,12 +74,12 @@ void UpdateUniform2f(const unsigned int location, const float v1, const float v2
     glUniform2f(location, v1, v2);
 }
 
-void Contents::SetRowIndex(const int index)
+void NullEditor::SetRowIndex(const int index)
 {
     glUniform1i(appContents.u_sceneRowIndex.location, index);
 }
 
-void Contents::SetColumnIndex(const int index)
+void NullEditor::SetColumnIndex(const int index)
 {
     glUniform1i(appContents.u_sceneColumnIndex.location, index);
 }

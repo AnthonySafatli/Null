@@ -1,9 +1,9 @@
 #include "Headers/CursorController.h"
-#include "Headers/Contents.h"
+#include "Headers/NullEditor.h"
 
 #include <iostream>
 
-extern Contents appContents;
+extern NullEditor appContents;
 
 CursorController::CursorController(int x, int y)
 	: textX(0), textY(0), screenX(x), screenY(y), commandX(3), isOnCommand(false),
