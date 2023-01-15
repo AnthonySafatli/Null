@@ -18,6 +18,15 @@ Contents::Contents(const int width, const int height, const int tabAmount, const
 		vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 		u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
+	for (int i = 0; i < 2; i += 4)
+	{
+		indices.push_back(i);
+		indices.push_back(i + 1);
+		indices.push_back(i + 2);
+		indices.push_back(i + 2);
+		indices.push_back(i + 3);
+		indices.push_back(i);
+	}
 }
 
 void Contents::GLInit()
@@ -46,6 +55,8 @@ void Contents::GLInit()
 void Contents::SetData()
 {
 	std::vector<Vertex> vertices;
+
+	vertices.insert(vertices.end(), command.text.vertices.begin(), command.text.vertices.end());
 
 	for (TextRow row : currentScene.rows)
 		vertices.insert(vertices.end(), row.vertices.begin(), row.vertices.end());

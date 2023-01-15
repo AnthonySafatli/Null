@@ -66,7 +66,7 @@ public:
     Uniform u_tex;
 
     /* Text Variables */
-    // CommandRow command;
+    CommandRow command;
     Scene currentScene;
     // StatusBar status;
     CursorController cursor;

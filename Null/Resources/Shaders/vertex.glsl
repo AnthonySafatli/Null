@@ -18,8 +18,16 @@ out uint vHighlight;
 void main() {
 	vTexCoords = texCoords;
 
-	float actualRow = row - sceneRowIndex;
+	float actualRow = 0;
 	float actualColumn = column - sceneColumnIndex;
+
+	if (row > -1.0) 
+	{
+		actualRow = row - sceneRowIndex;
+		actualRow += 2.0;
+	}
+
+	actualRow += 0.5;
 
 	// calculate position
 	vec2 position = reletivePosition * 0.1 * size;
