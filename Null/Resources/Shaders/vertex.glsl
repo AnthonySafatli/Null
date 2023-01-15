@@ -13,7 +13,7 @@ in layout(location = 3) float column;
 in layout(location = 4) uint highlight;
 
 out vec2 vTexCoords;
-out uint vHighlight;
+flat out uint vHighlight;
 
 void main() {
 	vTexCoords = texCoords;

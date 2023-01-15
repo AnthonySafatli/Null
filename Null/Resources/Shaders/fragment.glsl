@@ -4,10 +4,13 @@
 uniform sampler2D tex;
 
 in vec2 vTexCoords;
-in uint vHighlight;
+flat in uint vHighlight;
 
 out vec4 color;
 
 void main() {
-	color = texture(tex, vTexCoords);
+	if (vHighlight == 0u)
+		color = texture(tex, vTexCoords);
+	else 
+		color = vec4(1.0, 0.0, 0.0, 1.0); // TODO: get fixed
 }

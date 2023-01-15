@@ -99,7 +99,10 @@ void Contents::ProcessKey(int key, int action, int mods)
 void Contents::ProcessChar(unsigned int codepoint)
 {
 	if (codepoint > 31 && codepoint < 128)
-		AddCharacter(codepoint);
+		if (cursor.textY < 0)
+			AddCharacterCommand(codepoint);
+		else 
+			AddCharacter(codepoint);
 }
 
 void Contents::OnResize(int width, int height)
@@ -123,7 +126,7 @@ void Contents::IncrementBarrier()
 	cursor.sceneLeftBarrier++;
 }
 
-void Contents::AddCharacter(char ch)
+void Contents::AddCharacter(const char ch)
 {
 	// Get vertex offset
 	int offset = cursor.textX * 4;
@@ -161,6 +164,42 @@ void Contents::AddCharacter(char ch)
 
 	// Add letter to memory
 	SaveChar(ch);
+
+	// Move cursor forwards
+	cursor.Move(RIGHT);
+
+	// Update OpenGL
+	SetData();
+}
+
+void Contents::AddCharacterCommand(const char ch)
+{
+	int offset = (cursor.textX - 2) * 4;
+
+	// Add vertices
+	TexCoords texCoords = GetCoords(ch);
+
+	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 1
+		Vertex(0.0, 0.0, texCoords.u, texCoords.v, cursor.textY, cursor.textX, 0.0));
+	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 2
+		Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, cursor.textY, cursor.textX, 0.0));
+	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 3
+		Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), cursor.textY, cursor.textX, 0.0));
+	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 4
+		Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), cursor.textY, cursor.textX, 0.0));
+
+
+	// Edit the vertices after
+	// TODO: Implement going back to edit text
+
+	// Add indices
+	int startIndex = indices.size() / 6 * 4;
+	indices.push_back(startIndex);
+	indices.push_back(startIndex + 1);
+	indices.push_back(startIndex + 2);
+	indices.push_back(startIndex + 2);
+	indices.push_back(startIndex + 3);
+	indices.push_back(startIndex);
 
 	// Move cursor forwards
 	cursor.Move(RIGHT);

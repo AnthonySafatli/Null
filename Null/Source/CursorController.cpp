@@ -1,6 +1,8 @@
 #include "Headers/CursorController.h"
 #include "Headers/Contents.h"
 
+#include <iostream>
+
 extern Contents appContents;
 
 CursorController::CursorController(int x, int y) 
@@ -31,14 +33,14 @@ void CursorController::Move(const Direction dir)
 	
 	case UP:
 
-		if (textY > 0)
+		if (textY > -1)
 			textY--;
 
 		break;
 
 	case DOWN:
 
-		if (textY < appContents.currentScene.rows.size())
+		if (textY < (int) appContents.currentScene.rows.size() - 1)
 			textY++;
 
 		break;
@@ -51,6 +53,12 @@ void CursorController::Move(const Direction dir)
 		break;
 
 	case RIGHT:
+
+		if (textY == -1)
+		{
+			textX++;
+			break;
+		}
 
 		TextRow currentRow = appContents.currentScene.rows[textY];
 		if (textX < currentRow.text.size())

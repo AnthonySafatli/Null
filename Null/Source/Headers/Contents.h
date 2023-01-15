@@ -35,7 +35,8 @@ public:
 
     /* Text Methods */
     void IncrementBarrier();
-    void AddCharacter(char ch);
+    void AddCharacter(const char ch);
+    void AddCharacterCommand(const char ch);
     void RemoveCharacterFromLeft();
     void RemoveCharacterFromRight();
     void AddTab();
