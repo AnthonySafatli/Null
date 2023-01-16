@@ -16,6 +16,8 @@ NullEditor::NullEditor(const int width, const int height, const int tabAmount, c
 		vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 		u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
+
+
 	for (int i = 0; i < 2; i += 4)
 	{
 		indices.push_back(i);
@@ -163,7 +165,7 @@ void NullEditor::AddCharacter(const char ch)
 	indices.push_back(startIndex);
 
 	// Add letter to memory
-	SaveChar(ch);
+	currentScene.rows[cursor.textY].text.insert(currentScene.rows[cursor.textY].text.begin() + cursor.textX, ch);
 
 	// Move cursor forwards
 	cursor.Move(RIGHT);
@@ -240,6 +242,10 @@ void NullEditor::RemoveCharacterFromLeft()
 	// Delete Row
 	if (cursor.textX <= cursor.sceneLeftBarrier)
 	{
+		// Error Check
+		if (cursor.textY == 0)
+			return;
+
 		cursor.textY--;
 		cursor.textX = currentScene.rows[cursor.textY].text.size();
 
@@ -317,6 +323,10 @@ void NullEditor::RemoveCharacterFromRight()
 	// Delete row
 	if (cursor.textX >= currentScene.rows[cursor.textY].text.size())
 	{
+		// Error Check
+		if (cursor.textY == currentScene.rows.size() - 1)
+			return;
+
 		int size = currentScene.rows[cursor.textY + 1].text.size();
 
 		for (int i = cursor.sceneLeftBarrier; i < size; i++)
@@ -409,12 +419,4 @@ void NullEditor::Return()
 	for (char ch : letters) AddCharacter(ch);
 
 	cursor.textX = cursor.sceneLeftBarrier;
-}
-
-void NullEditor::SaveChar(char ch)
-{
-	if (currentScene.rows[cursor.textY].text.size() == 0)
-		currentScene.rows[cursor.textY].text.push_back(ch);
-	else
-		currentScene.rows[cursor.textY].text.insert(currentScene.rows[cursor.textY].text.begin() + cursor.textX, ch);
 }

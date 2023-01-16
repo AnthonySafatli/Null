@@ -39,7 +39,10 @@ void CursorController::Move(const Direction dir)
 			break;
 
 		if (textY > 0)
+		{
 			textY--;
+			screenY--;
+		}
 
 		break;
 
@@ -49,7 +52,18 @@ void CursorController::Move(const Direction dir)
 			break;
 
 		if (textY < appContents.currentScene.rows.size() - 1)
-			textY++;
+		{
+			if (screenY + 4.5 < (1.0 / (0.1 * appContents.textSize)) * ((float) appContents.height / (float) appContents.idealHeight))
+			{
+				screenY++;
+				textY++;
+			}
+			else
+			{
+				textY++;
+				appContents.SetRowIndex(++appContents.rowIndex);
+			}
+		}
 
 		break;
 
