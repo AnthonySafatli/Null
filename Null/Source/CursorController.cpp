@@ -15,6 +15,7 @@ void CursorController::Move(const Direction dir)
 {
 	// TODO: Proper bounds checking
 	// TODO: Add Command bounds checking
+	// TODO: Separate into Methods
 
 	switch (dir)
 	{
@@ -38,10 +39,18 @@ void CursorController::Move(const Direction dir)
 		if (isOnCommand)
 			break;
 
-		if (textY > 0)
+		if (screenY > 0)
 		{
 			textY--;
 			screenY--;
+		}
+		else
+		{
+			if (textY > 0)
+			{
+				textY--;
+				appContents.SetRowIndex(--appContents.rowIndex);
+			}
 		}
 
 		break;

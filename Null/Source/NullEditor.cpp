@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 /* ====== Contents ====== */
 
@@ -54,13 +55,24 @@ void NullEditor::GLInit()
 
 void NullEditor::SetData()
 {
+	// Make vector
 	std::vector<Vertex> vertices;
 
+	// Add command row
 	vertices.insert(vertices.end(), command.text.vertices.begin(), command.text.vertices.end());
 
-	for (TextRow row : currentScene.rows)
-		vertices.insert(vertices.end(), row.vertices.begin(), row.vertices.end());
+	// Add visible rows from scene
+	float maxRows = (1.0 / (0.1 * textSize)) * ((float)height / (float)idealHeight) - 2.5;
 
+	float rows = std::min(maxRows, (float)currentScene.rows.size());
+
+	for (int i = 0; i < (int)rows; i++)
+		vertices.insert(vertices.end(), currentScene.rows[i + rowIndex].vertices.begin(), currentScene.rows[i + rowIndex].vertices.end());
+
+	// Add status bar
+	// TODO: Implement Status Bar
+
+	// Pass in data
 	vertexBuffer.SetData(vertices);
 	indexBuffer.SetData(indices);
 }
