@@ -283,7 +283,27 @@ void NullEditor::RemoveCharacterFromLeft()
 
 void NullEditor::RemoveCharacterFromLeftCommand()
 {
+	// Error Checking
+	if (cursor.commandX <= cursor.sceneLeftBarrier)
+		return;
 
+	// Calculate offset
+	int offset = (cursor.commandX - 1 - 2) * 4;
+
+	// Remove vertices
+	command.text.vertices.erase(command.text.vertices.begin() + offset, command.text.vertices.begin() + offset + 4);
+
+	while (offset < command.text.vertices.size())
+		command.text.vertices[offset++].column--;
+
+	// Remove indices
+	for (int i = 0; i < 6; i++) indices.pop_back();
+
+	// Move cursor
+	cursor.Move(LEFT);
+
+	// Update OpenGL
+	SetData();
 }
 
 void NullEditor::RemoveCharacterFromRight()
@@ -336,7 +356,25 @@ void NullEditor::RemoveCharacterFromRight()
 
 void NullEditor::RemoveCharacterFromRightCommand()
 {
+	// Error Check
+	if (cursor.commandX - 2 >= command.text.vertices.size() / 4)
+		return;
 
+	// Calculate vertex offset
+	int offset = (cursor.commandX - 2) * 4;
+
+	// Remove vertices
+	command.text.vertices.erase(command.text.vertices.begin() + offset, command.text.vertices.begin() + offset + 4);
+
+	// Edit vertices after
+	while (offset < command.text.vertices.size())
+		command.text.vertices[offset++].column--;
+
+	// Remove indices
+	for (int i = 0; i < 6; i++) indices.pop_back();
+
+	// Update OpenGl
+	SetData();
 }
 
 void NullEditor::Return()
@@ -344,8 +382,12 @@ void NullEditor::Return()
 	if (cursor.isOnCommand)
 	{
 		cursor.isOnCommand = false;
+
+		int charAmount = command.text.vertices.size() / 4 - 1;
+
 		command.text.vertices.erase(command.text.vertices.begin() + 4, command.text.vertices.end());
-		// Remove Indices
+		
+		for (int i = 0; i < charAmount * 6; i++) indices.pop_back();
 		
 		// TODO: Execute command if on CommandRow
 

@@ -55,7 +55,7 @@ void CursorController::Move(const Direction dir)
 
 	case LEFT:
 
-		if (isOnCommand)
+		if (isOnCommand && commandX > 3)
 		{
 			commandX--;
 			break;
@@ -68,14 +68,13 @@ void CursorController::Move(const Direction dir)
 
 	case RIGHT:
 
-		if (isOnCommand)
+		if (isOnCommand && commandX < appContents.command.text.vertices.size() / 4 + 2)
 		{
 			commandX++;
 			break;
 		}
 
-		TextRow currentRow = appContents.currentScene.rows[textY];
-		if (textX < currentRow.text.size())
+		if (textX < appContents.currentScene.rows[textY].text.size())
 			textX++;
 
 		break;
