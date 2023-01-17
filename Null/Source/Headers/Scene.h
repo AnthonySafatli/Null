@@ -26,10 +26,8 @@ public:
 	static Scene SettingsScene();
 	static Scene PropertiesScene();
 
-	std::vector<TextRow> rows;
-
-	const bool editable;
-
 	LineNumType type;
+	const bool editable;
+	std::vector<TextRow> rows;
 };
 

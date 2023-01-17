@@ -67,7 +67,7 @@ public:
     /* Text Variables */
     CommandRow command;
     Scene currentScene;
-    // StatusBar status;
+    StatusBar status;
     CursorController cursor;
 
     /* Vectors */

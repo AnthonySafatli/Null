@@ -13,20 +13,30 @@
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400),
 	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0),
-	  indices(), currentScene(true), cursor(0, 0),
+	  indices(), currentScene(true), command(), status(), cursor(0, 0),
 	  vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
 	// Indices for Command Row Init
-	for (int i = 0; i < 2; i += 4)
+	indices.push_back(0);
+	indices.push_back(1);
+	indices.push_back(2);
+	indices.push_back(2);
+	indices.push_back(3);
+	indices.push_back(0);
+
+	// Indices for Status Bar Init
+	for (int i = 0; i < 100 * 4; i += 4)
 	{
-		indices.push_back(i);
-		indices.push_back(i + 1);
-		indices.push_back(i + 2);
-		indices.push_back(i + 2);
-		indices.push_back(i + 3);
-		indices.push_back(i);
+		indices.push_back(4 + i);
+		indices.push_back(4 + i + 1);
+		indices.push_back(4 + i + 2);
+		indices.push_back(4 + i + 2);
+		indices.push_back(4 + i + 3);
+		indices.push_back(4 + i);
 	}
+
+	status.Init(100, "Null Loaded Successfully");
 }
 
 void NullEditor::GLInit()
@@ -58,7 +68,7 @@ void NullEditor::SetData()
 	std::vector<Vertex> vertices;
 
 	// Add command row
-	vertices.insert(vertices.end(), command.text.vertices.begin(), command.text.vertices.end());
+	vertices.insert(vertices.end(), command.row.vertices.begin(), command.row.vertices.end());
 
 	// Add visible rows from scene
 	float maxRows = (1.0 / (0.1 * textSize)) * ((float)height / (float)idealHeight) - 2.5;
@@ -69,7 +79,7 @@ void NullEditor::SetData()
 		vertices.insert(vertices.end(), currentScene.rows[i + rowIndex].vertices.begin(), currentScene.rows[i + rowIndex].vertices.end());
 
 	// Add status bar
-	// TODO: Implement Status Bar
+	vertices.insert(vertices.end(), status.row.vertices.begin(), status.row.vertices.end());
 
 	// Pass in data
 	vertexBuffer.SetData(vertices);
@@ -204,24 +214,24 @@ void NullEditor::AddCharacterCommand(const char ch)
 	TexCoords texCoords = GetCoords(ch);
 
 	// TODO: Insert once by making array
-	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 1
-		Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1.0, cursor.commandX, 0.0));
-	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 2
-		Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1.0, cursor.commandX, 0.0));
-	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 3
-		Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1.0, cursor.commandX, 0.0));
-	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 4
-		Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1.0, cursor.commandX, 0.0));
+	command.row.vertices.insert(command.row.vertices.begin() + offset++,                                      // Add Vertex 1
+		Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1.0, cursor.commandX, 0));
+	command.row.vertices.insert(command.row.vertices.begin() + offset++,                                      // Add Vertex 2
+		Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1.0, cursor.commandX, 0));
+	command.row.vertices.insert(command.row.vertices.begin() + offset++,                                      // Add Vertex 3
+		Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1.0, cursor.commandX, 0));
+	command.row.vertices.insert(command.row.vertices.begin() + offset++,                                      // Add Vertex 4
+		Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1.0, cursor.commandX, 0));
 
 
 	// Edit the vertices after
-	int commandTextAmount = command.text.text.size();
+	int commandTextAmount = command.row.text.size();
 	for (int i = offset / 4 - 1; i < commandTextAmount; i++)
 	{
-		command.text.vertices[offset++].column++;
-		command.text.vertices[offset++].column++;
-		command.text.vertices[offset++].column++;
-		command.text.vertices[offset++].column++;
+		command.row.vertices[offset++].column++;
+		command.row.vertices[offset++].column++;
+		command.row.vertices[offset++].column++;
+		command.row.vertices[offset++].column++;
 	}
 
 	// Add indices
@@ -234,7 +244,7 @@ void NullEditor::AddCharacterCommand(const char ch)
 	indices.push_back(startIndex);
 
 	// Add letter to memory
-	command.text.text.insert(command.text.text.begin() + ((int)cursor.commandX - 3), ch);
+	command.row.text.insert(command.row.text.begin() + ((int)cursor.commandX - 3), ch);
 
 	// Move cursor forwards
 	cursor.Move(RIGHT);
@@ -322,16 +332,16 @@ void NullEditor::RemoveCharacterFromLeftCommand()
 	int offset = (cursor.commandX - 1 - 2) * 4;
 
 	// Remove vertices
-	command.text.vertices.erase(command.text.vertices.begin() + offset, command.text.vertices.begin() + offset + 4);
+	command.row.vertices.erase(command.row.vertices.begin() + offset, command.row.vertices.begin() + offset + 4);
 
-	while (offset < command.text.vertices.size())
-		command.text.vertices[offset++].column--;
+	while (offset < command.row.vertices.size())
+		command.row.vertices[offset++].column--;
 
 	// Remove indices
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from Memory
-	command.text.text.erase(command.text.text.begin() + cursor.commandX - 1);
+	command.row.text.erase(command.row.text.begin() + cursor.commandX - 1);
 
 	// Move cursor
 	cursor.Move(LEFT);
@@ -395,24 +405,24 @@ void NullEditor::RemoveCharacterFromRight()
 void NullEditor::RemoveCharacterFromRightCommand()
 {
 	// Error Check
-	if (cursor.commandX - 2 >= command.text.vertices.size() / 4)
+	if (cursor.commandX - 2 >= command.row.vertices.size() / 4)
 		return;
 
 	// Calculate vertex offset
 	int offset = (cursor.commandX - 2) * 4;
 
 	// Remove vertices
-	command.text.vertices.erase(command.text.vertices.begin() + offset, command.text.vertices.begin() + offset + 4);
+	command.row.vertices.erase(command.row.vertices.begin() + offset, command.row.vertices.begin() + offset + 4);
 
 	// Edit vertices after
-	while (offset < command.text.vertices.size())
-		command.text.vertices[offset++].column--;
+	while (offset < command.row.vertices.size())
+		command.row.vertices[offset++].column--;
 
 	// Remove indices
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from memory
-	command.text.text.erase(command.text.text.begin() + cursor.commandX);
+	command.row.text.erase(command.row.text.begin() + cursor.commandX);
 
 	// Update OpenGl
 	SetData();
@@ -424,9 +434,9 @@ void NullEditor::Return()
 	{
 		cursor.isOnCommand = false;
 
-		int charAmount = command.text.vertices.size() / 4 - 1;
+		int charAmount = command.row.vertices.size() / 4 - 1;
 
-		command.text.vertices.erase(command.text.vertices.begin() + 4, command.text.vertices.end());
+		command.row.vertices.erase(command.row.vertices.begin() + 4, command.row.vertices.end());
 		
 		for (int i = 0; i < charAmount * 6; i++) indices.pop_back();
 		

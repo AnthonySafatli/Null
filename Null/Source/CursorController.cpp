@@ -50,7 +50,7 @@ void CursorController::Home()
 	{
 		commandX = 0;
 
-		for (int i = 0; appContents.command.text.text[i] == ' '; i++)
+		for (int i = 0; appContents.command.row.text[i] == ' '; i++)
 			commandX++;
 		
 		return;
@@ -65,7 +65,7 @@ void CursorController::Home()
 void CursorController::End()
 {
 	if (isOnCommand)
-		commandX = appContents.command.text.text.size();
+		commandX = appContents.command.row.text.size();
 	else
 		textX = appContents.currentScene.rows[textY].text.size();
 }
@@ -121,7 +121,7 @@ void CursorController::Left()
 
 void CursorController::Right()
 {
-	if (isOnCommand && commandX < appContents.command.text.text.size() + 3)
+	if (isOnCommand && commandX < appContents.command.row.text.size() + 3)
 	{
 		commandX++;
 		return;

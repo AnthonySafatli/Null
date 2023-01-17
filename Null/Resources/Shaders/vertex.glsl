@@ -1,7 +1,11 @@
 // VERTEX
 #version 330 core
 
+const float COMMAND_LINE_ROW = -1.0;
+const float STATUS_BAR_ROW   = -2.0;
+
 uniform vec2 idealRatio; // idealSize / currentSize
+// uniform float height;
 uniform float size;
 uniform int sceneRowIndex;
 uniform int sceneColumnIndex;
@@ -17,17 +21,21 @@ flat out uint vHighlight;
 
 void main() {
 	vTexCoords = texCoords;
+	vHighlight = highlight;
 
 	float actualRow = 0;
 	float actualColumn = column - sceneColumnIndex;
 
-	if (row > -1.0) 
+	if (row != COMMAND_LINE_ROW && row != STATUS_BAR_ROW) 
 	{
 		actualRow = row - sceneRowIndex;
 		actualRow += 2.0;
 	}
 
-	actualRow += 0.5;
+	if (row == STATUS_BAR_ROW)
+		actualRow = ((1.0 / size) * (1.0 / idealRatio.y)) - 1;
+	else
+		actualRow += 0.5;
 
 	// calculate position
 	vec2 position = reletivePosition * size;

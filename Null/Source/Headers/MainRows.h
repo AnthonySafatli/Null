@@ -4,13 +4,14 @@
 #include "TextRow.h"
 
 #include <vector>
+#include <string>
 
 class CommandRow
 {
 public:
 	CommandRow();
 
-	TextRow text;
+	TextRow row;
 };
 
 class StatusBar
@@ -18,5 +19,9 @@ class StatusBar
 public:
 	StatusBar();
 
-	TextRow text;
+	void Init(const unsigned int length, const std::string initialMessage);
+
+	void UpdateLength(const unsigned int length);
+
+	TextRow row;
 };
