@@ -3,21 +3,23 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/NullEditor.h"
 
+#include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 /* ====== Scene ====== */
 
 extern NullEditor appContents;
 
-Scene::Scene() : rows(), type(NUMBERED)
+Scene::Scene(const bool editable) : rows(), type(NUMBERED), editable(editable)
 {
     rows.push_back(TextRow());
 }
 
 void Scene::AddNumber()
 {
-    if (rows.size() == 99)
+    if ((unsigned int)std::log10((double)rows.size() + 1.0) + 2 > (unsigned int)appContents.cursor.sceneLeftBarrier)
         appContents.IncrementBarrier();
 
     rows.push_back(TextRow());
@@ -79,25 +81,25 @@ void Scene::Return()
 
 Scene Scene::WelcomeScene()
 {
-    return Scene();
+    return Scene(false);
 }
 
 Scene Scene::NotebookScene()
 {
-    return Scene();
+    return Scene(false);
 }
 
 Scene Scene::TextEditor()
 {
-    return Scene();
+    return Scene(true);
 }
 
 Scene Scene::SettingsScene()
 {
-    return Scene();
+    return Scene(false);
 }
 
 Scene Scene::PropertiesScene()
 {
-    return Scene();
+    return Scene(false);
 }

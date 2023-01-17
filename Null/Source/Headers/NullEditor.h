@@ -25,11 +25,6 @@
 
 class NullEditor
 {
-private:
-
-    /* Private */
-    void SaveChar(char ch);
-
 public:
     /* Constructor */
     NullEditor(const int width, const int height, const int tabAmount, const float textSize);

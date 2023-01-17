@@ -40,7 +40,6 @@ int main(void)
         return -3;
 
     glClearColor(0.03, 0.05, 0.09, 0.85);
-    // glClearColor(0.03, 0.05, 0.09, 0.05);
 
     appContents.GLInit();
 

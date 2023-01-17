@@ -11,14 +11,13 @@
 /* ====== Contents ====== */
 
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
-	: idealWidth(800), idealHeight(1400), 
-		width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0),
-		indices(), currentScene(), cursor(0, 0),
-		vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
-		u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
+	: idealWidth(800), idealHeight(1400),
+	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0),
+	  indices(), currentScene(true), cursor(0, 0),
+	  vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
+	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
-
-
+	// Indices for Command Row Init
 	for (int i = 0; i < 2; i += 4)
 	{
 		indices.push_back(i);
@@ -79,19 +78,12 @@ void NullEditor::SetData()
 
 void NullEditor::ProcessKey(int key, int action, int mods)
 {
+	// TODO: Implement shortcuts
+
 	if (action == GLFW_RELEASE)
 		return;
 
-	if (key == KEYCODE_ESCAPE)
-		cursor.isOnCommand = !cursor.isOnCommand;
-	if (key == KEYCODE_TAB)
-		AddTab();
-	else if (key == KEYCODE_ENTER)
-		Return();
-	else if (key == KEYCODE_DEL)
-		RemoveCharacterFromLeft();
-	else if (key == KEYCODE_DELETE)
-		RemoveCharacterFromRight();
+	/* Related to Cursor */
 
 	else if (key == KEYCODE_HOME)
 		cursor.Move(HOME);
@@ -107,32 +99,50 @@ void NullEditor::ProcessKey(int key, int action, int mods)
 	else if (key == KEYCODE_DOWN)
 		cursor.Move(DOWN);
 
-	// TODO: Implement shortcuts
+	if (key == KEYCODE_ESCAPE)
+		cursor.isOnCommand = !cursor.isOnCommand;
+
+	if (!currentScene.editable && !cursor.isOnCommand)
+		return;
+
+	/* Related to Text */
+	
+	if (key == KEYCODE_TAB)
+		AddTab();
+	else if (key == KEYCODE_ENTER)
+		Return();
+	else if (key == KEYCODE_DEL)
+		RemoveCharacterFromLeft();
+	else if (key == KEYCODE_DELETE)
+		RemoveCharacterFromRight();
 }
 
 void NullEditor::ProcessChar(unsigned int codepoint)
 {
-	if (codepoint > 31 && codepoint < 128)
-		if (cursor.isOnCommand)
-			AddCharacterCommand(codepoint);
-		else 
-			AddCharacter(codepoint);
+	if (!(codepoint > 31 && codepoint < 128))
+		return;
+
+	if (cursor.isOnCommand)
+		AddCharacterCommand(codepoint);
+	else if (currentScene.editable)
+		AddCharacter(codepoint);
 }
 
 void NullEditor::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	UpdateUniform2f(u_idealRatio.location, (float) idealWidth / (float) width, (float) idealHeight / (float) height);
+	UpdateUniform2f(u_idealRatio.location, (float)idealWidth / (float)width, (float)idealHeight / (float)height);
 
 	this->width = width;
 	this->height = height;
 }
 
-void NullEditor::IncrementBarrier() // UNTESTED CODE!!
+void NullEditor::IncrementBarrier()
 {
-	for (TextRow row : currentScene.rows)
+	for (int i = 0; i < currentScene.rows.size(); i++)
 	{
+		cursor.textY = i;
 		cursor.textX = 0;
 		AddCharacter(' ');
 	}
@@ -193,7 +203,7 @@ void NullEditor::AddCharacterCommand(const char ch)
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	// Insert once by making array
+	// TODO: Insert once by making array
 	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 1
 		Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1.0, cursor.commandX, 0.0));
 	command.text.vertices.insert(command.text.vertices.begin() + offset++,                                          // Add Vertex 2
@@ -205,7 +215,7 @@ void NullEditor::AddCharacterCommand(const char ch)
 
 
 	// Edit the vertices after
-	int commandTextAmount = command.text.vertices.size() / 4 - 1;
+	int commandTextAmount = command.text.text.size();
 	for (int i = offset / 4 - 1; i < commandTextAmount; i++)
 	{
 		command.text.vertices[offset++].column++;
@@ -223,6 +233,9 @@ void NullEditor::AddCharacterCommand(const char ch)
 	indices.push_back(startIndex + 3);
 	indices.push_back(startIndex);
 
+	// Add letter to memory
+	command.text.text.insert(command.text.text.begin() + ((int)cursor.commandX - 3), ch);
+
 	// Move cursor forwards
 	cursor.Move(RIGHT);
 
@@ -234,7 +247,7 @@ void NullEditor::AddTab()
 {
 	if (cursor.isOnCommand)
 	{
-		// Add intellisense (maybe)
+		// Add + Remove intelliSense (maybe)
 
 		return;
 	}
@@ -317,6 +330,9 @@ void NullEditor::RemoveCharacterFromLeftCommand()
 	// Remove indices
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
+	// Remove letter from Memory
+	command.text.text.erase(command.text.text.begin() + cursor.commandX - 1);
+
 	// Move cursor
 	cursor.Move(LEFT);
 
@@ -370,7 +386,7 @@ void NullEditor::RemoveCharacterFromRight()
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from memory
-	currentScene.rows[cursor.textY].text.erase(currentScene.rows[cursor.textY].text.begin() + cursor.textY);
+	currentScene.rows[cursor.textY].text.erase(currentScene.rows[cursor.textY].text.begin() + cursor.textX);
 
 	// Update OpenGl
 	SetData();
@@ -395,6 +411,9 @@ void NullEditor::RemoveCharacterFromRightCommand()
 	// Remove indices
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
+	// Remove letter from memory
+	command.text.text.erase(command.text.text.begin() + cursor.commandX);
+
 	// Update OpenGl
 	SetData();
 }
@@ -412,6 +431,10 @@ void NullEditor::Return()
 		for (int i = 0; i < charAmount * 6; i++) indices.pop_back();
 		
 		// TODO: Execute command if on CommandRow
+		// Turn chars to string 
+		// Clear char vector
+		// Parse string
+		// Execute command
 
 		SetData();
 		return;

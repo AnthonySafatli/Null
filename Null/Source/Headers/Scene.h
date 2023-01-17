@@ -15,7 +15,7 @@ private:
 	void AddTilda();
 
 public:
-	Scene();
+	Scene(const bool editable);
 
 	void TextInit();
 	void Return();
@@ -27,6 +27,8 @@ public:
 	static Scene PropertiesScene();
 
 	std::vector<TextRow> rows;
+
+	const bool editable;
 
 	LineNumType type;
 };
