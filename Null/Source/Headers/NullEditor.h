@@ -47,10 +47,10 @@ public:
     
     /* OpenGL Methods */
     void GLInit();
+    std::vector<Vertex> GetVertices();
     void SetData();
     void SetRowIndex(const int index);
     void SetColumnIndex(const int index);
-
 
     /* OpenGL Variables */
     VertexBuffer vertexBuffer;
@@ -70,8 +70,9 @@ public:
     StatusBar status;
     CursorController cursor;
 
-    /* Vectors */
+    /* Indices */
     std::vector<unsigned int> indices;
+    void AddIndices(const unsigned int count);
 
     /* Text Properties */
     int tabAmount;

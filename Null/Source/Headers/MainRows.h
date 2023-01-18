@@ -16,12 +16,18 @@ public:
 
 class StatusBar
 {
+private:
+	void Render();
+
 public:
 	StatusBar();
 
-	void Init(const unsigned int length, const std::string initialMessage);
+	void Init(const std::string initialMessage);
 
-	void UpdateLength(const unsigned int length);
+	void UpdateLength();
+
+	void UpdateMessage(const std::string message);
 
 	TextRow row;
+	std::string message;
 };

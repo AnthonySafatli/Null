@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#define MAX_SQAURES_TO_RENDER 1000
+#define MAX_SQAURES_TO_RENDER 10000
 
 struct Vertex
 {

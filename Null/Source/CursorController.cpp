@@ -75,7 +75,7 @@ void CursorController::Up()
 	if (isOnCommand)
 		return;
 
-	if (screenY > 0)
+	else if (screenY > 0)
 	{
 		textY--;
 		screenY--;
@@ -95,7 +95,7 @@ void CursorController::Down()
 	if (textY >= appContents.currentScene.rows.size() - 1)
 		return;
 	
-	if (screenY + 4.5 < (1.0 / (0.1 * appContents.textSize)) * ((float)appContents.height / (float)appContents.idealHeight))
+	if (screenY + 5.5 < (1.0 / (0.1 * appContents.textSize)) * ((float)appContents.height / (float)appContents.idealHeight))
 	{
 		screenY++;
 		textY++;

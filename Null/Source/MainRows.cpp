@@ -20,45 +20,62 @@ CommandRow::CommandRow() : row()
 
 /* ====== StatusBar ====== */
 
-StatusBar::StatusBar() : row()
+StatusBar::StatusBar() : row(), message()
 {
 }
 
-void StatusBar::Init(const unsigned int length, const std::string initialMessage)
+void StatusBar::Init(const std::string initialMessage)
 {
-	// float rowPos = (1.0 / (0.1 * appContents.textSize)) * ((float)appContents.height / (float)appContents.idealHeight) - 3.5;
-	float rowPos = -2;
+	message = initialMessage;
+	Render();
+}
+
+void StatusBar::UpdateLength()
+{
+	row.vertices.clear();
+	Render();
+}
+
+void StatusBar::UpdateMessage(const std::string message)
+{
+	row.vertices.clear();
+	this->message = message;
+	Render();
+}
+
+
+void StatusBar::Render()
+{
+	float length = ((1.0 / (0.1 * appContents.textSize)) * ((float)appContents.width / (float)appContents.idealWidth)) + 1;
 
 	TexCoords texCoords = GetCoords(' ');
 
-	row.vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rowPos, 0, 1));
-	row.vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rowPos, 0, 1));
-	row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rowPos, 0, 1));
-	row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rowPos, 0, 1));
+	row.vertices.push_back(Vertex(0.0, 0.0, texCoords.u, texCoords.v, -2, 0, 1));
+	row.vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, -2, 0, 1));
+	row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, 0, 1));
+	row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), -2, 0, 1));
 
 	for (int i = 1; i < length; i++)
 	{
-		if (i - 1 < initialMessage.size())
+		if (i - 1 < message.size())
 		{
-			TexCoords texCoords = GetCoords(initialMessage.at(i - 1));
+			TexCoords texCoords = GetCoords(message.at(i - 1));
 
-			row.vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rowPos, i, 1));
-			row.vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rowPos, i, 1));
-			row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rowPos, i, 1));
-			row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rowPos, i, 1));
+			row.vertices.push_back(Vertex(0.0, 0.0, texCoords.u, texCoords.v, -2, i, 1));
+			row.vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, -2, i, 1));
+			row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, i, 1));
+			row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), -2, i, 1));
 		}
 		else
 		{
 			TexCoords texCoords = GetCoords(' ');
 
-			row.vertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rowPos, i, 1));
-			row.vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rowPos, i, 1));
-			row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rowPos, i, 1));
-			row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rowPos, i, 1));
+			row.vertices.push_back(Vertex(0.0, 0.0, texCoords.u, texCoords.v, -2, i, 1));
+			row.vertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, -2, i, 1));
+			row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, i, 1));
+			row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), -2, i, 1));
 		}
 	}
-}
 
-void StatusBar::UpdateLength(const unsigned int length)
-{
+	
 }

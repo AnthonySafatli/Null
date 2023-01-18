@@ -12,7 +12,7 @@
 
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400),
-	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0),
+	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0), 
 	  indices(), currentScene(true), command(), status(), cursor(0, 0),
 	  vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
@@ -26,7 +26,9 @@ NullEditor::NullEditor(const int width, const int height, const int tabAmount, c
 	indices.push_back(0);
 
 	// Indices for Status Bar Init
-	for (int i = 0; i < 100 * 4; i += 4)
+	status.Init("Null Loaded Successfully");
+
+	for (int i = 0; i < status.row.vertices.size(); i += 4)
 	{
 		indices.push_back(4 + i);
 		indices.push_back(4 + i + 1);
@@ -35,8 +37,6 @@ NullEditor::NullEditor(const int width, const int height, const int tabAmount, c
 		indices.push_back(4 + i + 3);
 		indices.push_back(4 + i);
 	}
-
-	status.Init(100, "Null Loaded Successfully");
 }
 
 void NullEditor::GLInit()
@@ -62,7 +62,7 @@ void NullEditor::GLInit()
 	u_tex.Init(shaderProgram.handle, "tex");
 }
 
-void NullEditor::SetData()
+std::vector<Vertex> NullEditor::GetVertices()
 {
 	// Make vector
 	std::vector<Vertex> vertices;
@@ -71,7 +71,7 @@ void NullEditor::SetData()
 	vertices.insert(vertices.end(), command.row.vertices.begin(), command.row.vertices.end());
 
 	// Add visible rows from scene
-	float maxRows = (1.0 / (0.1 * textSize)) * ((float)height / (float)idealHeight) - 2.5;
+	float maxRows = (1.0 / (0.1 * textSize)) * ((float)height / (float)idealHeight) - 3.5;
 
 	float rows = std::min(maxRows, (float)currentScene.rows.size());
 
@@ -81,8 +81,12 @@ void NullEditor::SetData()
 	// Add status bar
 	vertices.insert(vertices.end(), status.row.vertices.begin(), status.row.vertices.end());
 
-	// Pass in data
-	vertexBuffer.SetData(vertices);
+	return vertices;
+}
+
+void NullEditor::SetData()
+{
+	vertexBuffer.SetData(GetVertices());
 	indexBuffer.SetData(indices);
 }
 
@@ -95,7 +99,7 @@ void NullEditor::ProcessKey(int key, int action, int mods)
 
 	/* Related to Cursor */
 
-	else if (key == KEYCODE_HOME)
+	if (key == KEYCODE_HOME)
 		cursor.Move(HOME);
 	else if (key == KEYCODE_END)
 		cursor.Move(END);
@@ -146,6 +150,10 @@ void NullEditor::OnResize(int width, int height)
 
 	this->width = width;
 	this->height = height;
+
+	status.UpdateLength();
+
+	SetData();
 }
 
 void NullEditor::IncrementBarrier()
@@ -268,6 +276,8 @@ void NullEditor::AddTab()
 
 void NullEditor::RemoveCharacterFromLeft()
 {
+	// TODO: Redo (keep in mind scroll)
+
 	if (cursor.isOnCommand)
 	{
 		RemoveCharacterFromLeftCommand();
@@ -281,7 +291,15 @@ void NullEditor::RemoveCharacterFromLeft()
 		if (cursor.textY == 0)
 			return;
 
-		cursor.textY--;
+		float max = (1.0 / (0.1 * textSize)) * ((float)height / (float)idealHeight) - 4.5;
+		if (currentScene.rows.size() - 1 > (unsigned int)max)
+		{
+			cursor.textY--;
+			SetRowIndex(--rowIndex);
+		}
+		else
+			cursor.Move(UP);
+
 		cursor.textX = currentScene.rows[cursor.textY].text.size();
 
 		int size = currentScene.rows[cursor.textY + 1].text.size();
@@ -341,7 +359,7 @@ void NullEditor::RemoveCharacterFromLeftCommand()
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from Memory
-	command.row.text.erase(command.row.text.begin() + cursor.commandX - 1);
+	command.row.text.erase(command.row.text.begin() + ((int)cursor.commandX - 3 - 1));
 
 	// Move cursor
 	cursor.Move(LEFT);
@@ -352,6 +370,8 @@ void NullEditor::RemoveCharacterFromLeftCommand()
 
 void NullEditor::RemoveCharacterFromRight()
 {
+	// TODO: Redo (keep in mind scroll)
+
 	if (cursor.isOnCommand)
 	{
 		RemoveCharacterFromRightCommand();
@@ -422,7 +442,7 @@ void NullEditor::RemoveCharacterFromRightCommand()
 	for (int i = 0; i < 6; i++) indices.pop_back();
 
 	// Remove letter from memory
-	command.row.text.erase(command.row.text.begin() + cursor.commandX);
+	command.row.text.erase(command.row.text.begin() + ((int)cursor.commandX - 3));
 
 	// Update OpenGl
 	SetData();
@@ -464,4 +484,15 @@ void NullEditor::Return()
 	for (char ch : letters) AddCharacter(ch);
 
 	cursor.textX = cursor.sceneLeftBarrier;
+}
+
+void NullEditor::AddIndices(const unsigned int count)
+{
+	int vertexCount = GetVertices().size();
+
+	// TODO: Finish method
+	
+	// see how many unused indices
+	// skip them
+	// add required indices
 }
