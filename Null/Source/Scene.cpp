@@ -80,45 +80,45 @@ void Scene::Return()
         AddTilda();
 }
 
-Scene Scene::WelcomeScene()
+void Scene::WelcomeScene(Scene& scene)
 {
-    Scene welcome = Scene(false, TILDA);
-
-    AddLine(welcome.rows[0], "Welcome to Null - v1.0", 0);
-
-    return welcome;
+    AddLine(scene.rows[0], "Welcome to Null - v1.0", 0, 2);
+    AddLine(scene.rows[0], "~", 1, 0);
+    AddLine(scene.rows[0], "~", 2, 0);
+    AddLine(scene.rows[0], "~ Press Enter to continue", 3, 0);
+    // TODO: Fix
 }
 
-Scene Scene::NotebookScene()
+void Scene::NotebookScene(Scene& scene)
 {
-    return Scene(false, TILDA);
+    // TODO: Load Notebooks
 }
 
-Scene Scene::TextEditor()
+void Scene::TextEditor(Scene& scene)
 {
-    return Scene(true, NUMBERED);
 }
 
-Scene Scene::SettingsScene()
+void Scene::SettingsScene(Scene& scene)
 {
-    return Scene(false, TILDA);
+    // TODO: Print Settings
 }
 
-Scene Scene::PropertiesScene()
+void Scene::PropertiesScene(Scene& scene)
 {
-    return Scene(false, TILDA);
+    // TODO: Print Properties
 }
 
-// TODO: Pass as reference or pointer
-void Scene::AddLine(TextRow row, const std::string text, const int rowNumber)
+void Scene::AddLine(TextRow &row, const std::string text, const int rowNumber, const int columnStart)
 {
     for (int i = 0; i < text.size(); i++)
     {
         TexCoords coords = GetCoords(text.at(i));
 
-        row.vertices.push_back(Vertex(0.0, 0.0, coords.u               , coords.v               , rowNumber, i, 0));
-        row.vertices.push_back(Vertex(1.0, 0.0, coords.u + (1.0 / 10.0), coords.v               , rowNumber, i, 0));
-        row.vertices.push_back(Vertex(1.0, 1.0, coords.u + (1.0 / 10.0), coords.v + (1.0 / 10.0), rowNumber, i, 0));
-        row.vertices.push_back(Vertex(0.0, 1.0, coords.u               , coords.v + (1.0 / 10.0), rowNumber, i, 0));
+        int column = columnStart + i;
+
+        row.vertices.push_back(Vertex(0.0, 0.0, coords.u               , coords.v               , rowNumber, column, 0));
+        row.vertices.push_back(Vertex(1.0, 0.0, coords.u + (1.0 / 10.0), coords.v               , rowNumber, column, 0));
+        row.vertices.push_back(Vertex(1.0, 1.0, coords.u + (1.0 / 10.0), coords.v + (1.0 / 10.0), rowNumber, column, 0));
+        row.vertices.push_back(Vertex(0.0, 1.0, coords.u               , coords.v + (1.0 / 10.0), rowNumber, column, 0));
     }
 }

@@ -13,11 +13,11 @@
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400),
 	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0), 
-	  indices(), currentScene(true, NUMBERED), command(), status(), cursor(0, 0),
+	  indices(), currentScene(false, TILDA), command(), status(), cursor(0, 0),
 	  vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
-	// currentScene = Scene::WelcomeScene();
+	Scene::WelcomeScene(currentScene);
 
 	// Indices for Command Row Init
 	AddIndices();
@@ -140,8 +140,6 @@ void NullEditor::OnResize(int width, int height)
 	this->height = height;
 
 	status.UpdateLength();
-
-
 
 	SetData();
 }
