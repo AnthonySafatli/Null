@@ -7,12 +7,13 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include "Headers/Character.h"
 
 /* ====== Scene ====== */
 
 extern NullEditor appContents;
 
-Scene::Scene(const bool editable) : rows(), type(NUMBERED), editable(editable)
+Scene::Scene(const bool editable, const LineNumType type) : rows(), type(type), editable(editable)
 {
     rows.push_back(TextRow());
 }
@@ -81,25 +82,43 @@ void Scene::Return()
 
 Scene Scene::WelcomeScene()
 {
-    return Scene(false);
+    Scene welcome = Scene(false, TILDA);
+
+    AddLine(welcome.rows[0], "Welcome to Null - v1.0", 0);
+
+    return welcome;
 }
 
 Scene Scene::NotebookScene()
 {
-    return Scene(false);
+    return Scene(false, TILDA);
 }
 
 Scene Scene::TextEditor()
 {
-    return Scene(true);
+    return Scene(true, NUMBERED);
 }
 
 Scene Scene::SettingsScene()
 {
-    return Scene(false);
+    return Scene(false, TILDA);
 }
 
 Scene Scene::PropertiesScene()
 {
-    return Scene(false);
+    return Scene(false, TILDA);
+}
+
+// TODO: Pass as reference or pointer
+void Scene::AddLine(TextRow row, const std::string text, const int rowNumber)
+{
+    for (int i = 0; i < text.size(); i++)
+    {
+        TexCoords coords = GetCoords(text.at(i));
+
+        row.vertices.push_back(Vertex(0.0, 0.0, coords.u               , coords.v               , rowNumber, i, 0));
+        row.vertices.push_back(Vertex(1.0, 0.0, coords.u + (1.0 / 10.0), coords.v               , rowNumber, i, 0));
+        row.vertices.push_back(Vertex(1.0, 1.0, coords.u + (1.0 / 10.0), coords.v + (1.0 / 10.0), rowNumber, i, 0));
+        row.vertices.push_back(Vertex(0.0, 1.0, coords.u               , coords.v + (1.0 / 10.0), rowNumber, i, 0));
+    }
 }

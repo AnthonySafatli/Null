@@ -4,6 +4,7 @@
 #include "TextRow.h"
 
 #include <vector>
+#include <string>
 
 enum LineNumType { NUMBERED, TILDA, NONE };
 
@@ -15,7 +16,7 @@ private:
 	void AddTilda();
 
 public:
-	Scene(const bool editable);
+	Scene(const bool editable, const LineNumType type);
 
 	void TextInit();
 	void Return();
@@ -29,5 +30,7 @@ public:
 	LineNumType type;
 	const bool editable;
 	std::vector<TextRow> rows;
+
+	static void AddLine(TextRow row, const std::string text, const int rowNumber);
 };
 

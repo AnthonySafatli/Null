@@ -77,5 +77,5 @@ void StatusBar::Render()
 		}
 	}
 
-	
+	appContents.AddIndices();
 }

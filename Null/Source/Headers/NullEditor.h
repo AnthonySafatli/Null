@@ -72,7 +72,7 @@ public:
 
     /* Indices */
     std::vector<unsigned int> indices;
-    void AddIndices(const unsigned int count);
+    void AddIndices();
 
     /* Text Properties */
     int tabAmount;

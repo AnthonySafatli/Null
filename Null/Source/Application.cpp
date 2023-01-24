@@ -7,7 +7,7 @@
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
 
-NullEditor appContents = NullEditor(1800, 1100, 4, 0.3);
+NullEditor appContents = NullEditor(1800, 1100, 4, 0.24);
 
 int main(void)
 {

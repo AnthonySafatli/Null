@@ -13,30 +13,18 @@
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400),
 	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0), 
-	  indices(), currentScene(true), command(), status(), cursor(0, 0),
+	  indices(), currentScene(true, NUMBERED), command(), status(), cursor(0, 0),
 	  vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
+	// currentScene = Scene::WelcomeScene();
+
 	// Indices for Command Row Init
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(2);
-	indices.push_back(3);
-	indices.push_back(0);
+	AddIndices();
 
-	// Indices for Status Bar Init
+	// Status Bar Init
 	status.Init("Null Loaded Successfully");
-
-	for (int i = 0; i < status.row.vertices.size(); i += 4)
-	{
-		indices.push_back(4 + i);
-		indices.push_back(4 + i + 1);
-		indices.push_back(4 + i + 2);
-		indices.push_back(4 + i + 2);
-		indices.push_back(4 + i + 3);
-		indices.push_back(4 + i);
-	}
+	AddIndices();
 }
 
 void NullEditor::GLInit()
@@ -153,6 +141,8 @@ void NullEditor::OnResize(int width, int height)
 
 	status.UpdateLength();
 
+
+
 	SetData();
 }
 
@@ -196,13 +186,7 @@ void NullEditor::AddCharacter(const char ch)
 	}
 
 	// Add indices
-	int startIndex = indices.size() / 6 * 4;
-	indices.push_back(startIndex);
-	indices.push_back(startIndex + 1);
-	indices.push_back(startIndex + 2);
-	indices.push_back(startIndex + 2);
-	indices.push_back(startIndex + 3);
-	indices.push_back(startIndex);
+	AddIndices();
 
 	// Add letter to memory
 	currentScene.rows[cursor.textY].text.insert(currentScene.rows[cursor.textY].text.begin() + cursor.textX, ch);
@@ -243,13 +227,7 @@ void NullEditor::AddCharacterCommand(const char ch)
 	}
 
 	// Add indices
-	int startIndex = indices.size() / 6 * 4;
-	indices.push_back(startIndex);
-	indices.push_back(startIndex + 1);
-	indices.push_back(startIndex + 2);
-	indices.push_back(startIndex + 2);
-	indices.push_back(startIndex + 3);
-	indices.push_back(startIndex);
+	AddIndices();
 
 	// Add letter to memory
 	command.row.text.insert(command.row.text.begin() + ((int)cursor.commandX - 3), ch);
@@ -486,13 +464,21 @@ void NullEditor::Return()
 	cursor.textX = cursor.sceneLeftBarrier;
 }
 
-void NullEditor::AddIndices(const unsigned int count)
+void NullEditor::AddIndices()
 {
-	int vertexCount = GetVertices().size();
+	int neededIndices = GetVertices().size() / 4 * 6;
 
-	// TODO: Finish method
-	
-	// see how many unused indices
-	// skip them
-	// add required indices
+	int count = (neededIndices - indices.size()) / 6;
+
+	int startIndex = indices.size() / 6 * 4;
+	for (int i = 0; i < count; i++)
+	{
+		indices.push_back(startIndex);
+		indices.push_back(startIndex + 1);
+		indices.push_back(startIndex + 2);
+		indices.push_back(startIndex + 2);
+		indices.push_back(startIndex + 3);
+		indices.push_back(startIndex);
+		startIndex += 4;
+	}
 }

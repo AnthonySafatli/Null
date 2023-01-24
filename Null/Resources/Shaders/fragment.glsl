@@ -21,6 +21,6 @@ void main() {
 		color = vec4(1 - result.x, 1 - result.y, 1 - result.z, 1 - result.w);
 
 		if (vRow == STATUS_BAR_ROW)
-			color.w *= 0.5;
+			color *= 0.75;
 	}
 }

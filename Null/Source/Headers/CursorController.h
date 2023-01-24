@@ -22,11 +22,11 @@ public:
 	bool isOnCommand;      // Checks if is typing in Command Row
 	unsigned int commandX; // Cursor position in Command Row
 
-	unsigned int textX;   // Location in text
-	unsigned int textY;   // Location in text
-
-	unsigned int screenX; // Location on screen
-	unsigned int screenY; // Location on screen
+	unsigned int textX;    // Location in text
+	unsigned int textY;    // Location in text
+						   
+	unsigned int screenX;  // Location on screen
+	unsigned int screenY;  // Location on screen
 
 	unsigned int sceneStartRowIndex;    // the index of the first row in the Scene
 	unsigned int sceneStartColumnIndex; // the index of the first column in the Scene
