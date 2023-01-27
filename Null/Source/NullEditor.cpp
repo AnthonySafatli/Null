@@ -13,11 +13,10 @@
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400),
 	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0), 
-	  indices(), currentScene(false, TILDA), command(), status(), cursor(0, 0),
+	  indices(), currentScene(TEXT), command(), status(), cursor(0, 0),
 	  vertexBuffer(), indexBuffer(), vertexArray(), shaderProgram(), texture(),
 	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
-	Scene::WelcomeScene(currentScene);
 
 	// Indices for Command Row Init
 	AddIndices();
@@ -458,8 +457,6 @@ void NullEditor::Return()
 
 	// Add characters back
 	for (char ch : letters) AddCharacter(ch);
-
-	cursor.textX = cursor.sceneLeftBarrier;
 }
 
 void NullEditor::AddIndices()

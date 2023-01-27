@@ -7,6 +7,7 @@
 #include <string>
 
 enum LineNumType { NUMBERED, TILDA, NONE };
+enum SceneType { TEXT, EDITOR, FILES, SETTINGS };
 
 class Scene
 {
@@ -16,21 +17,23 @@ private:
 	void AddTilda();
 
 public:
-	Scene(const bool editable, const LineNumType type);
+	Scene(const SceneType sceneType);
 
 	void TextInit();
 	void Return();
 
-	static void WelcomeScene(Scene &scene);
-	static void NotebookScene(Scene& scene);
-	static void TextEditor(Scene& scene);
-	static void SettingsScene(Scene& scene);
-	static void PropertiesScene(Scene& scene);
+	void ToWelcomeScene();
+	void ToNotebookScene();
+	void ToTextEditor();
+	void ToSettingsScene();
+	void ToPropertiesScene();
 
-	LineNumType type;
-	const bool editable;
+	SceneType sceneType;
+
+	LineNumType lineType;
+	bool editable;
 	std::vector<TextRow> rows;
 
-	static void AddLine(TextRow &row, const std::string text, const int rowNumber, const int columnStart);
+	void AddLine(const std::string text);
 };
 

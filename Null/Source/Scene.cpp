@@ -13,9 +13,28 @@
 
 extern NullEditor appContents;
 
-Scene::Scene(const bool editable, const LineNumType type) : rows(), type(type), editable(editable)
+Scene::Scene(const SceneType sceneType) : rows(), editable(false), lineType(TILDA)
 {
     rows.push_back(TextRow());
+
+    if (sceneType == EDITOR)
+        editable = true;
+
+    /*switch (sceneType)
+    {
+    case TEXT:
+        break;
+
+    case EDITOR:
+        editable = true;
+        break;
+
+    case FILES:
+        break;
+
+    case SETTINGS:
+        break;
+    }*/
 }
 
 void Scene::AddNumber()
@@ -59,66 +78,60 @@ void Scene::AddTilda()
 
 void Scene::TextInit()
 {
-    if (type == NUMBERED)
+    if (lineType == NUMBERED)
     {
         appContents.AddCharacter(' ');
         appContents.AddCharacter('1');
         appContents.AddCharacter(' ');
     }
-    else if (type == TILDA)
+    else if (lineType == TILDA)
     {
         appContents.AddCharacter('~');
         appContents.AddCharacter(' ');
     }
+
+    ToWelcomeScene();
 }
 
 void Scene::Return()
 {
-    if (type == NUMBERED)
+    if (lineType == NUMBERED)
         AddNumber();
-    else if (type = TILDA)
+    else if (lineType = TILDA)
         AddTilda();
 }
 
-void Scene::WelcomeScene(Scene& scene)
+void Scene::ToWelcomeScene()
 {
-    AddLine(scene.rows[0], "Welcome to Null - v1.0", 0, 2);
-    AddLine(scene.rows[0], "~", 1, 0);
-    AddLine(scene.rows[0], "~", 2, 0);
-    AddLine(scene.rows[0], "~ Press Enter to continue", 3, 0);
-    // TODO: Fix
+    AddLine("Welcome to Null - v1.0");
+    appContents.Return();
+    appContents.Return();
+    AddLine("Press Enter to Continue");
 }
 
-void Scene::NotebookScene(Scene& scene)
+void Scene::ToNotebookScene()
 {
     // TODO: Load Notebooks
 }
 
-void Scene::TextEditor(Scene& scene)
+void Scene::ToTextEditor()
 {
 }
 
-void Scene::SettingsScene(Scene& scene)
+void Scene::ToSettingsScene()
 {
     // TODO: Print Settings
 }
 
-void Scene::PropertiesScene(Scene& scene)
+void Scene::ToPropertiesScene()
 {
     // TODO: Print Properties
 }
 
-void Scene::AddLine(TextRow &row, const std::string text, const int rowNumber, const int columnStart)
+void Scene::AddLine(const std::string text)
 {
     for (int i = 0; i < text.size(); i++)
     {
-        TexCoords coords = GetCoords(text.at(i));
-
-        int column = columnStart + i;
-
-        row.vertices.push_back(Vertex(0.0, 0.0, coords.u               , coords.v               , rowNumber, column, 0));
-        row.vertices.push_back(Vertex(1.0, 0.0, coords.u + (1.0 / 10.0), coords.v               , rowNumber, column, 0));
-        row.vertices.push_back(Vertex(1.0, 1.0, coords.u + (1.0 / 10.0), coords.v + (1.0 / 10.0), rowNumber, column, 0));
-        row.vertices.push_back(Vertex(0.0, 1.0, coords.u               , coords.v + (1.0 / 10.0), rowNumber, column, 0));
+        appContents.AddCharacter(text.at(i));
     }
 }
