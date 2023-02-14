@@ -39,6 +39,7 @@ public:
     void RemoveCharacterFromRightCommand();
     void AddTab();
     void Return();
+    void Clear();
 
     /* CallBack Methods */
     void ProcessKey(int key, int action, int mods);

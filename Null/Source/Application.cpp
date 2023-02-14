@@ -33,7 +33,7 @@ int main(void)
     /* Setup Callbacks */
     glfwSetKeyCallback(window, CallBack::KeyCallBack);
     glfwSetCharCallback(window, CallBack::CharCallBack);
-    glfwSetFramebufferSizeCallback(window, CallBack::FrameBuffeResizeCallBack);
+    glfwSetFramebufferSizeCallback(window, CallBack::FrameBufferResizeCallBack);
 
     /* OpenGL Setup */
     if (glewInit())

@@ -2,12 +2,12 @@
 
 #include "Headers/GLAbstraction.h"
 #include "Headers/NullEditor.h"
+#include "Headers/Character.h"
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <cmath>
-#include "Headers/Character.h"
 
 /* ====== Scene ====== */
 
@@ -105,17 +105,40 @@ void Scene::ToWelcomeScene()
 {
     AddLine("Welcome to Null - v1.0");
     appContents.Return();
+
     appContents.Return();
-    AddLine("Press Enter to Continue");
+    
+    AddLine("Press Enter to continue");
+    appContents.Return();
+    
+    AddLine("Press Esc to see settings");
 }
 
 void Scene::ToNotebookScene()
 {
-    // TODO: Load Notebooks
+    appContents.Clear();
+    sceneType = FILES;
+
+    appContents.AddCharacter('~');
+    appContents.AddCharacter(' ');
+
+    // TODO: Setup notebook scene
+    //       - Get all the notebooks
+    //       - Print them
+    // 
+    // TODO: Set functionality for opening them
 }
 
 void Scene::ToTextEditor()
 {
+    appContents.Clear();
+    sceneType = EDITOR;
+    editable = true;
+    lineType = NUMBERED;
+
+    appContents.AddCharacter(' ');
+    appContents.AddCharacter('1');
+    appContents.AddCharacter(' ');
 }
 
 void Scene::ToSettingsScene()

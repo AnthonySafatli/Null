@@ -8,8 +8,6 @@
 #include <string>
 #include <algorithm>
 
-/* ====== Contents ====== */
-
 NullEditor::NullEditor(const int width, const int height, const int tabAmount, const float textSize)
 	: idealWidth(800), idealHeight(1400),
 	  width(width), height(height), tabAmount(tabAmount), textSize(textSize), rowIndex(0), columnIndex(0), 
@@ -104,7 +102,12 @@ void NullEditor::ProcessKey(int key, int action, int mods)
 		cursor.isOnCommand = !cursor.isOnCommand;
 
 	if (!currentScene.editable && !cursor.isOnCommand)
+	{
+		if (key == KEYCODE_ENTER)
+			currentScene.ToTextEditor();
+
 		return;
+	}
 
 	/* Related to Text */
 	
@@ -457,6 +460,21 @@ void NullEditor::Return()
 
 	// Add characters back
 	for (char ch : letters) AddCharacter(ch);
+}
+
+void NullEditor::Clear()
+{
+	indices.clear();
+	currentScene.rows.clear();
+	currentScene.rows.push_back(TextRow());
+
+	cursor.textX = 0;
+	cursor.textY = 0;
+	cursor.screenX = 0;
+	cursor.screenY = 0;
+
+	AddIndices();
+	SetData();
 }
 
 void NullEditor::AddIndices()

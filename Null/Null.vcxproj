@@ -89,6 +89,8 @@
     <ClCompile Include="Source\CursorController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CallBack.cpp" />
+    <ClCompile Include="Source\GLObejct.cpp" />
+    <ClCompile Include="Source\Program.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\MainRows.cpp" />
@@ -108,10 +110,13 @@
     <ClInclude Include="Source\Headers\CallBack.h" />
     <ClInclude Include="Source\Headers\Character.h" />
     <ClInclude Include="Source\Headers\CursorController.h" />
+    <ClInclude Include="Source\Headers\GLObejct.h" />
+    <ClInclude Include="Source\Headers\Program.h" />
     <ClInclude Include="Source\Headers\Scene.h" />
     <ClInclude Include="Source\Headers\MainRows.h" />
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
     <ClInclude Include="Source\Headers\NullEditor.h" />
+    <ClInclude Include="Source\Headers\TextArea.h" />
     <ClInclude Include="Source\Headers\TextRow.h" />
     <ClInclude Include="Source\Headers\Uniforms.h" />
   </ItemGroup>

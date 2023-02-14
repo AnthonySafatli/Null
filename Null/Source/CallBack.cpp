@@ -15,7 +15,7 @@ void CallBack::CharCallBack(GLFWwindow* window, unsigned int codepoint)
 	appContents.ProcessChar(codepoint);
 }
 
-void CallBack::FrameBuffeResizeCallBack(GLFWwindow* window, int width, int height)
+void CallBack::FrameBufferResizeCallBack(GLFWwindow* window, int width, int height)
 {
 	appContents.OnResize(width, height);
 }
