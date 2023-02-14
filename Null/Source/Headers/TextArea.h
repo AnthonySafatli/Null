@@ -3,7 +3,7 @@
 class TextArea
 {
 public:
-	virtual void OnKey() = 0;
-	virtual void OnChar() = 0;
-	virtual void OnResize() = 0;
+    virtual void ProcessKey(int key, int action, int mods) = 0;
+    virtual void ProcessChar(unsigned int codepoint) = 0;
+    virtual void OnResize(int width, int height) = 0;
 };

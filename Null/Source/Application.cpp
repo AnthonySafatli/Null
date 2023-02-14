@@ -6,8 +6,10 @@
 #include "Headers/NullEditor.h"
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
+#include "Headers/Program.h"
 
 NullEditor appContents = NullEditor(1800, 1100, 4, 0.24);
+Program program = Program(1800, 1100, 4, 0.24);
 
 int main(void)
 {

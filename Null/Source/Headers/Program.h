@@ -5,12 +5,21 @@
 #include "GLAbstraction.h"
 
 #include <vector>
+#include <string>
+
+#define IDEAL_WIDTH 800
+#define IDEAL_HEIGHT 1400
 
 class Program
 {
 public:
 	/* Constructor */
 	Program(const int height, const int width, const int textSize, const int tabAmount);
+
+	/* OpenGL */
+	GLObject openGL;
+	void GLInit();
+	void SetData();
 
 	/* Callback */
 	void ProcessKey(int key, int action, int mods);
@@ -21,9 +30,10 @@ public:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	/* Members */
+	/* Text Data */
+	std::string commandText;
 	TextArea *area;
-	GLObject openGL;
+	std::string statusText;
 
 	/* Text Cursor */
 	unsigned int textX;
