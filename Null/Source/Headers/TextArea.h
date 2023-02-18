@@ -15,9 +15,9 @@ public:
     std::vector<std::string> rows;
 
     /* Text Methods */
+    void SetLeftMargin(const int margin);
     int GetCharIndex();
     int GetLastIndexInRow();
-    void IncrementBarrier();
     void AddCharacter(const char ch);
     void RemoveCharacterFromLeft();
     void RemoveCharacterFromRight();
@@ -31,4 +31,8 @@ public:
     void MoveLeft();
     void MoveHome();
     void MoveEnd();
+
+private:
+    /* Ignore */
+    int leftMargin;
 };

@@ -3,7 +3,7 @@
 GLObject::GLObject() 
 	: vertexBuffer(), indexBuffer(), vertexArray(),
 	  shaderProgram(), texture(), 
-	  u_idealRatio(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
+	  u_idealRatio(), u_leftMargin(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex()
 {
 }
 
@@ -24,6 +24,7 @@ void GLObject::Init()
 	texture.Init("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\font texture.png");
 
 	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
+	u_leftMargin.Init(shaderProgram.handle, "leftBarrier");
 	u_size.Init(shaderProgram.handle, "size");
 	u_sceneRowIndex.Init(shaderProgram.handle, "sceneRowIndex");
 	u_sceneColumnIndex.Init(shaderProgram.handle, "sceneColumnIndex");

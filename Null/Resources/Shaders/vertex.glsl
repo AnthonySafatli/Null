@@ -5,10 +5,10 @@ const float COMMAND_LINE_ROW = -1.0;
 const float STATUS_BAR_ROW   = -2.0;
 
 uniform vec2 idealRatio; // idealSize / currentSize
-// uniform float height;
 uniform float size;
 uniform int sceneRowIndex;
 uniform int sceneColumnIndex;
+uniform int leftMargin;
 
 in layout(location = 0) vec2 reletivePosition;
 in layout(location = 1) vec2 texCoords;
@@ -26,7 +26,7 @@ void main() {
 	vHighlight = highlight;
 
 	float actualRow = 0;
-	float actualColumn = column - sceneColumnIndex;
+	float actualColumn = column - sceneColumnIndex + leftMargin;
 
 	if (row != COMMAND_LINE_ROW && row != STATUS_BAR_ROW) 
 	{

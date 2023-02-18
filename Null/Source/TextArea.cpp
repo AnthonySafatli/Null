@@ -2,11 +2,14 @@
 
 #include "Headers/Program.h"
 #include "Headers/Character.h"
+#include "Headers/Uniforms.h"
 
 extern Program program;
 
-void TextArea::IncrementBarrier()
+void TextArea::SetLeftMargin(const int margin)
 {
+	leftMargin = margin;
+	UpdateUniform1i(program.openGL.u_leftMargin.location, margin);
 }
 
 int TextArea::GetCharIndex()
@@ -23,7 +26,7 @@ int TextArea::GetLastIndexInRow()
 {
 	int index = 0;
 
-	for (int i = -1; i < program.textY; i++)
+	for (int i = -1; i < (int)program.textY; i++)
 		index += rows[program.textY].size();
 
 	return index;
@@ -43,16 +46,9 @@ void TextArea::AddCharacter(const char ch)
 	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
 
 	// Edit the vertices after
-	int lastIndexInRow = GetLastIndexInRow();
-	for (int i = offset; i < lastIndexInRow; i++)
+	int lastIndexInRow = GetLastIndexInRow() + 1;
+	for (int i = offset; i < lastIndexInRow * 4; i++)
 		program.vertices[i].column++;
-
-	{
-		//currentScene.rows[cursor.textY].vertices[offset++].column++;
-		//currentScene.rows[cursor.textY].vertices[offset++].column++;
-		//currentScene.rows[cursor.textY].vertices[offset++].column++;
-		//currentScene.rows[cursor.textY].vertices[offset++].column++;
-	}
 
 	// Add indices
 	program.UpdateIndices();
@@ -99,6 +95,8 @@ void TextArea::MoveRight()
 
 void TextArea::MoveLeft()
 {
+	if (program.textX > 0)
+		program.textX--;
 }
 
 void TextArea::MoveHome()

@@ -8,6 +8,7 @@
 
 TextEditor::TextEditor()
 {
+	SetLeftMargin(4);
 	rows.push_back(std::string());
 }
 

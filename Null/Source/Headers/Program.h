@@ -48,6 +48,7 @@ public:
 	bool commandSelected;
 
 	/* Text Properties */
+	bool showCursor;
 	int tabAmount;
 	float textSize;
 

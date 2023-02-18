@@ -46,6 +46,7 @@ int main(void)
     program.GLInit();
 
     glUniform2f(program.openGL.u_idealRatio.location, (float) program.idealWidth / (float) program.width, (float) program.idealHeight / (float) program.height);
+    glUniform1i(program.openGL.u_leftMargin.location, 0);
     glUniform1f(program.openGL.u_size.location, 0.1 * program.textSize);
     glUniform1i(program.openGL.u_sceneRowIndex.location, 0);
     glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);
@@ -75,6 +76,11 @@ int main(void)
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)
 {
     glUniform2f(location, v1, v2);
+}
+
+void UpdateUniform1i(const unsigned int location, const int i1)
+{
+    glUniform1i(location, i1);
 }
 
 void NullEditor::SetRowIndex(const int index)
