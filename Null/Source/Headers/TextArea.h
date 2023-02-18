@@ -16,6 +16,7 @@ public:
 
     /* Text Methods */
     int GetCharIndex();
+    int GetLastIndexInRow();
     void IncrementBarrier();
     void AddCharacter(const char ch);
     void RemoveCharacterFromLeft();

@@ -9,7 +9,7 @@
 #include "Headers/Program.h"
 
 // TODO: Maybe don't use global variables
-Program program = Program(1800, 1100, 4, 0.24);
+Program program = Program(1800, 1100, 0.24, 4);
 
 int main(void)
 {
@@ -63,6 +63,8 @@ int main(void)
         glfwSwapBuffers(window);
 
         glfwWaitEvents();
+
+        GetErrors();
     }
 
     glfwTerminate();

@@ -14,7 +14,7 @@ class Program
 {
 public:
 	/* Constructor */
-	Program(const int width, const int height, const int textSize, const int tabAmount);
+	Program(const int width, const int height, const float textSize, const int tabAmount);
 	~Program();
 
 	/* OpenGL */

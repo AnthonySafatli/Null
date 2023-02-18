@@ -68,7 +68,7 @@ IndexBuffer::~IndexBuffer()
 void IndexBuffer::SetData(std::vector<unsigned int> indices)
 {
 	if (indices.size() > 0)
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), &indices[0]);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), &indices[0]);
 }
 
 /* ====== Vertex Array ====== */
