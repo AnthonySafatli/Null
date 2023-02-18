@@ -42,7 +42,7 @@ VertexBuffer::~VertexBuffer()
 void VertexBuffer::SetData(std::vector<Vertex> vertices)
 {
 	if (vertices.size() > 0)
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), &vertices[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), &vertices[0]);
 }
 
 /* ====== Index Buffer ====== */

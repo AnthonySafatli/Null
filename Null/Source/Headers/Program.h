@@ -30,6 +30,7 @@ public:
 	/* Vertex Data */
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
+	void UpdateIndices();
 
 	/* Text Data */
 	std::string commandText;

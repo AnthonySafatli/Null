@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 class TextArea
 {
 public:
@@ -8,11 +11,23 @@ public:
     virtual void ProcessChar(unsigned int codepoint) = 0;
     virtual void OnResize(int width, int height) = 0;
 
+    /* Text Data */
+    std::vector<std::string> rows;
+
     /* Text Methods */
+    int GetCharIndex();
     void IncrementBarrier();
     void AddCharacter(const char ch);
     void RemoveCharacterFromLeft();
     void RemoveCharacterFromRight();
     void AddTab();
     void Return();
+
+    /* Cursor Methods */
+    void MoveUp();
+    void MoveDown();
+    void MoveRight();
+    void MoveLeft();
+    void MoveHome();
+    void MoveEnd();
 };

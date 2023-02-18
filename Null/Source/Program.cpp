@@ -32,19 +32,32 @@ void Program::SetData()
 	openGL.indexBuffer.SetData(indices);
 }
 
+void Program::UpdateIndices()
+{
+	int neededIndices = vertices.size() / 4 * 6;
+
+	int count = (neededIndices - indices.size()) / 6;
+
+	int startIndex = indices.size() / 6 * 4;
+	for (int i = 0; i < count; i++)
+	{
+		indices.push_back(startIndex);
+		indices.push_back(startIndex + 1);
+		indices.push_back(startIndex + 2);
+		indices.push_back(startIndex + 2);
+		indices.push_back(startIndex + 3);
+		indices.push_back(startIndex);
+		startIndex += 4;
+	}
+}
+
 void Program::ProcessKey(int key, int action, int mods)
 {
-	if (action == GLFW_RELEASE)
-		return;
-
 	area->ProcessKey(key, action, mods);
 }
 
 void Program::ProcessChar(unsigned int codepoint)
 {
-	if (!(codepoint > 31 && codepoint < 128))
-		return;
-
 	if (commandSelected)
 		// TODO: Implement Command Typing
 		return;
