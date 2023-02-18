@@ -15,6 +15,7 @@ class Program
 public:
 	/* Constructor */
 	Program(const int height, const int width, const int textSize, const int tabAmount);
+	~Program();
 
 	/* OpenGL */
 	GLObject openGL;

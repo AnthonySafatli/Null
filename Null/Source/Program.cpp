@@ -2,13 +2,21 @@
 
 #include "GLFW/glfw3.h"
 
+#include "Headers/TextEditor.h"
+#include "Headers/TextArea.h"
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
 
 Program::Program(const int height, const int width, const int textSize, const int tabAmount) 
-	: height(height), width(width), textSize(textSize), tabAmount(tabAmount)
-	// TODO: Initialize all members
+	: height(height), width(width), textSize(textSize), tabAmount(tabAmount), 
+	  rowIndex(0), columnIndex(0), screenX(0), screenY(0), textX(0), textY(0), commandSelected(false)
 {
+	area = new TextEditor();
+}
+
+Program::~Program()
+{
+	delete area;
 }
 
 void Program::GLInit()

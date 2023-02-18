@@ -8,6 +8,7 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
 
+// TODO: Maybe don't use global variables
 NullEditor appContents = NullEditor(1800, 1100, 4, 0.24);
 Program program = Program(1800, 1100, 4, 0.24);
 
@@ -44,6 +45,7 @@ int main(void)
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
     appContents.GLInit();
+    program.GLInit();
 
     glUniform2f(appContents.u_idealRatio.location, (float) appContents.idealWidth / (float) appContents.width, (float) appContents.idealHeight / (float) appContents.height);
     glUniform1f(appContents.u_size.location, 0.1 * appContents.textSize);
