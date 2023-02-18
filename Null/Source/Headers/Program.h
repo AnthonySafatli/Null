@@ -14,7 +14,7 @@ class Program
 {
 public:
 	/* Constructor */
-	Program(const int height, const int width, const int textSize, const int tabAmount);
+	Program(const int width, const int height, const int textSize, const int tabAmount);
 	~Program();
 
 	/* OpenGL */
@@ -53,4 +53,6 @@ public:
 	/* Window Properties */
 	int width;
 	int height;
+	const int idealWidth;
+	const int idealHeight;
 };

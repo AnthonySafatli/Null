@@ -11,8 +11,6 @@
 
 /* ====== Scene ====== */
 
-extern NullEditor appContents;
-
 Scene::Scene(const SceneType sceneType) : rows(), editable(false), lineType(TILDA)
 {
     rows.push_back(TextRow());
@@ -39,55 +37,57 @@ Scene::Scene(const SceneType sceneType) : rows(), editable(false), lineType(TILD
 
 void Scene::AddNumber()
 {
-    if ((unsigned int)std::log10((double)rows.size() + 1.0) + 2 > (unsigned int)appContents.cursor.sceneLeftBarrier)
-        appContents.IncrementBarrier();
+    //if ((unsigned int)std::log10((double)rows.size() + 1.0) + 2 > (unsigned int)appContents.cursor.sceneLeftBarrier)
+    if ((unsigned int)std::log10((double)rows.size() + 1.0) + 2 > (unsigned int)0)
+        //appContents.IncrementBarrier();
 
     rows.push_back(TextRow());
-    appContents.cursor.Move(DOWN);
-    appContents.cursor.textX = 0;
+    //appContents.cursor.Move(DOWN);
+    //appContents.cursor.textX = 0;
 
     std::string rowNumberString = std::to_string(rows.size());
 
     int i = 0;
     while (i < rowNumberString.size())
     {
-        appContents.AddCharacter(rowNumberString.at(rowNumberString.size() - i - 1));
-        appContents.cursor.textX = 0;
+        //appContents.AddCharacter(rowNumberString.at(rowNumberString.size() - i - 1));
+        //appContents.cursor.textX = 0;
         i++;
     }
 
-    while (i < appContents.cursor.sceneLeftBarrier - 1)
+    //while (i < appContents.cursor.sceneLeftBarrier - 1)
+    while (i < 0 - 1)
     {
-        appContents.AddCharacter(' ');
+        //appContents.AddCharacter(' ');
         i++;
     }
 
-    appContents.cursor.textX = appContents.cursor.sceneLeftBarrier - 1;
-    appContents.AddCharacter(' ');
+    //appContents.cursor.textX = appContents.cursor.sceneLeftBarrier - 1;
+    //appContents.AddCharacter(' ');
 }
 
 void Scene::AddTilda()
 {
     rows.push_back(TextRow());
-    appContents.cursor.Move(DOWN);
-    appContents.cursor.textX = 0;
+    //appContents.cursor.Move(DOWN);
+    //appContents.cursor.textX = 0;
 
-    appContents.AddCharacter('~');
-    appContents.AddCharacter(' ');
+    //appContents.AddCharacter('~');
+    //appContents.AddCharacter(' ');
 }
 
 void Scene::TextInit()
 {
     if (lineType == NUMBERED)
     {
-        appContents.AddCharacter(' ');
-        appContents.AddCharacter('1');
-        appContents.AddCharacter(' ');
+        //appContents.AddCharacter(' ');
+        //appContents.AddCharacter('1');
+        //appContents.AddCharacter(' ');
     }
     else if (lineType == TILDA)
     {
-        appContents.AddCharacter('~');
-        appContents.AddCharacter(' ');
+        //appContents.AddCharacter('~');
+        //appContents.AddCharacter(' ');
     }
 
     ToWelcomeScene();
@@ -104,23 +104,23 @@ void Scene::Return()
 void Scene::ToWelcomeScene()
 {
     AddLine("Welcome to Null - v1.0");
-    appContents.Return();
+    //appContents.Return();
 
-    appContents.Return();
+    //appContents.Return();
     
     AddLine("Press Enter to continue");
-    appContents.Return();
+    //appContents.Return();
     
     AddLine("Press Esc to see settings");
 }
 
 void Scene::ToNotebookScene()
 {
-    appContents.Clear();
+    //appContents.Clear();
     sceneType = FILES;
 
-    appContents.AddCharacter('~');
-    appContents.AddCharacter(' ');
+    //appContents.AddCharacter('~');
+    //appContents.AddCharacter(' ');
 
     // TODO: Setup notebook scene
     //       - Get all the notebooks
@@ -131,14 +131,14 @@ void Scene::ToNotebookScene()
 
 void Scene::ToTextEditor()
 {
-    appContents.Clear();
+    //appContents.Clear();
     sceneType = EDITOR;
     editable = true;
     lineType = NUMBERED;
 
-    appContents.AddCharacter(' ');
-    appContents.AddCharacter('1');
-    appContents.AddCharacter(' ');
+    //appContents.AddCharacter(' ');
+    //appContents.AddCharacter('1');
+    //appContents.AddCharacter(' ');
 }
 
 void Scene::ToSettingsScene()
@@ -155,6 +155,6 @@ void Scene::AddLine(const std::string text)
 {
     for (int i = 0; i < text.size(); i++)
     {
-        appContents.AddCharacter(text.at(i));
+        //appContents.AddCharacter(text.at(i));
     }
 }

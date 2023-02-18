@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-extern NullEditor appContents;
+// extern NullEditor appContents;
 
 CursorController::CursorController(int x, int y)
 	: textX(0), textY(0), screenX(x), screenY(y), commandX(3), isOnCommand(false),
@@ -50,7 +50,8 @@ void CursorController::Home()
 	{
 		commandX = 0;
 
-		for (int i = 0; appContents.command.row.text[i] == ' '; i++)
+		//for (int i = 0; appContents.command.row.text[i] == ' '; i++)
+		for (int i = 0; 'c' == ' '; i++)
 			commandX++;
 		
 		return;
@@ -58,16 +59,19 @@ void CursorController::Home()
 
 	textX = sceneLeftBarrier;
 
-	for (int i = sceneLeftBarrier; appContents.currentScene.rows[textY].text[i] == ' '; i++)
+	// for (int i = sceneLeftBarrier; appContents.currentScene.rows[textY].text[i] == ' '; i++)
+	for (int i = sceneLeftBarrier; 'c' == ' '; i++)
 		textX++;
 }
 
 void CursorController::End()
 {
 	if (isOnCommand)
-		commandX = appContents.command.row.text.size();
+		//commandX = appContents.command.row.text.size();
+		commandX = 0;
 	else
-		textX = appContents.currentScene.rows[textY].text.size();
+		//textX = appContents.currentScene.rows[textY].text.size();
+		textX = 0;
 }
 
 void CursorController::Up()
@@ -83,7 +87,7 @@ void CursorController::Up()
 	else if (textY > 0)
 	{
 		textY--;
-		appContents.SetRowIndex(--appContents.rowIndex);
+		//appContents.SetRowIndex(--appContents.rowIndex);
 	}
 }
 
@@ -92,10 +96,12 @@ void CursorController::Down()
 	if (isOnCommand)
 		return;
 
-	if (textY >= appContents.currentScene.rows.size() - 1)
+	//if (textY >= appContents.currentScene.rows.size() - 1)
+	if (textY >= 0 - 1)
 		return;
 	
-	if (screenY + 5.5 < (1.0 / (0.1 * appContents.textSize)) * ((float)appContents.height / (float)appContents.idealHeight))
+	//if (screenY + 5.5 < (1.0 / (0.1 * appContents.textSize)) * ((float)appContents.height / (float)appContents.idealHeight))
+	if (screenY + 5.5 < (1.0 / (0.1 * 0)) * ((float)0 / (float)0))
 	{
 		screenY++;
 		textY++;
@@ -103,7 +109,7 @@ void CursorController::Down()
 	else
 	{
 		textY++;
-		appContents.SetRowIndex(++appContents.rowIndex);
+		//appContents.SetRowIndex(++appContents.rowIndex);
 	}
 }
 
@@ -121,12 +127,14 @@ void CursorController::Left()
 
 void CursorController::Right()
 {
-	if (isOnCommand && commandX < appContents.command.row.text.size() + 3)
+	//if (isOnCommand && commandX < appContents.command.row.text.size() + 3)
+	if (isOnCommand && commandX < 0 + 3)
 	{
 		commandX++;
 		return;
 	}
 
-	if (textX < appContents.currentScene.rows[textY].text.size())
+	//if (textX < appContents.currentScene.rows[textY].text.size())
+	if (textX < 0)
 		textX++;
 }

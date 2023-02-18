@@ -7,8 +7,9 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
 
-Program::Program(const int height, const int width, const int textSize, const int tabAmount) 
-	: height(height), width(width), textSize(textSize), tabAmount(tabAmount), 
+Program::Program(const int width, const int height, const int textSize, const int tabAmount) 
+	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
+	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), 
 	  rowIndex(0), columnIndex(0), screenX(0), screenY(0), textX(0), textY(0), commandSelected(false)
 {
 	area = new TextEditor();

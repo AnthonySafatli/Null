@@ -6,8 +6,6 @@
 
 /* ====== CommandRow ====== */
 
-extern NullEditor appContents;
-
 CommandRow::CommandRow() : row()
 {
 	TexCoords texCoords = GetCoords('>');
@@ -46,7 +44,7 @@ void StatusBar::UpdateMessage(const std::string message)
 
 void StatusBar::Render()
 {
-	float length = ((1.0 / (0.1 * appContents.textSize)) * ((float)appContents.width / (float)appContents.idealWidth)) + 1;
+	//float length = ((1.0 / (0.1 * appContents.textSize)) * ((float)appContents.width / (float)appContents.idealWidth)) + 1;
 
 	TexCoords texCoords = GetCoords(' ');
 
@@ -55,7 +53,8 @@ void StatusBar::Render()
 	row.vertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, 0, 1));
 	row.vertices.push_back(Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), -2, 0, 1));
 
-	for (int i = 1; i < length; i++)
+	//for (int i = 1; i < length; i++)
+	for (int i = 1; i < 0; i++)
 	{
 		if (i - 1 < message.size())
 		{
@@ -77,5 +76,5 @@ void StatusBar::Render()
 		}
 	}
 
-	appContents.AddIndices();
+	//appContents.AddIndices();
 }
