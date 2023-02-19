@@ -8,7 +8,7 @@
 
 TextEditor::TextEditor()
 {
-	SetLeftMargin(4);
+	// SetLeftMargin(4);
 	rows.push_back(std::string());
 }
 
@@ -37,6 +37,19 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 	case KEYCODE_DOWN:
 		MoveDown();
 		break;
+
+	case KEYCODE_ENTER:
+		Return();
+		break;
+	case KEYCODE_DEL:
+		RemoveCharacterFromLeft();
+		break;
+	case KEYCODE_DELETE:
+		RemoveCharacterFromRight();
+		break;
+	case KEYCODE_TAB:
+		AddTab();
+		break;
 	}
 }
 
@@ -49,6 +62,10 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 }
 
 void TextEditor::OnResize(int width, int height)
+{
+}
+
+void TextEditor::AddLeftMargin()
 {
 }
 

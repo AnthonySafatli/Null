@@ -17,7 +17,7 @@ int TextArea::GetCharIndex()
 	int index = program.textX;
 
 	for (int i = 0; i < program.textY; i++)
-		index += rows[program.textY].size();
+		index += rows[i].size();
 
 	return index;
 }
@@ -26,8 +26,8 @@ int TextArea::GetLastIndexInRow()
 {
 	int index = 0;
 
-	for (int i = -1; i < (int)program.textY; i++)
-		index += rows[program.textY].size();
+	for (int i = 0; i <= (int)program.textY; i++)
+		index += rows[i].size();
 
 	return index;
 }
@@ -73,18 +73,40 @@ void TextArea::RemoveCharacterFromRight()
 
 void TextArea::AddTab()
 {
+	for (int i = 0; i < program.tabAmount; i++)
+		AddCharacter(' ');
 }
 
 void TextArea::Return()
 {
+	// Delete characters after cursor
+	std::vector<char> letters(rows[program.textY].begin() + program.textX, rows[program.textY].end());
+
+	int size = rows[program.textY].size();
+	while (program.textX < rows[program.textY].size())
+	 	RemoveCharacterFromRight();
+
+	// Add New Row
+	rows.push_back(std::string());
+	MoveDown();
+	program.textX = 0;
+	AddLeftMargin();
+
+	// Add characters back
+	for (char ch : letters) AddCharacter(ch);
 }
 
 void TextArea::MoveUp()
 {
+	if (program.textY > 0)
+		program.textY--;
 }
 
 void TextArea::MoveDown()
 {
+	// TODO: Remake but with scrolling in mind
+	if (program.textY < rows.size() - 1)
+		program.textY++;
 }
 
 void TextArea::MoveRight()

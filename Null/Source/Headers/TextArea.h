@@ -11,6 +11,9 @@ public:
     virtual void ProcessChar(unsigned int codepoint) = 0;
     virtual void OnResize(int width, int height) = 0;
 
+    /* Virtual Methods */
+    virtual void AddLeftMargin() = 0;
+
     /* Text Data */
     std::vector<std::string> rows;
 
