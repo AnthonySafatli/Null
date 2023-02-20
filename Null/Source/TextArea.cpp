@@ -9,6 +9,8 @@
 
 extern Program program;
 
+/* ================= Text Methods ================= */
+
 void TextArea::SetLeftMargin(const int margin)
 {
 	leftMargin = margin;
@@ -113,7 +115,7 @@ void TextArea::RemoveCharacterFromLeft()
 		program.vertices[i].column--;
 
 	// Remove indices
-	for (int i = 0; i < 6; i++) program.indices.pop_back();
+	program.indices.resize(program.indices.size() - 6);
 
 	// Remove letter to memory
 	rows[program.textY].erase(rows[program.textY].begin() + program.textX - 1);
@@ -127,7 +129,54 @@ void TextArea::RemoveCharacterFromLeft()
 
 void TextArea::RemoveCharacterFromRight()
 {
+	// Delete Row
+	if (program.textX == rows[program.textY].size())
+	{
+		if (program.textY == rows.size() - 1)
+			return;
 
+		int size = rows[program.textY].size();
+
+		// Move string data to row before
+		rows[program.textY] += rows[program.textY + 1];
+		rows.erase(rows.begin() + program.textY + 1);
+
+		// Edit the vertices to row above
+		int j = 0;
+		int offset = GetCharIndex() * 4;
+		int lastIndexInRowVertices = GetLastIndexInRow() * 4;
+		for (int i = offset; i < lastIndexInRowVertices; i++)
+		{
+			program.vertices[i].row--;
+			program.vertices[i].column = size + (j / 4) + 1;
+			j++;
+		}
+
+		// Update OpenGL
+		program.SetData();
+
+		return;
+	}
+
+	// Get column offset
+	int offset = GetCharIndex() * 4;
+
+	// Remove vertices
+	program.vertices.erase(program.vertices.begin() + offset, program.vertices.begin() + offset + 4);
+
+	// Edit the vertices after
+	int lastIndexInRowVertices = GetLastIndexInRow() * 4 - 4;
+	for (int i = offset; i < lastIndexInRowVertices; i++)
+		program.vertices[i].column--;
+
+	// Remove indices
+	program.indices.resize(program.indices.size() - 6);
+
+	// Remove letter to memory
+	rows[program.textY].erase(rows[program.textY].begin() + program.textX);
+
+	// Update OpenGL
+	program.SetData();
 }
 
 void TextArea::AddTab()
@@ -142,18 +191,22 @@ void TextArea::Return()
 	std::vector<char> letters(rows[program.textY].begin() + program.textX, rows[program.textY].end());
 
 	int size = rows[program.textY].size();
-	//while (program.textX < rows[program.textY].size())
+	while (program.textX < rows[program.textY].size())
 	 	RemoveCharacterFromRight();
 
 	// Add New Row
 	rows.push_back(std::string());
 	MoveDown();
 	program.textX = 0;
-	AddLeftMargin();
+	
+	// AddLeftMargin();
 
 	// Add characters back
 	for (char ch : letters) AddCharacter(ch);
+	program.textX = 0;
 }
+
+/* ================= Movement Methods ================= */
 
 void TextArea::MoveUp()
 {
