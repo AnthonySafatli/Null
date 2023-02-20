@@ -65,10 +65,12 @@ void TextArea::AddCharacter(const char ch)
 
 void TextArea::RemoveCharacterFromLeft()
 {
+
 }
 
 void TextArea::RemoveCharacterFromRight()
 {
+
 }
 
 void TextArea::AddTab()
@@ -98,6 +100,7 @@ void TextArea::Return()
 
 void TextArea::MoveUp()
 {
+	// TODO: Remake but with scrolling in mind
 	if (program.textY > 0)
 		program.textY--;
 }
@@ -123,8 +126,10 @@ void TextArea::MoveLeft()
 
 void TextArea::MoveHome()
 {
+	program.textX = 0;
 }
 
 void TextArea::MoveEnd()
 {
+	program.textX = rows[program.textY].size();
 }

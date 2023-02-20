@@ -9,6 +9,7 @@ uniform float size;
 uniform int sceneRowIndex;
 uniform int sceneColumnIndex;
 uniform int leftMargin;
+uniform int maxLength;
 
 in layout(location = 0) vec2 reletivePosition;
 in layout(location = 1) vec2 texCoords;
@@ -25,6 +26,15 @@ void main() {
 	vRow = row;
 	vHighlight = highlight;
 
+	/*
+	if (not in view based on maxLength variable)
+	{
+		gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+		return 
+	}
+	*/
+
+	// Calculate screen row and column
 	float actualRow = 0;
 	float actualColumn = column - sceneColumnIndex + leftMargin;
 
@@ -34,6 +44,7 @@ void main() {
 		actualRow += 2.0;
 	}
 
+	// Edit command line row and status bar row
 	if (row == STATUS_BAR_ROW)
 		actualRow = ((1.0 / size) * (1.0 / idealRatio.y)) - 1;
 	else
