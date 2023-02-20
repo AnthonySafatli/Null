@@ -1,5 +1,8 @@
 #include "Headers/TextArea.h"
 
+#include <vector>
+#include <string>
+
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 #include "Headers/Uniforms.h"
@@ -46,8 +49,8 @@ void TextArea::AddCharacter(const char ch)
 	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
 
 	// Edit the vertices after
-	int lastIndexInRow = GetLastIndexInRow() + 1;
-	for (int i = offset; i < lastIndexInRow * 4; i++)
+	int lastIndexInRowVertices = (GetLastIndexInRow() + 1) * 4;
+	for (int i = offset; i < lastIndexInRowVertices; i++)
 		program.vertices[i].column++;
 
 	// Add indices
@@ -65,7 +68,61 @@ void TextArea::AddCharacter(const char ch)
 
 void TextArea::RemoveCharacterFromLeft()
 {
+	// Delete Row
+	if (program.textX == 0)
+	{
+		if (program.textY == 0)
+			return;
 
+		int size = rows[program.textY - 1].size();
+		int offset = GetCharIndex() * 4;
+
+		// Move string data to row before
+		rows[program.textY - 1] += rows[program.textY];
+		rows.erase(rows.begin() + program.textY);
+
+		// Move cursor up
+		MoveUp();
+
+		// Edit the vertices to row before
+		int lastIndexInRowVertices = GetLastIndexInRow() * 4;
+		for (int i = offset; i < lastIndexInRowVertices; i++)
+		{
+			program.vertices[i].row--;
+			program.vertices[i].column += size;
+		}
+
+		// Move cursor
+		program.textX = size;
+
+		// Update OpenGL
+		program.SetData();
+
+		return;
+	}
+
+	// Get column offset
+	int offset = GetCharIndex() * 4 - 4;
+
+	// Remove vertices
+	program.vertices.erase(program.vertices.begin() + offset, program.vertices.begin() + offset + 4);
+
+	// Edit the vertices after
+	int lastIndexInRowVertices = (GetLastIndexInRow() - 1) * 4;
+	for (int i = offset; i < lastIndexInRowVertices; i++)
+		program.vertices[i].column--;
+
+	// Remove indices
+	for (int i = 0; i < 6; i++) program.indices.pop_back();
+
+	// Remove letter to memory
+	rows[program.textY].erase(rows[program.textY].begin() + program.textX - 1);
+
+	// Move cursor back
+	MoveLeft();
+
+	// Update OpenGL
+	program.SetData();
 }
 
 void TextArea::RemoveCharacterFromRight()
@@ -85,7 +142,7 @@ void TextArea::Return()
 	std::vector<char> letters(rows[program.textY].begin() + program.textX, rows[program.textY].end());
 
 	int size = rows[program.textY].size();
-	while (program.textX < rows[program.textY].size())
+	//while (program.textX < rows[program.textY].size())
 	 	RemoveCharacterFromRight();
 
 	// Add New Row
