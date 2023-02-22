@@ -19,6 +19,7 @@ int main(void)
     if (!glfwInit())
         return -1;
 
+    // TODO: Fix Transparent Window
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
     int maxSquaresToRender = 1000;
@@ -46,7 +47,7 @@ int main(void)
     program.GLInit();
 
     glUniform2f(program.openGL.u_idealRatio.location, (float) program.idealWidth / (float) program.width, (float) program.idealHeight / (float) program.height);
-    glUniform1i(program.openGL.u_leftMargin.location, 0);
+    glUniform1i(program.openGL.u_leftMargin.location, 4);
     glUniform1f(program.openGL.u_size.location, 0.1 * program.textSize);
     glUniform1i(program.openGL.u_sceneRowIndex.location, 0);
     glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);

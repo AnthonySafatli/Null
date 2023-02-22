@@ -9,7 +9,7 @@ uniform float size;
 uniform int sceneRowIndex;
 uniform int sceneColumnIndex;
 uniform int leftMargin;
-uniform int maxLength;
+// uniform int maxLength;
 
 in layout(location = 0) vec2 reletivePosition;
 in layout(location = 1) vec2 texCoords;
@@ -26,7 +26,7 @@ void main() {
 	vRow = row;
 	vHighlight = highlight;
 
-	/*
+	/* Remove unseen vertices
 	if (not in view based on maxLength variable)
 	{
 		gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);

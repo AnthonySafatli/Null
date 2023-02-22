@@ -6,8 +6,11 @@
 
 #include "Headers/Program.h"
 
-TextEditor::TextEditor()
+extern Program program;
+
+TextEditor::TextEditor() 
 {
+	leftMargin = 4;
 	// SetLeftMargin(4);
 	rows.push_back(std::string());
 }
@@ -63,9 +66,30 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 
 void TextEditor::OnResize(int width, int height)
 {
+
 }
 
 void TextEditor::AddLeftMargin()
 {
+	std::string rowNumberString = std::to_string(rows.size());
+
+	for (int i = 0; i < leftMargin - 1; i++)
+	{
+		if (leftMargin - i - 1 <= rowNumberString.size())
+		{
+			AddCharacterToMargin(rowNumberString.at(leftMargin - i - 2), -leftMargin + i);
+
+			continue;
+		}
+
+		AddCharacterToMargin(' ', -leftMargin + i);
+	}
+
+	AddCharacterToMargin(' ', -1);
+}
+
+void TextEditor::IncreaseLeftMargin()
+{
+
 }
 

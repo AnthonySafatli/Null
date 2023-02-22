@@ -27,6 +27,9 @@ public:
     void AddTab();
     void Return();
 
+    /* Margin Methods */
+    void AddCharacterToMargin(const char ch, const int index);
+
     /* Cursor Methods */
     void MoveUp();
     void MoveDown();
@@ -35,7 +38,7 @@ public:
     void MoveHome();
     void MoveEnd();
 
-private:
-    /* Ignore */
+protected:
+    /* Ignore / Readonly */
     int leftMargin;
 };

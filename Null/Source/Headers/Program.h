@@ -29,6 +29,9 @@ public:
 
 	/* Vertex Data */
 	std::vector<Vertex> vertices;
+	std::vector<Vertex> commandVertices;
+	std::vector<Vertex> statusVertices;
+	std::vector<Vertex> marginVertices;
 	std::vector<unsigned int> indices;
 	void UpdateIndices();
 
@@ -40,8 +43,6 @@ public:
 	/* Text Cursor */
 	unsigned int textX;
 	unsigned int textY;
-	unsigned int screenX;
-	unsigned int screenY;
 	unsigned int rowIndex;
 	unsigned int columnIndex;
 
