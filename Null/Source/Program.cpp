@@ -23,6 +23,8 @@ Program::~Program()
 void Program::GLInit()
 {
 	openGL.Init();
+	UpdateIndices();
+	SetData();
 }
 
 void Program::SetData()

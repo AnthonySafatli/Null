@@ -14,6 +14,24 @@ TextEditor::TextEditor()
 	leftMargin = 4;
 	// SetLeftMargin(4);
 	rows.push_back(std::string());
+
+	TexCoords spaceTexCoords = GetCoords(' ');
+	TexCoords oneTexCoords = GetCoords('1');
+
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+																														
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
+																												
+	program.marginVertices.push_back(Vertex(0.0, 0.0,   oneTexCoords.u               ,   oneTexCoords.v               , 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v               , 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 }
 
 void TextEditor::ProcessKey(int key, int action, int mods)
@@ -72,10 +90,10 @@ void TextEditor::OnResize(int width, int height)
 
 void TextEditor::AddLeftMargin()
 {
-	// if (left margin needs to be increased)
-	//     IncreaseLeftMargin();
-
 	std::string rowNumberString = std::to_string(rows.size());
+
+	if (rowNumberString.size() > leftMargin - 1)
+	     IncreaseLeftMargin();
 
 	for (int i = 0; i < leftMargin - 1; i++)
 	{
