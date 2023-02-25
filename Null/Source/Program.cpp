@@ -220,18 +220,49 @@ void Program::ScrollDownAutoComplete()
 
 void Program::EnterCommand()
 {
-	// TODO: Fix, it breaks
-
-	// commandVertices.clear();
-	// commandText.clear();
+	// TODO: Fix commandVertices.clear();
+	
+	// commandText.clear(); 
 	// commandX = 0;
-	// commandSelected = false;
+	commandSelected = false;
 }
 
 void Program::RemoveCharacterFromLeftCommand()
 {
+	if (commandX == 0)
+		return;
+
+	int index = commandX * 4;
+
+	commandVertices.erase(commandVertices.begin() + index, commandVertices.begin() + index + 4);
+
+	for (int i = index; i < commandVertices.size(); i++)
+		commandVertices[i].column--;
+
+	indices.resize(indices.size() - 6);
+
+	commandText.erase(commandText.begin() + commandX - 1);
+
+	MoveLeftCommand();
+
+	SetData();
 }
 
 void Program::RemoveCharacterFromRightCommand()
 {
+	// if (commandX = commandText.size())
+	// 	return;
+	// 
+	// int index = commandX * 4 + 4;
+	// 
+	// commandVertices.erase(commandVertices.begin() + index, commandVertices.begin() + index + 4);
+	// 
+	// for (int i = index; i < commandVertices.size(); i++)
+	// 	commandVertices[i].column--;
+	// 
+	// indices.resize(indices.size() - 6);
+	// 
+	// commandText.erase(commandText.begin() + commandX);
+	// 
+	// SetData();
 }
