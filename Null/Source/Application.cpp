@@ -53,8 +53,6 @@ int main(void)
     glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);
     glUniform1i(program.openGL.u_tex.location, 0);
 
-    // appContents.currentScene.TextInit();
-
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
@@ -66,7 +64,7 @@ int main(void)
 
         glfwWaitEvents();
 
-        GetErrors();
+        // GetErrors();
     }
 
     glfwTerminate();

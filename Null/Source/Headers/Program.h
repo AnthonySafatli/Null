@@ -10,6 +10,8 @@
 #define IDEAL_WIDTH 800
 #define IDEAL_HEIGHT 1400
 
+#define KEYCODE_ESCAPE 256
+
 class Program
 {
 public:
@@ -26,6 +28,23 @@ public:
 	void ProcessKey(int key, int action, int mods);
 	void ProcessChar(unsigned int codepoint);
 	void OnResize(int width, int height);
+
+	/* Command Callback */
+	void ProcessKeyCommand(int key, int action, int mods);
+	void ProcessCharCommand(unsigned int codepoint);
+
+	/* Command Methods */
+	void AddCharacterCommand(const char ch);
+	void MoveHomeCommand();
+	void MoveEndCommand();
+	void MoveRightCommand();
+	void MoveLeftCommand();
+	void ToggleAutoComplete();
+	void ScrollUpAutoComplete();
+	void ScrollDownAutoComplete();
+	void EnterCommand();
+	void RemoveCharacterFromLeftCommand();
+	void RemoveCharacterFromRightCommand();
 
 	/* Vertex Data */
 	std::vector<Vertex> vertices;

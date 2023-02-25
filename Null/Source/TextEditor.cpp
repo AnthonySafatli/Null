@@ -105,7 +105,7 @@ void TextEditor::AddLeftMargin()
 			continue;
 		}
 
-		AddCharacterToMargin(' ', -leftMargin + i);
+		AddCharacterToMargin(' ', -leftMargin + i + 1);
 	}
 }
 

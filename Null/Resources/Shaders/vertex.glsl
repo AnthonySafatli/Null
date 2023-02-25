@@ -36,19 +36,22 @@ void main() {
 
 	// Calculate screen row and column
 	float actualRow = 0;
-	float actualColumn = column - sceneColumnIndex + leftMargin;
+	float actualColumn = column - sceneColumnIndex;
 
 	if (row != COMMAND_LINE_ROW && row != STATUS_BAR_ROW) 
 	{
-		actualRow = row - sceneRowIndex;
-		actualRow += 2.0;
+		actualRow = row - sceneRowIndex + 2;
+		actualColumn += leftMargin;
 	}
 
 	// Edit command line row and status bar row
 	if (row == STATUS_BAR_ROW)
 		actualRow = ((1.0 / size) * (1.0 / idealRatio.y)) - 1;
-	else
-		actualRow += 0.5;
+	else if (row == COMMAND_LINE_ROW)
+	{
+		actualRow += 1.0;
+		actualColumn += 3;
+	}
 
 	// calculate position
 	vec2 position = reletivePosition * size;

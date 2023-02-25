@@ -6,6 +6,7 @@
 #include "Headers/TextArea.h"
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
+#include "Headers/Character.h"
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
@@ -13,6 +14,13 @@ Program::Program(const int width, const int height, const float textSize, const 
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandSelected(false)
 {
 	area = new TextEditor();
+
+	TexCoords texCoords = GetCoords('>');
+
+	commandVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1, -2, 0.0));
+	commandVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1, -2, 0.0));
+	commandVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1, -2, 0.0));
+	commandVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1, -2, 0.0));
 }
 
 Program::~Program()
@@ -33,6 +41,7 @@ void Program::SetData()
 
 	std::vector<Vertex> all = vertices;
 	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
+	all.insert(all.end(), commandVertices.begin(), commandVertices.end());
 
 	openGL.vertexBuffer.SetData(all);
 	openGL.indexBuffer.SetData(indices);
@@ -40,7 +49,7 @@ void Program::SetData()
 
 void Program::UpdateIndices()
 {
-	int neededIndices = (vertices.size() + marginVertices.size()) / 4 * 6;
+	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size()) / 4 * 6;
 
 	int count = (neededIndices - indices.size()) / 6;
 
@@ -59,14 +68,31 @@ void Program::UpdateIndices()
 
 void Program::ProcessKey(int key, int action, int mods)
 {
+	if (key == KEYCODE_ESCAPE && action != GLFW_RELEASE)
+	{
+		commandSelected = !commandSelected;
+		return;
+	}
+
+	if (commandSelected)
+	{
+		// TODO: Implement Command Typing
+
+		return;
+	}
+
 	area->ProcessKey(key, action, mods);
 }
 
 void Program::ProcessChar(unsigned int codepoint)
 {
 	if (commandSelected)
+	{
 		// TODO: Implement Command Typing
+		ProcessCharCommand(codepoint);
+
 		return;
+	}
 
 	area->ProcessChar(codepoint);
 }
@@ -85,4 +111,98 @@ void Program::OnResize(int width, int height)
 	SetData();
 
 	area->OnResize(width, height);
+}
+
+void Program::ProcessKeyCommand(int key, int action, int mods)
+{
+	if (action == GLFW_RELEASE)
+		return;
+
+	switch (key)
+	{
+	case KEYCODE_HOME:
+		MoveHomeCommand();
+		break;
+	case KEYCODE_END:
+		MoveEndCommand();
+		break;
+	case KEYCODE_RIGHT:
+		MoveRightCommand();
+		break;
+	case KEYCODE_LEFT:
+		MoveLeftCommand();
+		break;
+	case KEYCODE_TAB:
+		ToggleAutoComplete();
+		break;
+	case KEYCODE_UP:
+		ScrollUpAutoComplete();
+		break;
+	case KEYCODE_DOWN:
+		ScrollDownAutoComplete();
+		break;
+
+	case KEYCODE_ENTER:
+		EnterCommand();
+		break;
+
+	case KEYCODE_DEL:
+		RemoveCharacterFromLeftCommand();
+		break;
+	case KEYCODE_DELETE:
+		RemoveCharacterFromRightCommand();
+		break;
+	}
+}
+
+void Program::ProcessCharCommand(unsigned int codepoint)
+{
+	if (!(codepoint > 31 && codepoint < 128))
+		return;
+
+	AddCharacterCommand((char)codepoint);
+}
+
+void Program::AddCharacterCommand(const char ch)
+{
+}
+
+void Program::MoveHomeCommand()
+{
+}
+
+void Program::MoveEndCommand()
+{
+}
+
+void Program::MoveRightCommand()
+{
+}
+
+void Program::MoveLeftCommand()
+{
+}
+
+void Program::ToggleAutoComplete()
+{
+}
+
+void Program::ScrollUpAutoComplete()
+{
+}
+
+void Program::ScrollDownAutoComplete()
+{
+}
+
+void Program::EnterCommand()
+{
+}
+
+void Program::RemoveCharacterFromLeftCommand()
+{
+}
+
+void Program::RemoveCharacterFromRightCommand()
+{
 }
