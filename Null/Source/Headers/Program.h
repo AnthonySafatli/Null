@@ -62,6 +62,7 @@ public:
 	/* Text Cursor */
 	unsigned int textX;
 	unsigned int textY;
+	unsigned int commandX;
 	unsigned int rowIndex;
 	unsigned int columnIndex;
 
