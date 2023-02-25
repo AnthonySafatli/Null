@@ -39,10 +39,8 @@ int TextArea::GetLastIndexInRow()
 
 void TextArea::AddCharacter(const char ch)
 {
-	// Get column offset
 	int offset = GetCharIndex() * 4;
 
-	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
 	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , program.textY + 1, program.textX + 1, 0.0));
@@ -50,21 +48,16 @@ void TextArea::AddCharacter(const char ch)
 	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
 	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
 
-	// Edit the vertices after
 	int lastIndexInRowVertices = (GetLastIndexInRow() + 1) * 4;
 	for (int i = offset; i < lastIndexInRowVertices; i++)
 		program.vertices[i].column++;
 
-	// Add indices
 	program.UpdateIndices();
 
-	// Add letter to memory
 	rows[program.textY].insert(rows[program.textY].begin() + program.textX, ch);
 
-	// Move cursor forwards
 	MoveRight();
 
-	// Update OpenGL
 	program.SetData();
 }
 
@@ -208,35 +201,16 @@ void TextArea::Return()
 
 void TextArea::AddCharacterToMargin(const char ch, const int index)
 {
-	/*
-	// Get column offset
-	int offset = GetCharIndex() * 4;
-
-	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u, texCoords.v, program.textY + 1, program.textX + 1, 0.0));
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v, program.textY + 1, program.textX + 1, 0.0));
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u, texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , program.textY + 1, index, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , program.textY + 1, index, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), program.textY + 1, index, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, index, 0.0));
 
-	// Edit the vertices after
-	int lastIndexInRowVertices = (GetLastIndexInRow() + 1) * 4;
-	for (int i = offset; i < lastIndexInRowVertices; i++)
-		program.vertices[i].column++;
-
-	// Add indices
 	program.UpdateIndices();
 
-	// Add letter to memory
-	rows[program.textY].insert(rows[program.textY].begin() + program.textX, ch);
-
-	// Move cursor forwards
-	MoveRight();
-
-	// Update OpenGL
 	program.SetData();
-	*/
 }
 
 /* ================= Movement Methods ================= */

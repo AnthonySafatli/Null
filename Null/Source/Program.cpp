@@ -28,15 +28,17 @@ void Program::GLInit()
 void Program::SetData()
 {
 	// TODO: Change method to accept pointer
-	// TODO: Add all vertices
 
-	openGL.vertexBuffer.SetData(vertices);
+	std::vector<Vertex> all = vertices;
+	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
+
+	openGL.vertexBuffer.SetData(all);
 	openGL.indexBuffer.SetData(indices);
 }
 
 void Program::UpdateIndices()
 {
-	int neededIndices = vertices.size() / 4 * 6;
+	int neededIndices = (vertices.size() + marginVertices.size()) / 4 * 6;
 
 	int count = (neededIndices - indices.size()) / 6;
 

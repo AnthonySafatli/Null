@@ -5,6 +5,7 @@
 #include "GLFW/glfw3.h"
 
 #include "Headers/Program.h"
+#include "Headers/Character.h"
 
 extern Program program;
 
@@ -71,25 +72,45 @@ void TextEditor::OnResize(int width, int height)
 
 void TextEditor::AddLeftMargin()
 {
+	// if (left margin needs to be increased)
+	//     IncreaseLeftMargin();
+
 	std::string rowNumberString = std::to_string(rows.size());
 
 	for (int i = 0; i < leftMargin - 1; i++)
 	{
 		if (leftMargin - i - 1 <= rowNumberString.size())
 		{
-			AddCharacterToMargin(rowNumberString.at(leftMargin - i - 2), -leftMargin + i);
+			int index = i - (leftMargin - rowNumberString.size() - 1);
+			AddCharacterToMargin(rowNumberString[index], -leftMargin + i + 1);
 
 			continue;
 		}
 
 		AddCharacterToMargin(' ', -leftMargin + i);
 	}
-
-	AddCharacterToMargin(' ', -1);
 }
 
 void TextEditor::IncreaseLeftMargin()
 {
+	TexCoords texCoords = GetCoords(' ');
 
+	std::vector<Vertex> spaceVertices;
+
+	spaceVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , 0, -leftMargin, 0.0));
+	spaceVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , 0, -leftMargin, 0.0));
+	spaceVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), 0, -leftMargin, 0.0));
+	spaceVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), 0, -leftMargin, 0.0));
+
+	for (int i = 0; i < rows.size(); i++)
+	{
+		int index = i * leftMargin * 4;
+
+		for (Vertex spaceVertex : spaceVertices) spaceVertex.row = i;
+
+		program.marginVertices.insert(program.marginVertices.begin() + index, spaceVertices.begin(), spaceVertices.end());
+	}
+
+	SetLeftMargin(leftMargin + 1);
 }
 

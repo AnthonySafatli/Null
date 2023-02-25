@@ -38,7 +38,6 @@ public:
     void MoveHome();
     void MoveEnd();
 
-protected:
-    /* Ignore / Readonly */
+    /* Read-only */
     int leftMargin;
 };
