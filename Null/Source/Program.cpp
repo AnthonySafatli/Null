@@ -186,19 +186,24 @@ void Program::AddCharacterCommand(const char ch)
 
 void Program::MoveHomeCommand()
 {
+	commandX = 0;
 }
 
 void Program::MoveEndCommand()
 {
+	commandX = commandText.size();
 }
 
 void Program::MoveRightCommand()
 {
-	commandX++;
+	if (commandX < commandText.size())
+		commandX++;
 }
 
 void Program::MoveLeftCommand()
 {
+	if (commandX > 0)
+		commandX--;
 }
 
 void Program::ToggleAutoComplete()
@@ -215,6 +220,12 @@ void Program::ScrollDownAutoComplete()
 
 void Program::EnterCommand()
 {
+	// TODO: Fix, it breaks
+
+	// commandVertices.clear();
+	// commandText.clear();
+	// commandX = 0;
+	// commandSelected = false;
 }
 
 void Program::RemoveCharacterFromLeftCommand()
