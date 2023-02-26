@@ -69,7 +69,6 @@ public:
 	std::string statusTextRight;
 
 	/* Text Cursor */
-	void UpdateCursor();
 	unsigned int textX;
 	unsigned int textY;
 	unsigned int rowIndex;

@@ -87,19 +87,6 @@ void Program::UpdateIndices()
 	}
 }
 
-void Program::UpdateCursor()
-{
-	/*
-	for (int i = 0; i < 4; i++) 
-	{
-		cursorVertices[i].column = textX + 1;
-		cursorVertices[i].row = textY + 1;
-	}
-
-	SetData();
-	*/
-}
-
 void Program::ProcessKey(int key, int action, int mods)
 {
 	if (key == KEYCODE_ESCAPE && action != GLFW_RELEASE)
@@ -214,7 +201,6 @@ void Program::StatusResize()
 	}
 
 	UpdateIndices();
-	SetData();
 }
 
 void Program::ProcessKeyCommand(int key, int action, int mods)
@@ -287,8 +273,6 @@ void Program::AddCharacterCommand(const char ch)
 	commandText.insert(commandText.begin() + commandX, ch);
 
 	MoveRightCommand();
-
-	SetData();
 }
 
 void Program::MoveHomeCommand()
@@ -351,8 +335,6 @@ void Program::RemoveCharacterFromLeftCommand()
 	commandText.erase(commandText.begin() + commandX - 1);
 
 	MoveLeftCommand();
-
-	SetData();
 }
 
 void Program::RemoveCharacterFromRightCommand()
@@ -372,6 +354,4 @@ void Program::RemoveCharacterFromRightCommand()
 	// indices.resize(indices.size() - 6);
 	// 
 	// commandText.erase(commandText.begin() + commandX);
-	// 
-	// SetData();
 }
