@@ -34,7 +34,7 @@ void VertexBuffer::Init()
 {
 	glGenBuffers(1, &handle);
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, MAX_SQAURES_TO_RENDER * 4 * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, MAX_SQAURES_TO_RENDER * 4 * sizeof(Vertex), nullptr, GL_STREAM_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -60,7 +60,7 @@ void IndexBuffer::Init()
 	glGenBuffers(1, &handle);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_SQAURES_TO_RENDER * 6 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_SQAURES_TO_RENDER * 6 * sizeof(unsigned int), nullptr, GL_STREAM_DRAW);
 }
 
 IndexBuffer::~IndexBuffer()

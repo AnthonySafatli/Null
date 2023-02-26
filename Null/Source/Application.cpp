@@ -8,6 +8,8 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
 
+#define TAU (M_PI * 2.0)
+
 // TODO: Maybe don't use global variables
 Program program = Program(1800, 1100, 0.24, 4);
 
@@ -53,16 +55,27 @@ int main(void)
     glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);
     glUniform1i(program.openGL.u_tex.location, 0);
 
+    double currentFrame = glfwGetTime();
+    double lastFrame = currentFrame;
+    double deltaTime;
+
     /* Main loop */
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
+
+        currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        program.Update(deltaTime);
+
         glDrawElements(GL_TRIANGLES, program.indices.size(), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 
-        glfwWaitEvents();
+        glfwPollEvents();
 
         // GetErrors();
     }

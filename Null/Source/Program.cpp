@@ -89,6 +89,7 @@ void Program::UpdateIndices()
 
 void Program::UpdateCursor()
 {
+	/*
 	for (int i = 0; i < 4; i++) 
 	{
 		cursorVertices[i].column = textX + 1;
@@ -96,6 +97,7 @@ void Program::UpdateCursor()
 	}
 
 	SetData();
+	*/
 }
 
 void Program::ProcessKey(int key, int action, int mods)
@@ -142,8 +144,38 @@ void Program::OnResize(int width, int height)
 	area->OnResize(width, height);
 }
 
+void Program::Update(const double deltaTime)
+{
+	// Cursor Animations
+	if (cursorVertices[0].row != textY + 1)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			cursorVertices[i].row += deltaTime * 16;
+
+			if (cursorVertices[i].row > textY + 1)
+				cursorVertices[i].row = textY + 1;
+		}
+	}
+
+	if (cursorVertices[0].column != textX + 1)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			cursorVertices[i].column += deltaTime * 16;
+
+			if (cursorVertices[i].column > textX + 1)
+				cursorVertices[i].column = textX + 1;
+		}
+	}
+
+	SetData();
+}
+
 void Program::RenderText(const std::string message)
 {
+	statusText = message;
+
 	for (int i = 0; i < statusVertices.size(); i++)
 	{
 		if (i / 4 >= message.size())

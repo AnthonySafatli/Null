@@ -29,6 +29,9 @@ public:
 	void ProcessChar(unsigned int codepoint);
 	void OnResize(int width, int height);
 
+	/* Update */
+	void Update(const double deltaTime);
+
 	/* Command Callback */
 	void ProcessKeyCommand(int key, int action, int mods);
 	void ProcessCharCommand(unsigned int codepoint);
@@ -63,6 +66,7 @@ public:
 	std::string commandText;
 	TextArea *area;
 	std::string statusText;
+	std::string statusTextRight;
 
 	/* Text Cursor */
 	void UpdateCursor();
