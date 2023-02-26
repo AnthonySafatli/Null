@@ -84,6 +84,8 @@ void TextArea::RemoveCharacterFromLeft()
 		}
 
 		program.textX = size;
+		program.UpdateCursor();
+		RemoveLeftMargin();
 		program.SetData();
 		return;
 	}
@@ -163,14 +165,14 @@ void TextArea::Return()
 
 	// Add New Row
 	rows.push_back(std::string());
-	MoveDown();
 	program.textX = 0;
+	MoveDown();
 	
 	AddLeftMargin();
 
 	// Add characters back
 	for (char ch : letters) AddCharacter(ch);
-	program.textX = 0;
+	MoveHome();
 }
 
 void TextArea::AddCharacterToMargin(const char ch, const int index)

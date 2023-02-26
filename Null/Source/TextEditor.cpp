@@ -113,7 +113,9 @@ void TextEditor::AddLeftMargin()
 
 void TextEditor::RemoveLeftMargin()
 {
-	// TODO: Implement and add for when deleting lines
+	program.marginVertices.resize(program.marginVertices.size() - (4 * (leftMargin - 1)));
+	program.indices.resize(program.indices.size() - (6 * (leftMargin - 1)));
+	program.SetData();
 }
 
 void TextEditor::IncreaseLeftMargin()

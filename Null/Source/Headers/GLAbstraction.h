@@ -6,6 +6,7 @@
 
 struct Vertex
 {
+	Vertex();
 	Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight);
 
 	float reletivePosition[2];
