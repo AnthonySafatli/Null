@@ -11,6 +11,10 @@
 
 /* ====== Vertex Struct ====== */
 
+Vertex::Vertex()
+{
+}
+
 Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight) : row(row), column(column), highlight(highlight)
 {
 	reletivePosition[0] = x;

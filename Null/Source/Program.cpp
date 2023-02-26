@@ -325,7 +325,7 @@ void Program::RemoveCharacterFromLeftCommand()
 
 void Program::RemoveCharacterFromRightCommand()
 {
-	// TODO: Fix problems
+	// TODO: Fix problems, perhaps indices size?
 
 	// if (commandX = commandText.size())
 	// 	return;
@@ -343,4 +343,3 @@ void Program::RemoveCharacterFromRightCommand()
 	// 
 	// SetData();
 }
-

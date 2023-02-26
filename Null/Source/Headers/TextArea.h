@@ -13,6 +13,7 @@ public:
 
     /* Virtual Methods */
     virtual void AddLeftMargin() = 0;
+    virtual void RemoveLeftMargin() = 0;
 
     /* Text Data */
     std::vector<std::string> rows;
