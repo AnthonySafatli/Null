@@ -13,14 +13,27 @@ Program::Program(const int width, const int height, const float textSize, const 
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false),
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false)
 {
+	// Add > to Command Line
+	TexCoords texCoordsCommand = GetCoords('>');
+
+	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u               , texCoordsCommand.v               , -1, -2, 0.0));
+	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v               , -1, -2, 0.0));
+	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
+	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u               , texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
+
+	// Create Status Bar
+	float columnAmount = ((1.0 / (textSize * 0.1)) * ((float)width / (float)IDEAL_WIDTH));
+	TexCoords texCoordsStatus = GetCoords(' ');
+
+	for (int i = 0; i < columnAmount; i++)
+	{
+		statusVertices.push_back(Vertex(0.0, 0.0, texCoordsStatus.u               , texCoordsStatus.v               , -2, i, 1.0));
+		statusVertices.push_back(Vertex(1.0, 0.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v               , -2, i, 1.0));
+		statusVertices.push_back(Vertex(1.0, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), -2, i, 1.0));
+		statusVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), -2, i, 1.0));
+	}
+
 	area = new TextEditor();
-
-	TexCoords texCoords = GetCoords('>');
-
-	commandVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1, -2, 0.0));
-	commandVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1, -2, 0.0));
-	commandVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1, -2, 0.0));
-	commandVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1, -2, 0.0));
 }
 
 Program::~Program()
@@ -42,6 +55,7 @@ void Program::SetData()
 	std::vector<Vertex> all = vertices;
 	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
 	all.insert(all.end(), commandVertices.begin(), commandVertices.end());
+	all.insert(all.end(), statusVertices.begin(), statusVertices.end());
 
 	openGL.vertexBuffer.SetData(all);
 	openGL.indexBuffer.SetData(indices);
@@ -49,7 +63,7 @@ void Program::SetData()
 
 void Program::UpdateIndices()
 {
-	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size()) / 4 * 6;
+	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size() + statusVertices.size()) / 4 * 6;
 
 	int count = (neededIndices - indices.size()) / 6;
 
@@ -103,11 +117,54 @@ void Program::OnResize(int width, int height)
 	this->width = width;
 	this->height = height;
 
-	// TODO: Update status length
+	StatusResize();
 
 	SetData();
 
 	area->OnResize(width, height);
+}
+
+void Program::RenderText(const std::string message)
+{
+	for (int i = 0; i < statusVertices.size(); i++)
+	{
+		if (i / 4 >= message.size())
+			break;
+
+		TexCoords texCoord = GetCoords(message[i / 4]);
+
+		statusVertices[i].texCoords[0]   = texCoord.u;
+		statusVertices[i].texCoords[1]   = texCoord.v;
+
+		statusVertices[++i].texCoords[0] = texCoord.u + (1.0 / 10.0);
+		statusVertices[i].texCoords[1]   = texCoord.v;
+		
+		statusVertices[++i].texCoords[0] = texCoord.u + (1.0 / 10.0);
+		statusVertices[i].texCoords[1]   = texCoord.v + (1.0 / 10.0);
+		
+		statusVertices[++i].texCoords[0] = texCoord.u;
+		statusVertices[i].texCoords[1]   = texCoord.v + (1.0 / 10.0);
+	}
+}
+
+void Program::StatusResize()
+{
+	float columnAmount = ((1.0 / (textSize * 0.1)) * ((float)width / (float)IDEAL_WIDTH));
+	TexCoords texCoords = GetCoords(' ');
+
+	for (int i = 0; i < columnAmount; i++)
+	{
+		if (i < statusVertices.size() / 4)
+			continue;
+
+		statusVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -2, i, 1.0));
+		statusVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -2, i, 1.0));
+		statusVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, i, 1.0));
+		statusVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -2, i, 1.0));
+	}
+
+	UpdateIndices();
+	SetData();
 }
 
 void Program::ProcessKeyCommand(int key, int action, int mods)
@@ -250,6 +307,8 @@ void Program::RemoveCharacterFromLeftCommand()
 
 void Program::RemoveCharacterFromRightCommand()
 {
+	// TODO: Fix problems
+
 	// if (commandX = commandText.size())
 	// 	return;
 	// 
@@ -266,3 +325,4 @@ void Program::RemoveCharacterFromRightCommand()
 	// 
 	// SetData();
 }
+

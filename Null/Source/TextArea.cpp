@@ -63,7 +63,6 @@ void TextArea::AddCharacter(const char ch)
 
 void TextArea::RemoveCharacterFromLeft()
 {
-	// Delete Row
 	if (program.textX == 0)
 	{
 		if (program.textY == 0)
@@ -72,14 +71,11 @@ void TextArea::RemoveCharacterFromLeft()
 		int size = rows[program.textY - 1].size();
 		int offset = GetCharIndex() * 4;
 
-		// Move string data to row before
 		rows[program.textY - 1] += rows[program.textY];
 		rows.erase(rows.begin() + program.textY);
 
-		// Move cursor up
 		MoveUp();
 
-		// Edit the vertices to row before
 		int lastIndexInRowVertices = GetLastIndexInRow() * 4;
 		for (int i = offset; i < lastIndexInRowVertices; i++)
 		{
@@ -87,42 +83,30 @@ void TextArea::RemoveCharacterFromLeft()
 			program.vertices[i].column += size;
 		}
 
-		// Move cursor
 		program.textX = size;
-
-		// Update OpenGL
 		program.SetData();
-
 		return;
 	}
 
-	// Get column offset
 	int offset = GetCharIndex() * 4 - 4;
 
-	// Remove vertices
 	program.vertices.erase(program.vertices.begin() + offset, program.vertices.begin() + offset + 4);
 
-	// Edit the vertices after
 	int lastIndexInRowVertices = (GetLastIndexInRow() - 1) * 4;
 	for (int i = offset; i < lastIndexInRowVertices; i++)
 		program.vertices[i].column--;
 
-	// Remove indices
 	program.indices.resize(program.indices.size() - 6);
 
-	// Remove letter to memory
 	rows[program.textY].erase(rows[program.textY].begin() + program.textX - 1);
 
-	// Move cursor back
 	MoveLeft();
 
-	// Update OpenGL
 	program.SetData();
 }
 
 void TextArea::RemoveCharacterFromRight()
 {
-	// Delete Row
 	if (program.textX == rows[program.textY].size())
 	{
 		if (program.textY == rows.size() - 1)
@@ -130,11 +114,9 @@ void TextArea::RemoveCharacterFromRight()
 
 		int size = rows[program.textY].size();
 
-		// Move string data to row before
 		rows[program.textY] += rows[program.textY + 1];
 		rows.erase(rows.begin() + program.textY + 1);
 
-		// Edit the vertices to row above
 		int j = 0;
 		int offset = GetCharIndex() * 4;
 		int lastIndexInRowVertices = GetLastIndexInRow() * 4;
@@ -145,30 +127,22 @@ void TextArea::RemoveCharacterFromRight()
 			j++;
 		}
 
-		// Update OpenGL
 		program.SetData();
-
 		return;
 	}
 
-	// Get column offset
 	int offset = GetCharIndex() * 4;
 
-	// Remove vertices
 	program.vertices.erase(program.vertices.begin() + offset, program.vertices.begin() + offset + 4);
 
-	// Edit the vertices after
 	int lastIndexInRowVertices = GetLastIndexInRow() * 4 - 4;
 	for (int i = offset; i < lastIndexInRowVertices; i++)
 		program.vertices[i].column--;
  
-	// Remove indices
 	program.indices.resize(program.indices.size() - 6);
 
-	// Remove letter to memory
 	rows[program.textY].erase(rows[program.textY].begin() + program.textX);
 
-	// Update OpenGL
 	program.SetData();
 }
 

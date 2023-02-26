@@ -46,6 +46,10 @@ public:
 	void RemoveCharacterFromLeftCommand();
 	void RemoveCharacterFromRightCommand();
 
+	/* Status Methods */
+	void RenderText(const std::string message);
+	void StatusResize();
+
 	/* Vertex Data */
 	std::vector<Vertex> vertices;
 	std::vector<Vertex> commandVertices;
@@ -62,11 +66,12 @@ public:
 	/* Text Cursor */
 	unsigned int textX;
 	unsigned int textY;
-	unsigned int commandX;
 	unsigned int rowIndex;
 	unsigned int columnIndex;
 
+	/* Command Cursor */
 	bool commandSelected;
+	unsigned int commandX;
 
 	/* Text Properties */
 	bool showCursor;
