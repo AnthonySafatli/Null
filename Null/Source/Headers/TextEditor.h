@@ -30,4 +30,5 @@ public:
 
 	/* Editor Methods */
 	void IncreaseLeftMargin();
+	void UpdateRowChange();
 };

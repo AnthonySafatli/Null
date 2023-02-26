@@ -134,6 +134,8 @@ void Program::OnResize(int width, int height)
 void Program::Update(const double deltaTime)
 {
 	// Cursor Animations
+
+	// TODO: Change to be based on how much it has changed (bigger changes go by faster)
 	if (cursorVertices[0].row != textY + 1)
 	{
 		for (int i = 0; i < 4; i++)

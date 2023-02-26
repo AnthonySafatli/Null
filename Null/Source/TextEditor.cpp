@@ -57,9 +57,11 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		break;
 	case KEYCODE_UP:
 		MoveUp();
+		UpdateRowChange();
 		break;
 	case KEYCODE_DOWN:
 		MoveDown();
+		UpdateRowChange();
 		break;
 
 	case KEYCODE_ENTER:
@@ -139,5 +141,11 @@ void TextEditor::IncreaseLeftMargin()
 	}
 
 	SetLeftMargin(leftMargin + 1);
+}
+
+void TextEditor::UpdateRowChange()
+{
+	if (program.textX > rows[program.textY].size())
+		MoveEnd();
 }
 
