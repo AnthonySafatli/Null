@@ -194,6 +194,8 @@ void TextArea::MoveUp()
 	// TODO: Remake but with scrolling in mind
 	if (program.textY > 0)
 		program.textY--;
+
+	program.UpdateCursor();
 }
 
 void TextArea::MoveDown()
@@ -201,26 +203,36 @@ void TextArea::MoveDown()
 	// TODO: Remake but with scrolling in mind
 	if (program.textY < rows.size() - 1)
 		program.textY++;
+
+	program.UpdateCursor();
 }
 
 void TextArea::MoveRight()
 {
 	if (program.textX < rows[program.textY].size())
 		program.textX++;
+
+	program.UpdateCursor();
 }
 
 void TextArea::MoveLeft()
 {
 	if (program.textX > 0)
 		program.textX--;
+
+	program.UpdateCursor();
 }
 
 void TextArea::MoveHome()
 {
 	program.textX = 0;
+
+	program.UpdateCursor();
 }
 
 void TextArea::MoveEnd()
 {
 	program.textX = rows[program.textY].size();
+
+	program.UpdateCursor();
 }

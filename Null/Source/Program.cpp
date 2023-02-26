@@ -33,6 +33,12 @@ Program::Program(const int width, const int height, const float textSize, const 
 		statusVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), -2, i, 1.0));
 	}
 
+	// Create Cursor
+	cursorVertices.push_back(Vertex(0.0, 0.0, texCoordsStatus.u               , texCoordsStatus.v               , 1, 1, 1.0));
+	cursorVertices.push_back(Vertex(0.1, 0.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v               , 1, 1, 1.0));
+	cursorVertices.push_back(Vertex(0.1, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), 1, 1, 1.0));
+	cursorVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), 1, 1, 1.0));
+
 	area = new TextEditor();
 }
 
@@ -56,6 +62,7 @@ void Program::SetData()
 	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
 	all.insert(all.end(), commandVertices.begin(), commandVertices.end());
 	all.insert(all.end(), statusVertices.begin(), statusVertices.end());
+	all.insert(all.end(), cursorVertices.begin(), cursorVertices.end());
 
 	openGL.vertexBuffer.SetData(all);
 	openGL.indexBuffer.SetData(indices);
@@ -63,7 +70,7 @@ void Program::SetData()
 
 void Program::UpdateIndices()
 {
-	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size() + statusVertices.size()) / 4 * 6;
+	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size() + statusVertices.size() + cursorVertices.size()) / 4 * 6;
 
 	int count = (neededIndices - indices.size()) / 6;
 
@@ -78,6 +85,17 @@ void Program::UpdateIndices()
 		indices.push_back(startIndex);
 		startIndex += 4;
 	}
+}
+
+void Program::UpdateCursor()
+{
+	for (int i = 0; i < 4; i++) 
+	{
+		cursorVertices[i].column = textX + 1;
+		cursorVertices[i].row = textY + 1;
+	}
+
+	SetData();
 }
 
 void Program::ProcessKey(int key, int action, int mods)

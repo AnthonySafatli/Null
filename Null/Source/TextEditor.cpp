@@ -111,6 +111,11 @@ void TextEditor::AddLeftMargin()
 	}
 }
 
+void TextEditor::RemoveLeftMargin()
+{
+	// TODO: Implement and add for when deleting lines
+}
+
 void TextEditor::IncreaseLeftMargin()
 {
 	TexCoords texCoords = GetCoords(' ');

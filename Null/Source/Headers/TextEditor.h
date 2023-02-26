@@ -26,6 +26,7 @@ public:
 
 	/* Virtual Methods */
 	void AddLeftMargin();
+	void RemoveLeftMargin();
 
 	/* Editor Methods */
 	void IncreaseLeftMargin();

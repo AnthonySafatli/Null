@@ -55,6 +55,7 @@ public:
 	std::vector<Vertex> commandVertices;
 	std::vector<Vertex> statusVertices;
 	std::vector<Vertex> marginVertices;
+	std::vector<Vertex> cursorVertices;
 	std::vector<unsigned int> indices;
 	void UpdateIndices();
 
@@ -64,6 +65,7 @@ public:
 	std::string statusText;
 
 	/* Text Cursor */
+	void UpdateCursor();
 	unsigned int textX;
 	unsigned int textY;
 	unsigned int rowIndex;
