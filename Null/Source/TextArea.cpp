@@ -83,9 +83,10 @@ void TextArea::RemoveCharacterFromLeft()
 			program.vertices[i].column += size;
 		}
 
+		for (int i = lastIndexInRowVertices; i < program.vertices.size(); i++) program.vertices[i].row--;
+
 		program.textX = size;
 		RemoveLeftMargin();
-		program.SetData();
 		return;
 	}
 
@@ -128,7 +129,9 @@ void TextArea::RemoveCharacterFromRight()
 			j++;
 		}
 
-		program.SetData();
+		for (int i = lastIndexInRowVertices; i < program.vertices.size(); i++) program.vertices[i].row--;
+
+		RemoveLeftMargin();
 		return;
 	}
 
@@ -143,8 +146,6 @@ void TextArea::RemoveCharacterFromRight()
 	program.indices.resize(program.indices.size() - 6);
 
 	rows[program.textY].erase(rows[program.textY].begin() + program.textX);
-
-	program.SetData();
 }
 
 void TextArea::AddTab()
@@ -193,8 +194,6 @@ void TextArea::AddCharacterToMargin(const char ch, const int index)
 	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, 0.0));
 
 	program.UpdateIndices();
-
-	program.SetData();
 }
 
 /* ================= Movement Methods ================= */
