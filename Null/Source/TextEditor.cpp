@@ -89,7 +89,6 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 
 void TextEditor::OnResize(int width, int height)
 {
-
 }
 
 void TextEditor::AddLeftMargin()

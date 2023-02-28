@@ -134,28 +134,13 @@ void Program::OnResize(int width, int height)
 void Program::Update(const double deltaTime)
 {
 	// Cursor Animations
+	double deltaRow = deltaTime * ((textY + 1) - cursorVertices[0].row) * 16;
+	double deltaColumn = deltaTime * ((textX + 1) - cursorVertices[0].column) * 16;
 
-	// TODO: Change to be based on how much it has changed (bigger changes go by faster)
-	if (cursorVertices[0].row != textY + 1)
+	for (int i = 0; i < 4; i++)
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			cursorVertices[i].row += deltaTime * 16;
-
-			if (cursorVertices[i].row > textY + 1)
-				cursorVertices[i].row = textY + 1;
-		}
-	}
-
-	if (cursorVertices[0].column != textX + 1)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			cursorVertices[i].column += deltaTime * 16;
-
-			if (cursorVertices[i].column > textX + 1)
-				cursorVertices[i].column = textX + 1;
-		}
+		cursorVertices[i].row += deltaRow;
+		cursorVertices[i].column += deltaColumn;
 	}
 
 	SetData();

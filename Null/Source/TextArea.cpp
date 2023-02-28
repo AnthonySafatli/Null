@@ -162,11 +162,20 @@ void TextArea::Return()
 	while (program.textX < rows[program.textY].size())
 	 	RemoveCharacterFromRight();
 
+	// Move all vertices down
+	int letterCount = 0;
+	for (int i = 0; i < program.textY + 1; i++)
+	{
+		letterCount += rows[i].size();
+	}
+
+	for (int i = letterCount * 4; i < program.vertices.size(); i++) program.vertices[i].row++;
+
 	// Add New Row
-	rows.push_back(std::string());
+	rows.insert(rows.begin() + program.textY + 1, std::string());
 	program.textX = 0;
 	MoveDown();
-	
+
 	AddLeftMargin();
 
 	// Add characters back
@@ -178,10 +187,10 @@ void TextArea::AddCharacterToMargin(const char ch, const int index)
 {
 	TexCoords texCoords = GetCoords(ch);
 
-	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , program.textY + 1, index, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , program.textY + 1, index, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), program.textY + 1, index, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, index, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rows.size(), index, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, 0.0));
 
 	program.UpdateIndices();
 
