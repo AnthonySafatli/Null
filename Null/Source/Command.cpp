@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Headers/Program.h"
+#include "Headers/Uniforms.h"
 
 #define String std::string
 #define Vector std::vector
@@ -25,13 +26,11 @@ void Command::Execute(const String fullCommand)
 	args.erase(args.begin());
 
 	if (command == "echo")
-	{
 		Echo(args);
-	}
+	else if (command == "size")
+		TextSize(args[0]);
 	else 
-	{
 		program.RenderStatus("Error: Unknown Command " + command);
-	}
 }
 
 /* ===== Commands ====== */
@@ -42,6 +41,29 @@ void Command::Echo(const Vector<String> args)
 	for (String str : args) ss << str + " ";
 
 	program.RenderStatus(ss.str());
+}
+
+void Command::TextSize(const String sizeStr) 
+{
+	float size = 0;
+
+	try 
+	{
+		size = std::stof(sizeStr);
+	}
+	catch (const std::exception& e) 
+	{
+		if (sizeStr != "default")
+		{
+			program.RenderStatus("Invalid Argument: must be number");
+			return;
+		}
+
+		size = 24;
+	}
+
+	program.textSize = size;
+	UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 }
 
 /* ====== Misc ====== */

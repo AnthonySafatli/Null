@@ -18,7 +18,7 @@ Program::Program(const int width, const int height, const float textSize, const 
 	AddCommandSymbol();
 
 	// Create Status Bar
-	float columnAmount = ((1.0 / (textSize * 0.1)) * ((float)width / (float)IDEAL_WIDTH));
+	float columnAmount = ((1.0 / (textSize * 0.001)) * ((float)width / (float)IDEAL_WIDTH));
 	TexCoords texCoordsStatus = GetCoords(' ');
 
 	for (int i = 0; i < columnAmount; i++)
@@ -200,7 +200,7 @@ void Program::RenderStatus(const std::string message)
 
 void Program::StatusResize()
 {
-	float columnAmount = ((1.0 / (textSize * 0.1)) * ((float)width / (float)IDEAL_WIDTH));
+	float columnAmount = ((1.0 / (textSize * 0.001)) * ((float)width / (float)IDEAL_WIDTH));
 	TexCoords texCoords = GetCoords(' ');
 
 	for (int i = 0; i < columnAmount; i++)

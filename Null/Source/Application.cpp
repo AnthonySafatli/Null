@@ -11,7 +11,7 @@
 #define DEBUG 1
 
 // TODO: Maybe don't use global variables
-Program program = Program(1800, 1100, 0.24, 4);
+Program program = Program(1800, 1100, 24, 4);
 
 int main(void)
 {
@@ -50,7 +50,7 @@ int main(void)
 
     glUniform2f(program.openGL.u_idealRatio.location, (float) program.idealWidth / (float) program.width, (float) program.idealHeight / (float) program.height);
     glUniform1i(program.openGL.u_leftMargin.location, program.area->leftMargin);
-    glUniform1f(program.openGL.u_size.location, 0.1 * program.textSize);
+    glUniform1f(program.openGL.u_size.location, 0.001 * program.textSize);
     glUniform1i(program.openGL.u_sceneRowIndex.location, 0);
     glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);
     glUniform1i(program.openGL.u_tex.location, 0);
@@ -92,7 +92,12 @@ void UpdateUniform2f(const unsigned int location, const float v1, const float v2
     glUniform2f(location, v1, v2);
 }
 
-void UpdateUniform1i(const unsigned int location, const int i1)
+void UpdateUniform1f(const unsigned int location, const float v1)
 {
-    glUniform1i(location, i1);
+    glUniform1f(location, v1);
+}
+
+void UpdateUniform1i(const unsigned int location, const int v1)
+{
+    glUniform1i(location, v1);
 }
