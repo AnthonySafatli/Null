@@ -14,12 +14,7 @@ Program::Program(const int width, const int height, const float textSize, const 
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false)
 {
 	// Add > to Command Line
-	TexCoords texCoordsCommand = GetCoords('>');
-
-	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u               , texCoordsCommand.v               , -1, -2, 0.0));
-	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v               , -1, -2, 0.0));
-	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
-	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u               , texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
+	AddCommandSymbol();
 
 	// Create Status Bar
 	float columnAmount = ((1.0 / (textSize * 0.1)) * ((float)width / (float)IDEAL_WIDTH));
@@ -72,7 +67,11 @@ void Program::UpdateIndices()
 {
 	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size() + statusVertices.size() + cursorVertices.size()) / 4 * 6;
 
-	int count = (neededIndices - indices.size()) / 6;
+	int indexNum = neededIndices - indices.size();
+	int count = indexNum / 6;
+
+	if (count < 0)
+		indices.resize(indices.size() + indexNum);
 
 	int startIndex = indices.size() / 6 * 4;
 	for (int i = 0; i < count; i++)
@@ -85,6 +84,16 @@ void Program::UpdateIndices()
 		indices.push_back(startIndex);
 		startIndex += 4;
 	}
+}
+
+void Program::AddCommandSymbol()
+{
+	TexCoords texCoordsCommand = GetCoords('>');
+
+	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u, texCoordsCommand.v, -1, -2, 0.0));
+	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v, -1, -2, 0.0));
+	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
+	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u, texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
 }
 
 void Program::ProcessKey(int key, int action, int mods)
@@ -143,6 +152,7 @@ void Program::Update(const double deltaTime)
 		cursorVertices[i].column += deltaColumn;
 	}
 
+	// Update Data Every Frame
 	SetData();
 }
 
@@ -298,10 +308,11 @@ void Program::ScrollDownAutoComplete()
 
 void Program::EnterCommand()
 {
-	// TODO: Fix commandVertices.clear();
-	
-	// commandText.clear(); 
-	// commandX = 0;
+	commandVertices.clear();
+	AddCommandSymbol();
+	UpdateIndices();
+	commandText.clear(); 
+	commandX = 0;
 	commandSelected = false;
 }
 
@@ -326,19 +337,17 @@ void Program::RemoveCharacterFromLeftCommand()
 
 void Program::RemoveCharacterFromRightCommand()
 {
-	// TODO: Fix problems, perhaps indices size?
-
-	// if (commandX = commandText.size())
-	// 	return;
-	// 
-	// int index = commandX * 4 + 4;
-	// 
-	// commandVertices.erase(commandVertices.begin() + index, commandVertices.begin() + index + 4);
-	// 
-	// for (int i = index; i < commandVertices.size(); i++)
-	// 	commandVertices[i].column--;
-	// 
-	// indices.resize(indices.size() - 6);
-	// 
-	// commandText.erase(commandText.begin() + commandX);
+	if (commandX == commandText.size())
+		return;
+	
+	int index = commandX * 4 + 4;
+	
+	commandVertices.erase(commandVertices.begin() + index, commandVertices.begin() + index + 4);
+	
+	for (int i = index; i < commandVertices.size(); i++)
+		commandVertices[i].column--;
+	
+	UpdateIndices();
+	
+	commandText.erase(commandText.begin() + commandX);
 }

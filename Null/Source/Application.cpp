@@ -8,7 +8,7 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
 
-#define TAU (M_PI * 2.0)
+#define DEBUG 1
 
 // TODO: Maybe don't use global variables
 Program program = Program(1800, 1100, 0.24, 4);
@@ -64,7 +64,6 @@ int main(void)
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-
         currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -77,7 +76,10 @@ int main(void)
 
         glfwPollEvents();
 
-        // GetErrors();
+#if DEBUG
+        GetErrors();
+#endif
+
     }
 
     glfwTerminate();

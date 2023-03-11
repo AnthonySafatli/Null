@@ -88,4 +88,7 @@ public:
 	int height;
 	const int idealWidth;
 	const int idealHeight;
+
+private:
+	void AddCommandSymbol();
 };
