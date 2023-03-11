@@ -11,23 +11,26 @@ extern Program program;
 
 TextEditor::TextEditor() 
 {
+	// TODO: Fix following lines
 	leftMargin = 4;
 	// SetLeftMargin(4);
 	rows.push_back(std::string());
 
+	// add ' '
 	TexCoords spaceTexCoords = GetCoords(' ');
-	TexCoords oneTexCoords = GetCoords('1');
-
 	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, 0.0));
 	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, 0.0));
 	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
 	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
-																														
+				
+	// add ' '
 	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, 0.0));
 	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, 0.0));
 	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
 	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
-																												
+				
+	// add '1'
+	TexCoords oneTexCoords = GetCoords('1');
 	program.marginVertices.push_back(Vertex(0.0, 0.0,   oneTexCoords.u               ,   oneTexCoords.v               , 1, -1, 0.0));
 	program.marginVertices.push_back(Vertex(1.0, 0.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v               , 1, -1, 0.0));
 	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
@@ -116,7 +119,6 @@ void TextEditor::RemoveLeftMargin()
 {
 	program.marginVertices.resize(program.marginVertices.size() - (4 * (leftMargin - 1)));
 	program.indices.resize(program.indices.size() - (6 * (leftMargin - 1)));
-	program.SetData();
 }
 
 void TextEditor::IncreaseLeftMargin()

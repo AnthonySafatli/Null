@@ -31,6 +31,7 @@ void Command::Execute(const String fullCommand)
 	String command = args[0];
 	args.erase(args.begin());
 
+	// TODO: Update status for commands
 	if (command == "echo")
 		Echo(args);
 	else if (command == "size")

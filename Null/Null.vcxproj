@@ -100,6 +100,7 @@
     <ClCompile Include="Source\Deprecated\NullEditor.cpp" />
     <ClCompile Include="Source\TextEditor.cpp" />
     <ClCompile Include="Source\Deprecated\TextRow.cpp" />
+    <ClCompile Include="Source\TextViewer.cpp" />
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +125,7 @@
     <ClInclude Include="Source\Headers\TextArea.h" />
     <ClInclude Include="Source\Headers\TextEditor.h" />
     <ClInclude Include="Source\Headers\TextRow.h" />
+    <ClInclude Include="Source\Headers\TextViewer.h" />
     <ClInclude Include="Source\Headers\Uniforms.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
