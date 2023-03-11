@@ -64,6 +64,7 @@
   <ItemGroup>
     <None Include="Resources\Shaders\fragment.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
+    <None Include="commands.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\font texture.png">

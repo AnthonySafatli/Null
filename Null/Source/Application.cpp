@@ -101,3 +101,8 @@ void UpdateUniform1i(const unsigned int location, const int v1)
 {
     glUniform1i(location, v1);
 }
+
+void UpdateBackground(const float r, const float g, const float b, const float a) 
+{
+    glClearColor(r, g, b, a);
+}

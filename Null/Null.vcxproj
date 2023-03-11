@@ -103,6 +103,7 @@
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="commands.md" />
     <None Include="Resources\Shaders\fragment.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
   </ItemGroup>
