@@ -20,4 +20,5 @@ public:
     Uniform u_sceneRowIndex;
     Uniform u_sceneColumnIndex;
     Uniform u_tex;
+    Uniform u_foreground;
 };

@@ -54,6 +54,7 @@ int main(void)
     glUniform1i(program.openGL.u_sceneRowIndex.location, 0);
     glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);
     glUniform1i(program.openGL.u_tex.location, 0);
+    glUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
 
     double currentFrame = glfwGetTime();
     double lastFrame = currentFrame;
@@ -90,6 +91,11 @@ int main(void)
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)
 {
     glUniform2f(location, v1, v2);
+}
+
+void UpdateUniform4f(const unsigned int location, const float v1, const float v2, const float v3, const float v4)
+{
+    glUniform4f(location, v1, v2, v3, v4);
 }
 
 void UpdateUniform1f(const unsigned int location, const float v1)

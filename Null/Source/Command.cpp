@@ -13,7 +13,13 @@
 
 extern Program program;
 
+struct Colour 
+{
+	bool error; float r; float g; float b; float a;
+};
+
 Vector<String> Split(String str, char separator);
+Colour ParseColour(Vector<String> args);
 
 void Command::Execute(const String fullCommand)
 {
@@ -31,6 +37,8 @@ void Command::Execute(const String fullCommand)
 		TextSize(args[0]);
 	else if (command == "background")
 		BackgroundColour(args);
+	else if (command == "foreground")
+		ForegroundColour(args);
 	else 
 		program.RenderStatus("Error: Unknown Command " + command);
 }
@@ -70,55 +78,92 @@ void Command::TextSize(const String sizeStr)
 
 void Command::BackgroundColour(const Vector<String> args) 
 {
-	float r, g, b, a;
+	Colour colour = ParseColour(args);
+
+	if (colour.error)
+	{
+		if (args.size() == 1 && args[0] == "default")
+		{
+			colour.r = 0.03;
+			colour.g = 0.05; 
+			colour.b = 0.09;
+			colour.a = 0.85;
+		}
+		else
+		{
+			program.RenderStatus("Invalid Argument(s)");
+			return;
+		}
+	}
+
+	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
+}
+
+void Command::ForegroundColour(const Vector<String> args)
+{
+	Colour colour = ParseColour(args);
+
+	if (colour.error)
+	{
+		if (args.size() == 1 && args[0] == "default")
+		{
+			colour.r = 1.0f;
+			colour.g = 1.0f;
+			colour.b = 1.0f;
+			colour.a = 1.0f;
+		}
+		else
+		{
+			program.RenderStatus("Invalid Argument(s)");
+			return;
+		}
+	}
+
+	UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
+}
+
+/* ====== Misc ====== */
+
+Colour ParseColour(Vector<String> args)
+{
+	Colour colour;
+	colour.error = false;
 
 	try
 	{
 		if (args.size() == 1)      // x
 		{
-			r = std::stof(args[0]);
-			g = std::stof(args[0]);
-			b = std::stof(args[0]);
-			a = 1.0f;
+			colour.r = std::stof(args[0]);
+			colour.g = std::stof(args[0]);
+			colour.b = std::stof(args[0]);
+			colour.a = 1.0f;
 		}
 		else if (args.size() == 3) // r g b
 		{
-			r = std::stof(args[0]);
-			g = std::stof(args[1]);
-			b = std::stof(args[2]);
-			a = 1.0f;
+			colour.r = std::stof(args[0]);
+			colour.g = std::stof(args[1]);
+			colour.b = std::stof(args[2]);
+			colour.a = 1.0f;
 		}
 		else if (args.size() == 4) // r g b a
 		{
-			r = std::stof(args[0]);
-			g = std::stof(args[1]);
-			b = std::stof(args[2]);
-			a = std::stof(args[3]);
+			colour.r = std::stof(args[0]);
+			colour.g = std::stof(args[1]);
+			colour.b = std::stof(args[2]);
+			colour.a = std::stof(args[3]);
 		}
-		else 
+		else
 		{
-			program.RenderStatus("Invalid Argument(s): must be 1, 3, or 4 numbers");
-			return;
+			colour.error = true;
 		}
 	}
 	catch (const std::exception& e)
 	{
-		if (args[0] != "default" && args.size() != 1)
-		{
-			program.RenderStatus("Invalid Argument: must be number");
-			return;
-		}
-
-		r = 0.03;
-		g = 0.05;
-		b = 0.09; 
-		a = 0.85;
+		colour.error = true;
 	}
 
-	UpdateBackground(r, g, b, a);
+	return colour;
 }
-
-/* ====== Misc ====== */
 
 Vector<String> Split(String str, char separator)
 {
