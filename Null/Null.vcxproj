@@ -90,6 +90,7 @@
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CallBack.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
+    <ClCompile Include="Source\Command.cpp" />
     <ClCompile Include="Source\TextArea.cpp" />
     <ClCompile Include="Source\Program.cpp" />
     <ClCompile Include="Source\Deprecated\Scene.cpp" />
@@ -111,6 +112,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Headers\CallBack.h" />
     <ClInclude Include="Source\Headers\Character.h" />
+    <ClInclude Include="Source\Headers\Command.h" />
     <ClInclude Include="Source\Headers\CursorController.h" />
     <ClInclude Include="Source\Headers\GLObejct.h" />
     <ClInclude Include="Source\Headers\Program.h" />

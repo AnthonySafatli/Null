@@ -50,7 +50,7 @@ public:
 	void RemoveCharacterFromRightCommand();
 
 	/* Status Methods */
-	void RenderText(const std::string message);
+	void RenderStatus(const std::string message);
 	void StatusResize();
 
 	/* Vertex Data */

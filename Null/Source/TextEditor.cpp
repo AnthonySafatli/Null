@@ -33,7 +33,7 @@ TextEditor::TextEditor()
 	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 
-	program.RenderText("Editor Loaded Successfully");
+	program.RenderStatus("Editor Loaded Successfully");
 }
 
 void TextEditor::ProcessKey(int key, int action, int mods)

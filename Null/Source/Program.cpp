@@ -7,6 +7,7 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
+#include "Headers/Command.h"
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
@@ -156,7 +157,7 @@ void Program::Update(const double deltaTime)
 	SetData();
 }
 
-void Program::RenderText(const std::string message)
+void Program::RenderStatus(const std::string message)
 {
 	statusText = message;
 
@@ -178,6 +179,22 @@ void Program::RenderText(const std::string message)
 		
 		statusVertices[++i].texCoords[0] = texCoord.u;
 		statusVertices[i].texCoords[1]   = texCoord.v + (1.0 / 10.0);
+	}
+
+	TexCoords spaceCoords = GetCoords(' ');
+	for (int i = message.size() * 4; i < statusVertices.size(); i++)
+	{
+		statusVertices[i].texCoords[0] = spaceCoords.u;
+		statusVertices[i].texCoords[1] = spaceCoords.v;
+
+		statusVertices[++i].texCoords[0] = spaceCoords.u + (1.0 / 10.0);
+		statusVertices[i].texCoords[1] = spaceCoords.v;
+
+		statusVertices[++i].texCoords[0] = spaceCoords.u + (1.0 / 10.0);
+		statusVertices[i].texCoords[1] = spaceCoords.v + (1.0 / 10.0);
+
+		statusVertices[++i].texCoords[0] = spaceCoords.u;
+		statusVertices[i].texCoords[1] = spaceCoords.v + (1.0 / 10.0);
 	}
 }
 
@@ -308,6 +325,8 @@ void Program::ScrollDownAutoComplete()
 
 void Program::EnterCommand()
 {
+	Command::Execute(commandText);
+
 	commandVertices.clear();
 	AddCommandSymbol();
 	UpdateIndices();
