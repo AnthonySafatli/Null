@@ -94,15 +94,3 @@ void UpdateUniform1i(const unsigned int location, const int i1)
 {
     glUniform1i(location, i1);
 }
-
-void NullEditor::SetRowIndex(const int index)
-{
-    glUniform1i(program.openGL.u_sceneRowIndex.location, index);
-    SetData();
-}
-
-void NullEditor::SetColumnIndex(const int index)
-{
-    glUniform1i(program.openGL.u_sceneColumnIndex.location, index);
-    SetData();
-}

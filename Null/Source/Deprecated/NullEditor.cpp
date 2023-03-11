@@ -1,3 +1,5 @@
+/*
+
 #include "Headers/NullEditor.h"
 #include "Headers/Character.h"
 
@@ -82,7 +84,7 @@ void NullEditor::ProcessKey(int key, int action, int mods)
 	if (action == GLFW_RELEASE)
 		return;
 
-	/* Related to Cursor */
+	/* Related to Cursor 
 
 	if (key == KEYCODE_HOME)
 		cursor.Move(HOME);
@@ -109,7 +111,7 @@ void NullEditor::ProcessKey(int key, int action, int mods)
 		return;
 	}
 
-	/* Related to Text */
+	/* Related to Text 
 	
 	if (key == KEYCODE_TAB)
 		AddTab();
@@ -495,3 +497,5 @@ void NullEditor::AddIndices()
 		startIndex += 4;
 	}
 }
+
+*/

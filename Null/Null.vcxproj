@@ -86,19 +86,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\CursorController.cpp" />
+    <ClCompile Include="Source\Deprecated\CursorController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CallBack.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\TextArea.cpp" />
     <ClCompile Include="Source\Program.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\Deprecated\Scene.cpp" />
     <ClCompile Include="Source\Application.cpp" />
-    <ClCompile Include="Source\MainRows.cpp" />
+    <ClCompile Include="Source\Deprecated\MainRows.cpp" />
     <ClCompile Include="Source\GLAbstraction.cpp" />
-    <ClCompile Include="Source\NullEditor.cpp" />
+    <ClCompile Include="Source\Deprecated\NullEditor.cpp" />
     <ClCompile Include="Source\TextEditor.cpp" />
-    <ClCompile Include="Source\TextRow.cpp" />
+    <ClCompile Include="Source\Deprecated\TextRow.cpp" />
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

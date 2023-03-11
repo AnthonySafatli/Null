@@ -1,15 +1,18 @@
-#include "Headers/Scene.h"
 
-#include "Headers/GLAbstraction.h"
-#include "Headers/NullEditor.h"
-#include "Headers/Character.h"
-
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cmath>
+// #include "Headers/Scene.h"
+// 
+// #include "Headers/GLAbstraction.h"
+// #include "Headers/NullEditor.h"
+// #include "Headers/Character.h"
+// 
+// #include <iostream>
+// #include <vector>
+// #include <string>
+// #include <cmath>
 
 /* ====== Scene ====== */
+
+/*
 
 Scene::Scene(const SceneType sceneType) : rows(), editable(false), lineType(TILDA)
 {
@@ -18,7 +21,7 @@ Scene::Scene(const SceneType sceneType) : rows(), editable(false), lineType(TILD
     if (sceneType == EDITOR)
         editable = true;
 
-    /*switch (sceneType)
+    switch (sceneType)
     {
     case TEXT:
         break;
@@ -32,7 +35,7 @@ Scene::Scene(const SceneType sceneType) : rows(), editable(false), lineType(TILD
 
     case SETTINGS:
         break;
-    }*/
+    }
 }
 
 void Scene::AddNumber()
@@ -158,3 +161,5 @@ void Scene::AddLine(const std::string text)
         //appContents.AddCharacter(text.at(i));
     }
 }
+
+*/

@@ -1,9 +1,11 @@
-#include "Headers/CursorController.h"
-#include "Headers/NullEditor.h"
+// #include "Headers/CursorController.h"
+// #include "Headers/NullEditor.h"
 
-#include <iostream>
+// #include <iostream>
 
 // extern NullEditor appContents;
+
+/*
 
 CursorController::CursorController(int x, int y)
 	: textX(0), textY(0), screenX(x), screenY(y), commandX(3), isOnCommand(false),
@@ -138,3 +140,5 @@ void CursorController::Right()
 	if (textX < 0)
 		textX++;
 }
+
+*/
