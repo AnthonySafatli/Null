@@ -3,9 +3,6 @@
 #include "GLFW/glfw3.h"
 
 #include "GLAbstraction.h"
-#include "MainRows.h"
-#include "Scene.h"
-#include "CursorController.h"
 
 #include <vector>
 
@@ -66,10 +63,10 @@ public:
     Uniform u_tex;
 
     /* Text Variables */
-    CommandRow command;
-    Scene currentScene;
-    StatusBar status;
-    CursorController cursor;
+    // CommandRow command;
+    // Scene currentScene;
+    // StatusBar status;
+    // CursorController cursor;
 
     /* Indices */
     std::vector<unsigned int> indices;

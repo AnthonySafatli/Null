@@ -9,15 +9,16 @@ extern Program program;
 
 TextViewer::TextViewer(const std::string text, const std::string pageName)
 {
-	leftMargin = 2;
+	SetLeftMargin(2);
 	rows.push_back(std::string());
 
-	TexCoords tildaCoords = GetCoords('~');
+	for (int i = 0; i < 4; i++) program.cursorVertices[i].highlight = 0;
 
-	program.marginVertices.push_back(Vertex(0.0, 0.0, tildaCoords.u,                tildaCoords.v,                1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v,                1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v + (1.0 / 10.0), 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, tildaCoords.u,                tildaCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+	TexCoords tildaCoords = GetCoords('~');
+	program.marginVertices.push_back(Vertex(0.0, 0.0, tildaCoords.u,                tildaCoords.v,                1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v,                1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, tildaCoords.u,                tildaCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 
 	UpdateText(text);
 

@@ -18,6 +18,7 @@ class TextEditor : public TextArea
 {
 public:
 	TextEditor();
+	TextEditor(std::string text);
 
 	/* Callback Methods */
 	void ProcessKey(int key, int action, int mods);

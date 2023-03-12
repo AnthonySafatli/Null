@@ -39,6 +39,11 @@ TextEditor::TextEditor()
 	program.RenderStatus("Editor Loaded Successfully");
 }
 
+TextEditor::TextEditor(std::string text)
+{
+
+}
+
 void TextEditor::ProcessKey(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)

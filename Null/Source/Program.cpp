@@ -2,8 +2,9 @@
 
 #include "GLFW/glfw3.h"
 
-#include "Headers/TextEditor.h"
 #include "Headers/TextArea.h"
+#include "Headers/TextEditor.h"
+#include "Headers/TextViewer.h"
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
@@ -369,4 +370,73 @@ void Program::RemoveCharacterFromRightCommand()
 	UpdateIndices();
 	
 	commandText.erase(commandText.begin() + commandX);
+}
+
+void Program::OpenEditor()
+{
+	vertices.clear();
+	marginVertices.clear();
+	UpdateIndices();
+
+	delete area;
+
+	area = new TextEditor();
+}
+
+void Program::OpenFile(const std::string dir)
+{
+	vertices.clear();
+	marginVertices.clear();
+	UpdateIndices();
+
+	delete area;
+
+	std::string text; // TODO: Get text from file
+
+	area = new TextEditor(text);
+}
+
+void Program::OpenJournal(const std::string name)
+{
+	std::string path; // Get path for journal file
+
+	OpenFile(path);
+}
+
+void Program::OpenViewer(const std::string str, const std::string pageName)
+{
+	vertices.clear();
+	marginVertices.clear();
+	UpdateIndices();
+
+	delete area;
+
+	area = new TextViewer(str, pageName);
+}
+
+void Program::LoadSettings()
+{
+	std::string settings = "Settings:"
+		"\n\n"
+		"Size: " + std::to_string(textSize) +
+		"\n\n"
+		"Background: 0.03, 0.05, 0.09, 0.85"
+		"\n\n"
+		"Foreground: 1.0, 1.0, 1.0, 1.0";
+
+	OpenViewer(settings, "Settings");
+}
+
+void Program::LoadHelp()
+{
+	std::string help;
+
+	OpenViewer(help, "Help");
+}
+
+void Program::LoadProperties(const std::string dir)
+{
+	std::string properties;
+
+	OpenViewer(properties, "Properties");
 }

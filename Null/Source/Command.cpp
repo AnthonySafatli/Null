@@ -40,6 +40,8 @@ void Command::Execute(const String fullCommand)
 		BackgroundColour(args);
 	else if (command == "foreground")
 		ForegroundColour(args);
+	else if (command == "settings")
+		Settings();
 	else 
 		program.RenderStatus("Error: Unknown Command " + command);
 }
@@ -121,6 +123,11 @@ void Command::ForegroundColour(const Vector<String> args)
 	}
 
 	UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
+}
+
+void Command::Settings() 
+{
+	program.LoadSettings();
 }
 
 /* ====== Misc ====== */

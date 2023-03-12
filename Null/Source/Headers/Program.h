@@ -62,6 +62,17 @@ public:
 	std::vector<unsigned int> indices;
 	void UpdateIndices();
 
+	/* TextEditor Methods */
+	void OpenEditor();
+	void OpenFile(const std::string dir);
+	void OpenJournal(const std::string name);
+
+	/* TextArea Methods */
+	void OpenViewer(const std::string str, const std::string pageName);
+	void LoadSettings();
+	void LoadHelp();
+	void LoadProperties(const std::string dir);
+
 	/* Text Data */
 	std::string commandText;
 	TextArea *area;
