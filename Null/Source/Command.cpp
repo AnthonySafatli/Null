@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <sstream>
 #include <iostream>
 
@@ -15,8 +16,17 @@ extern Program program;
 
 struct Colour 
 {
-	bool error; float r; float g; float b; float a;
+	bool error; 
+	float r; 
+	float g;
+	float b;
+	float a;
+
+	Colour();
+	Colour(float r, float g, float b);
 };
+Colour::Colour()                          : error(false), r(0), g(0), b(0), a(1) {}
+Colour::Colour(float r, float g, float b) : error(false), r(r), g(g), b(b), a(1) {}
 
 Vector<String> Split(String str, char separator);
 Colour ParseColour(Vector<String> args);
@@ -126,7 +136,7 @@ void Command::TextSize(const std::vector<std::string> args)
 	}
 }
 
-// TODO: CSS colours?
+// TODO: redo
 void Command::BackgroundColour(const std::vector<std::string> args)
 {
 	/* 
@@ -149,17 +159,29 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	: sets the background colour to a css colour and the a channel to a
 	*/
 
-	if (args.size() != 1 && args.size() != 3 && args.size() != 4)
+	if (args.size() < 4 || args.size() < 1)
 	{
-		program.RenderStatus("Command 'background' takes 1 3 or 4 arguments");
+		program.RenderStatus("Command 'background' can only take 1-4 arguments");
 		return;
 	}
 
-	if (args.size() == 1 && args[0] == "default")
+	if (args.size() == 1 || args.size() == 2)
 	{
-		UpdateBackground(0.03, 0.05, 0.09, 0.85);
-		program.RenderStatus("Background set to 0.03 0.05 0.09 0.85");
-		return;
+		if (args[0] == "default" && args.size() == 1)
+		{
+			UpdateBackground(0.03, 0.05, 0.09, 0.85);
+			program.RenderStatus("Background set to 0.03 0.05 0.09 0.85");
+			return;
+		}
+
+		std::map<String, Colour> colourMap = GenerateColourMap();
+
+		if (colourMap.count(args[0]))
+		{
+			// get colour
+			// check next arguement 
+			// if number change a
+		}
 	}
 
 	Colour colour = ParseColour(args);
@@ -173,7 +195,7 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	program.RenderStatus("Background set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
-// TODO: CSS colours?
+// TODO: redo
 void Command::ForegroundColour(const std::vector<std::string> args)
 {
 	/*
@@ -467,4 +489,160 @@ Vector<String> Split(String str, char separator)
 		strings.push_back(ss.str());
 
 	return strings;
+}
+
+std::map<String, Colour> GenerateColourMap()
+{
+	std::map<String, Colour> colours;
+	
+	colours["aliceblue"]            = Colour(240.0 / 255.0, 248.0 / 255.0, 255.0 / 255.0);
+	colours["antiquewhite"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["aqua"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["aquamarine"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["azure"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["beige"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["bisque"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["black"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["blanchedalmond"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["blue"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["blueviolet"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["brown"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["burlywood"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["cadetblue"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["chartreuse"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["chocolate"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["coral"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["cornflowerblue"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["cornsilk"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["crimson"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["cyan"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkblue"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkcyan"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkgoldenrod"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkgrey"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkgray"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkgreen"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkkhaki"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkmagenta"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkolivegreen"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkorange"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkorchid"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkred"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darksalmon"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkseagreen"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkslateblue"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkslategrey"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkslategray"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkturqoise"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["darkviolet"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["deeppink"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["deepskyblue"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["dimgray"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["dimgrey"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["dodgerblue"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["firebrick"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["floralwhite"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["forestgreen"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["fuchsia"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["gainsboro"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["ghostwhite"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["gold"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["goldenrod"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["gray"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["grey"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["green"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["greenyellow"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["honeydew"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["hotpink"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["indianred"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["indigo"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["ivory"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["khaki"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lavender"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lavenderblush"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lawngreen"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lemonchiffon"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightblue"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightcoral"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightcyan"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightgoldenrodyellow"] = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightgrey"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightgray"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightgreen"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightpink"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightsalmon"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightseagreen"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightskyblue"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightslategray"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightslategray"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightsleelblue"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lightyellow"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["lime"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["limegreen"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["linen"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["megenta"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["maroon"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumaquamarine"]     = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumblue"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumorchid"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumpurple"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumseagreen"]       = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumslateblue"]      = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumspringgreen"]    = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumturquoise"]      = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mediumvioletred"]      = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["midnightblue"]         = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mintcream"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["mistyrose"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["moccasin"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["novajowhite"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["navy"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["oldlace"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["olive"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["olivedrap"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["orange"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["orangered"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["orchid"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["palegoldenrod"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["palegreen"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["paleturquoise"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["palevioletred"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["papayawhip"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["peachpuff"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["peru"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["pink"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["plum"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["powderblue"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["purple"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["rebeccapurple"]        = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["red"]                  = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["rosybrown"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["royalblue"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["saddlebrown"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["salmon"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["sandybrown"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["seagreen"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["seashell"]             = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["sienna"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["silver"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["skyblue"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["slateblue"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["slategrey"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["slategray"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["snow"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["springgreen"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["steelblue"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["tan"]                  = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["teal"]                 = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["thistle"]              = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["tomato"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["turquoise"]            = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["violet"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["wheat"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["white"]                = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["whitesmoke"]           = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["yellow"]               = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+	colours["yellowgreen"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
+
+	return colours;
 }
