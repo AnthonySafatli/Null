@@ -158,6 +158,8 @@ void Program::Update(const double deltaTime)
 	SetData();
 }
 
+/* Status Methods */
+
 void Program::RenderStatus(const std::string message)
 {
 	statusText = message;
@@ -217,6 +219,8 @@ void Program::StatusResize()
 
 	UpdateIndices();
 }
+
+/* Command Methods */
 
 void Program::ProcessKeyCommand(int key, int action, int mods)
 {
@@ -372,6 +376,8 @@ void Program::RemoveCharacterFromRightCommand()
 	commandText.erase(commandText.begin() + commandX);
 }
 
+/* TextArea Methods */
+
 void Program::OpenEditor()
 {
 	vertices.clear();
@@ -391,14 +397,16 @@ void Program::OpenFile(const std::string dir)
 
 	delete area;
 
-	std::string text; // TODO: Get text from file
+	// TODO: Get text from file
+	std::string text; 
 
 	area = new TextEditor(text);
 }
 
 void Program::OpenJournal(const std::string name)
 {
-	std::string path; // Get path for journal file
+	// TODO: Get path for journal file
+	std::string path; 
 
 	OpenFile(path);
 }
@@ -416,6 +424,7 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 
 void Program::LoadSettings()
 {
+	// TODO: Fix background and foreground
 	std::string settings = "Settings:"
 		"\n\n"
 		"Size: " + std::to_string(textSize) +
@@ -429,14 +438,8 @@ void Program::LoadSettings()
 
 void Program::LoadHelp()
 {
+	// TODO: Write out help string
 	std::string help;
 
 	OpenViewer(help, "Help");
-}
-
-void Program::LoadProperties(const std::string dir)
-{
-	std::string properties;
-
-	OpenViewer(properties, "Properties");
 }

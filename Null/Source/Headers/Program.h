@@ -71,7 +71,6 @@ public:
 	void OpenViewer(const std::string str, const std::string pageName);
 	void LoadSettings();
 	void LoadHelp();
-	void LoadProperties(const std::string dir);
 
 	/* Text Data */
 	std::string commandText;

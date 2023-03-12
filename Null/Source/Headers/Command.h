@@ -12,21 +12,19 @@ private:
 	static void Echo(const std::vector<std::string> args);             // prints text in status bar
 
 	/* Change Settings */
-	static void TextSize(const std::string sizeStr);                   // changes text size
+	static void TextSize(const std::vector<std::string> args);         // changes text size
 	// TODO: have + or - be arguments
 	static void BackgroundColour(const std::vector<std::string> args); // changes background colour
 	static void ForegroundColour(const std::vector<std::string> args); // changes foreground colour
 	
 	/* Opens Pages */
-	static void Journal(const std::vector<std::string> args);          // open the journal viewer or journal page / folder
-	static void Settings();                                            // opens settings viewer
-	static void Properties(const std::vector<std::string> args);       // opens properties page for specified file or current file
-	static void Help();                                                // opens help viewer
-	
-	/* Text Editor */
-	static void Open(const std::string);                               // opens new file at specified location
+	static void Help(const std::vector<std::string> args);             
+	static void Settings(const std::vector<std::string> args);
+	static void Open(const std::vector<std::string> args);
+	static void Save(const std::vector<std::string> args);
+	static void Journal(const std::vector<std::string> args);          
 
 public:
-	static void Execute(const std::string command);
+	static void Execute(const std::string input);
 
 };
