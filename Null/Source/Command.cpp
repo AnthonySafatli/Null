@@ -4,32 +4,34 @@
 #include <vector>
 #include <map>
 #include <sstream>
-#include <iostream>
+#include <fstream>
 
 #include "Headers/Program.h"
 #include "Headers/Uniforms.h"
+#include "Headers/TextEditor.h"
+#include "Headers/TextViewer.h"
+#include "Headers/TextArea.h"
 
 #define String std::string
 #define Vector std::vector
+#define Map std::map
 
 extern Program program;
 
 struct Colour 
 {
-	bool error; 
-	float r; 
-	float g;
-	float b;
-	float a;
-
-	Colour();
-	Colour(float r, float g, float b);
+	bool error; float r; float g; float b; float a;
+	Colour(); Colour(float r, float g, float b);
 };
 Colour::Colour()                          : error(false), r(0), g(0), b(0), a(1) {}
 Colour::Colour(float r, float g, float b) : error(false), r(r), g(g), b(b), a(1) {}
 
-Vector<String> Split(String str, char separator);
-Colour ParseColour(Vector<String> args);
+Vector<String> Split(const String str, const char separator);
+Colour ParseColour(const Vector<String> args);
+Map<String, Colour> GenerateColourMap();
+String GetDir(const Vector<String> args);
+bool WriteToFile(const String dir);
+String GetTextFromEditor();
 
 void Command::Execute(const std::string input)
 {
@@ -56,6 +58,10 @@ void Command::Execute(const std::string input)
 		Settings(args);
 	else if (command == "help")
 		Help(args);
+	else if (command == "open")
+		Open(args);
+	else if (command == "save")
+		Save(args);
 	else if (command == "journal")
 		Journal(args);
 	else
@@ -296,7 +302,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	}
 }
 
-// TODO: Status dar message for 'help' command
+// done
 void Command::Help(const std::vector<std::string> args) 
 {
 	/* 
@@ -321,12 +327,14 @@ void Command::Help(const std::vector<std::string> args)
 		if (args[0] == "command")
 		{
 			program.LoadHelp(true, false);
+			program.RenderStatus("Help page loaded");
 			return;
 		}
 
 		if (args[0] == "shortcut")
 		{
 			program.LoadHelp(false, true);
+			program.RenderStatus("Help page loaded");
 			return;
 		}
 
@@ -335,9 +343,10 @@ void Command::Help(const std::vector<std::string> args)
 	}
 
 	program.LoadHelp(true, true);
+	program.RenderStatus("Help page loaded");
 }
 
-// TODO: Status dar message for 'settings' command
+// done
 void Command::Settings(const std::vector<std::string> args)
 {
 	/* 
@@ -352,6 +361,7 @@ void Command::Settings(const std::vector<std::string> args)
 	}
 
 	program.LoadSettings();
+	program.RenderStatus("Settings page loaded");
 }
 
 // TODO: Implement 'open' command
@@ -366,7 +376,6 @@ void Command::Open(const std::vector<std::string> args)
 	:
 	> open location name
 	: opens new text file in location (eg Desktop) named name
-	:
 	*/
 }
 
@@ -377,15 +386,52 @@ void Command::Save(const std::vector<std::string> args)
 	> save
 	: saves the file
 	:
-	> save as name
-	: saves the file with the name name
+	> save rel path
+	: saves the file with the relative path
 	:
-	> save as dir
-	: saves the file in dir with name
-	:
-	> save as location name
-	: saves the file in the location as name
+	> save abs path
+	: saves the file in the absolute path
 	*/
+
+	if (args.size() == 0)
+	{
+		auto editor = dynamic_cast<TextEditor*>(program.area);
+
+		if (editor == nullptr) // Not in TextEditor
+			return;
+
+		if (editor->fileName == "")
+		{
+			program.RenderStatus("File path unkown");
+			return;
+		}
+
+		if (!WriteToFile(editor->fileDirectory))
+		{
+			program.RenderStatus("Error: " + editor->fileName + " failed to save successfully");
+			return;
+		}
+
+		program.RenderStatus(editor->fileName + " saved successfully");
+		return;
+	}
+
+	String dir = GetDir(args);
+	String fileName = "file"; // TODO: Get file name from dir
+
+	if (dir == "")
+	{
+		program.RenderStatus("Error: Invalid Arguments");
+		return;
+	}
+
+	if (!WriteToFile(dir))
+	{
+		program.RenderStatus("Error: " + fileName + " failed to save successfully");
+		return;
+	}
+
+	program.RenderStatus(fileName + " saved successfully");
 }
 
 // TODO: Implement 'journal' command
@@ -428,7 +474,7 @@ More Possible Commands:
 
 /* ====== Misc ====== */
 
-Colour ParseColour(Vector<String> args)
+Colour ParseColour(const Vector<String> args)
 {
 	Colour colour;
 	colour.error = false;
@@ -463,7 +509,7 @@ Colour ParseColour(Vector<String> args)
 	return colour;
 }
 
-Vector<String> Split(String str, char separator)
+Vector<String> Split(const String str, const char separator)
 {
 	Vector<String> strings;
 
@@ -491,7 +537,7 @@ Vector<String> Split(String str, char separator)
 	return strings;
 }
 
-std::map<String, Colour> GenerateColourMap()
+Map<String, Colour> GenerateColourMap()
 {
 	std::map<String, Colour> colours;
 	
@@ -645,4 +691,52 @@ std::map<String, Colour> GenerateColourMap()
 	colours["yellowgreen"]          = Colour(250.0 / 255.0, 235.0 / 255.0, 215.0 / 255.0);
 
 	return colours;
+}
+
+// TODO: Get Dirs
+String GetDir(const Vector<String> args)
+{
+	if (args.size() != 2)
+		return "";
+
+	if (args[0] == "abs") // absolute path
+	{
+		
+	}
+
+	if (args[0] == "rel") // relative path
+	{
+		// check if fileDir is ""
+		// otherwize + them
+	}
+
+	return "";
+}
+
+// TODO: Check if file exists
+bool WriteToFile(const String dir)
+{
+	try
+	{
+		std::ofstream out(dir);
+		out << GetTextFromEditor();
+	}
+	catch (const std::exception& e)
+	{
+		return false;
+	}
+
+	// check if file exists
+
+	return true;
+}
+
+String GetTextFromEditor()
+{
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+
+	if (editor == nullptr)
+		return "";
+
+	return editor->GetText();
 }

@@ -1,6 +1,8 @@
 #include "Headers/TextEditor.h"
 
 #include <iostream>
+#include <sstream>
+#include <string>
 
 #include "GLFW/glfw3.h"
 
@@ -9,7 +11,7 @@
 
 extern Program program;
 
-TextEditor::TextEditor() 
+TextEditor::TextEditor() : fileDirectory(""), fileName("")
 {
 	if (program.openGL.init)
 		SetLeftMargin(4);
@@ -155,5 +157,20 @@ void TextEditor::UpdateRowChange()
 {
 	if (program.textX > rows[program.textY].size())
 		MoveEnd();
+}
+
+std::string TextEditor::GetText()
+{
+	std::stringstream ss;
+
+	for (int i = 0; i < rows.size(); i++)
+	{
+		ss << rows[i];
+
+		if (i + 1 < rows.size())
+			ss << '\n';
+	}
+
+	return ss.str();
 }
 

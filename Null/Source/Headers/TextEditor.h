@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "TextArea.h"
 
 #define KEYCODE_RIGHT  262    
@@ -32,4 +34,9 @@ public:
 	/* Editor Methods */
 	void IncreaseLeftMargin();
 	void UpdateRowChange();
+	std::string GetText();
+
+	/* Editor Data */
+	std::string fileDirectory;
+	std::string fileName;
 };
