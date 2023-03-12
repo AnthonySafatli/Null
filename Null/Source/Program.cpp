@@ -436,7 +436,7 @@ void Program::LoadSettings()
 	OpenViewer(settings, "Settings");
 }
 
-void Program::LoadHelp()
+void Program::LoadHelp(const bool commands, const bool shortcuts)
 {
 	// TODO: Write out help string
 	std::string help;

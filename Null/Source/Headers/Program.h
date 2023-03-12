@@ -70,7 +70,7 @@ public:
 	/* TextArea Methods */
 	void OpenViewer(const std::string str, const std::string pageName);
 	void LoadSettings();
-	void LoadHelp();
+	void LoadHelp(const bool commands, const bool shortcuts);
 
 	/* Text Data */
 	std::string commandText;

@@ -52,10 +52,12 @@ void Command::Execute(const std::string input)
 
 /* ===== Commands ====== */
 
-void Command::Echo(const std::vector<std::string> args)
+// done
+void Command::Echo(const std::vector<std::string> args) 
 {
 	/*
 	echo text ... text
+	: prints text to the status bar
 	*/
 
 	std::stringstream ss;
@@ -64,13 +66,21 @@ void Command::Echo(const std::vector<std::string> args)
 	program.RenderStatus(ss.str());
 }
 
+// done
 void Command::TextSize(const std::vector<std::string> args)
 {
 	/* 
 	> size +
+	: increases the text size by one
+	:
 	> size -
+	: decreases the text size by one
+	:
 	> size n
+	: sets the text size to n
+	:
 	> size default
+	: sets the text size to the default value
 	*/
 
 	if (args.size() != 1)
@@ -110,15 +120,27 @@ void Command::TextSize(const std::vector<std::string> args)
 	}
 }
 
+// TODO: CSS colours?
 void Command::BackgroundColour(const std::vector<std::string> args)
 {
 	/* 
 	> background n
+	: sets r g b channels of background to n and a to 1
+	:
 	> background r g b
+	: sets the r g b channels of the background to r g b and a to 1
+	:
 	> background r g b a
+	: sets the r g b a channels of the background to r g b a
+	:
 	> background default
-	> background colour ?
-	> background colour a ?
+	: sets the background colour to the default
+	:
+	> background colour 
+	: sets the background colour to a css colour and the a channel to 1
+	:
+	> background colour a 
+	: sets the background colour to a css colour and the a channel to a
 	*/
 
 	if (args.size() != 1 && args.size() != 3 && args.size() != 4)
@@ -143,15 +165,27 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
 }
 
+// TODO: CSS colours?
 void Command::ForegroundColour(const std::vector<std::string> args)
 {
-	/* 
+	/*
 	> foreground n
+	: sets r g b channels of foreground to n and a to 1
+	:
 	> foreground r g b
+	: sets the r g b channels of the foreground to r g b and a to 1
+	:
 	> foreground r g b a
+	: sets the r g b a channels of the foreground to r g b a
+	:
 	> foreground default
-	> foreground colour ?
-	> foreground colour a ?
+	: sets the foreground colour to the default
+	:
+	> foreground colour 
+	: sets the foreground colour to a css colour and the a channel to 1
+	:
+	> foreground colour a 
+	: sets the foreground colour to a css colour and the a channel to a
 	*/
 
 	if (args.size() != 1 && args.size() != 3 && args.size() != 4)
@@ -176,7 +210,8 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
 }
 
-void Command::Help(const std::vector<std::string> args)
+// done
+void Command::Help(const std::vector<std::string> args) 
 {
 	/* 
 	> help
@@ -188,6 +223,7 @@ void Command::Help(const std::vector<std::string> args)
 	> help shortcut
 	: opens help page with shortcuts filter
 	*/
+
 	if (args.size() > 1)
 	{
 		program.RenderStatus("Command 'status' cannot take more than one arguement");
@@ -196,14 +232,26 @@ void Command::Help(const std::vector<std::string> args)
 	
 	if (args.size() == 1)
 	{
-		// TODO: Implement help command and help shortcut
-		// program.RenderStatus("Command 'help' can only take 'command' or 'shortcut' as arguments");
-		// return;
+		if (args[0] == "command")
+		{
+			program.LoadHelp(true, false);
+			return;
+		}
+
+		if (args[0] == "shortcut")
+		{
+			program.LoadHelp(false, true);
+			return;
+		}
+
+		program.RenderStatus("Command 'help' can only take 'command' or 'shortcut' as arguments");
+		return;
 	}
 
-	program.LoadHelp();
+	program.LoadHelp(true, true);
 }
 
+// done
 void Command::Settings(const std::vector<std::string> args)
 {
 	/* 
@@ -220,6 +268,7 @@ void Command::Settings(const std::vector<std::string> args)
 	program.LoadSettings();
 }
 
+// TODO: Implement 'open' command
 void Command::Open(const std::vector<std::string> args)
 {
 	/*
@@ -235,11 +284,25 @@ void Command::Open(const std::vector<std::string> args)
 	*/
 }
 
+// TODO: Implement 'save' command
 void Command::Save(const std::vector<std::string> args)
 {
-	
+	/*
+	> save
+	: saves the file
+	:
+	> save as name
+	: saves the file with the name name
+	:
+	> save as dir
+	: saves the file in dir with name
+	:
+	> save as location name
+	: saves the file in the location as name
+	*/
 }
 
+// TODO: Implement 'journal' command
 void Command::Journal(const std::vector<std::string> args)
 {
 	/*
@@ -268,6 +331,14 @@ void Command::Journal(const std::vector<std::string> args)
 	: opens new text editor in subfolder with name
 	*/
 }
+
+/* 
+More Possible Commands:
+- undo   (ctrl + z)
+- redo   (ctrl + y)
+- reload (ctrl + r)
+- text / keyboard commands 
+*/
 
 /* ====== Misc ====== */
 
