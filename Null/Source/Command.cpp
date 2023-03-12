@@ -40,6 +40,8 @@ void Command::Execute(const std::string input)
 		BackgroundColour(args);
 	else if (command == "foreground")
 		ForegroundColour(args);
+	else if (command == "speed")
+		CursorSpeed(args);
 	else if (command == "settings")
 		Settings(args);
 	else if (command == "help")
@@ -95,16 +97,19 @@ void Command::TextSize(const std::vector<std::string> args)
 	{
 		program.textSize = 24;
 		UpdateUniform1f(program.openGL.u_size.location, program.textSize * 0.001);
+		program.RenderStatus("Text Size set to 24");
 		return;
 	}
 	else if (sizeStr == "+")
 	{
 		UpdateUniform1f(program.openGL.u_size.location, ++program.textSize * 0.001);
+		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
 		return;
 	}
 	else if (sizeStr == "-")
 	{
 		UpdateUniform1f(program.openGL.u_size.location, --program.textSize * 0.001);
+		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
 		return;
 	}
 
@@ -113,6 +118,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		float size = std::stof(sizeStr);
 		program.textSize = size;
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
+		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
 	}
 	catch (const std::exception& e)
 	{
@@ -152,6 +158,7 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	if (args.size() == 1 && args[0] == "default")
 	{
 		UpdateBackground(0.03, 0.05, 0.09, 0.85);
+		program.RenderStatus("Background set to 0.03 0.05 0.09 0.85");
 		return;
 	}
 
@@ -163,6 +170,7 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	}
 
 	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
+	program.RenderStatus("Background set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
 // TODO: CSS colours?
@@ -197,6 +205,7 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	if (args.size() == 1 && args[0] == "default")
 	{
 		UpdateUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
+		program.RenderStatus("Foreground set to 1.0 1.0 1.0 1.0");
 		return;
 	}
 
@@ -208,9 +217,64 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	}
 
 	UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
+	program.RenderStatus("Foreground set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
 // done
+void Command::CursorSpeed(const std::vector<std::string> args)
+{
+	/* 
+	> speed +
+	: increases the text speed by one
+	:
+	> speed -
+	: decreases the text speed by one
+	:
+	> speed n
+	: sets the text speed to n
+	:
+	> speed default
+	: sets the text speed to the default value
+	*/
+
+	if (args.size() != 1)
+	{
+		program.RenderStatus("Command 'speed' only takes one argument");
+		return;
+	}
+
+	String speedStr = args[0];
+
+	if (speedStr == "default")
+	{
+		program.textSize = 16;
+		program.RenderStatus("Cursor Speed set to 16");
+		return;
+	}
+	else if (speedStr == "+")
+	{
+		program.RenderStatus("Cursor Speed set to " + std::to_string(++program.cursorSpeed));
+		return;
+	}
+	else if (speedStr == "-")
+	{
+		program.RenderStatus("Cursor Speed set to " + std::to_string(--program.cursorSpeed));
+		return;
+	}
+
+	try
+	{
+		float speed = std::stof(speedStr);
+		program.cursorSpeed = speed;
+		program.RenderStatus("Cursor Speed set to " + std::to_string(program.cursorSpeed));
+	}
+	catch (const std::exception& e)
+	{
+		program.RenderStatus("Invalid Argument: must be a unsigned integer");
+	}
+}
+
+// TODO: Status dar message for 'help' command
 void Command::Help(const std::vector<std::string> args) 
 {
 	/* 
@@ -251,7 +315,7 @@ void Command::Help(const std::vector<std::string> args)
 	program.LoadHelp(true, true);
 }
 
-// done
+// TODO: Status dar message for 'settings' command
 void Command::Settings(const std::vector<std::string> args)
 {
 	/* 

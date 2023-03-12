@@ -11,9 +11,11 @@ extern Program program;
 
 TextEditor::TextEditor() 
 {
-	// TODO: Fix following lines
-	leftMargin = 4;
-	// SetLeftMargin(4);
+	if (program.openGL.init)
+		SetLeftMargin(4);
+	else
+		leftMargin = 4;
+
 	rows.push_back(std::string());
 
 	// add ' '

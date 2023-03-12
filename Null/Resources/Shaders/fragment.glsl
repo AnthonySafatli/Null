@@ -21,7 +21,9 @@ void main() {
 		vec4 result = texture(tex, vTexCoords) * foreground;
 		color = vec4(1 - result.x, 1 - result.y, 1 - result.z, 1 - result.w);
 
+		/*
 		if (vRow == STATUS_BAR_ROW)
 			color *= 0.75;
+		*/
 	}
 }

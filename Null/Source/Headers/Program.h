@@ -90,6 +90,7 @@ public:
 
 	/* Text Properties */
 	bool showCursor;
+	unsigned int cursorSpeed;
 	int tabAmount;
 	float textSize;
 

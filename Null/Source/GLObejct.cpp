@@ -3,7 +3,8 @@
 GLObject::GLObject() 
 	: vertexBuffer(), indexBuffer(), vertexArray(),
 	  shaderProgram(), texture(), 
-	  u_idealRatio(), u_leftMargin(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex(), u_foreground()
+	  u_idealRatio(), u_leftMargin(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex(), u_foreground(),
+	  init(false)
 {
 }
 
@@ -30,6 +31,8 @@ void GLObject::Init()
 	u_sceneColumnIndex.Init(shaderProgram.handle, "sceneColumnIndex");
 	u_tex.Init(shaderProgram.handle, "tex");
 	u_foreground.Init(shaderProgram.handle, "foreground");
+
+	init = true;
 }
 
 

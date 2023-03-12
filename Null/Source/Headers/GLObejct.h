@@ -7,6 +7,8 @@ class GLObject
 public:
     GLObject();
 
+    bool init;
+
     void Init();
 
     VertexBuffer vertexBuffer;

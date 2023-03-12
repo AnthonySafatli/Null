@@ -13,9 +13,9 @@ private:
 
 	/* Change Settings */
 	static void TextSize(const std::vector<std::string> args);         // changes text size
-	// TODO: have + or - be arguments
 	static void BackgroundColour(const std::vector<std::string> args); // changes background colour
 	static void ForegroundColour(const std::vector<std::string> args); // changes foreground colour
+	static void CursorSpeed(const std::vector<std::string> args);
 	
 	/* Opens Pages */
 	static void Help(const std::vector<std::string> args);             

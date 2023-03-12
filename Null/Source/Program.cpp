@@ -12,7 +12,7 @@
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
-	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false),
+	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(16),
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false)
 {
 	// Add > to Command Line
@@ -145,8 +145,8 @@ void Program::OnResize(int width, int height)
 void Program::Update(const double deltaTime)
 {
 	// Cursor Animations
-	double deltaRow = deltaTime * ((textY + 1) - cursorVertices[0].row) * 16;
-	double deltaColumn = deltaTime * ((textX + 1) - cursorVertices[0].column) * 16;
+	double deltaRow = deltaTime * ((commandSelected ? -1 : (int)(textY + 1)) - cursorVertices[0].row) * cursorSpeed;
+	double deltaColumn = deltaTime * ((commandSelected ? commandX : (int)(textX + 1)) - cursorVertices[0].column) * cursorSpeed;
 
 	for (int i = 0; i < 4; i++)
 	{
