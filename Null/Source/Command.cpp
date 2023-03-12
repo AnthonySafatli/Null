@@ -70,7 +70,6 @@ void Command::Execute(const std::string input)
 
 /* ===== Commands ====== */
 
-// done
 void Command::Echo(const std::vector<std::string> args) 
 {
 	/*
@@ -83,8 +82,6 @@ void Command::Echo(const std::vector<std::string> args)
 
 	program.RenderStatus(ss.str());
 }
-
-// done
 void Command::TextSize(const std::vector<std::string> args)
 {
 	/* 
@@ -141,8 +138,60 @@ void Command::TextSize(const std::vector<std::string> args)
 		program.RenderStatus("Invalid Argument: must be a number");
 	}
 }
+void Command::CursorSpeed(const std::vector<std::string> args)
+{
+	/* 
+	> speed +
+	: increases the text speed by one
+	:
+	> speed -
+	: decreases the text speed by one
+	:
+	> speed n
+	: sets the text speed to n
+	:
+	> speed default
+	: sets the text speed to the default value
+	*/
 
-// TODO: redo
+	if (args.size() != 1)
+	{
+		program.RenderStatus("Command 'speed' only takes one argument");
+		return;
+	}
+
+	String speedStr = args[0];
+
+	if (speedStr == "default")
+	{
+		program.textSize = 16;
+		program.RenderStatus("Cursor Speed set to 16");
+		return;
+	}
+	else if (speedStr == "+")
+	{
+		program.RenderStatus("Cursor Speed set to " + std::to_string(++program.cursorSpeed));
+		return;
+	}
+	else if (speedStr == "-")
+	{
+		program.RenderStatus("Cursor Speed set to " + std::to_string(--program.cursorSpeed));
+		return;
+	}
+
+	try
+	{
+		float speed = std::stof(speedStr);
+		program.cursorSpeed = speed;
+		program.RenderStatus("Cursor Speed set to " + std::to_string(program.cursorSpeed));
+	}
+	catch (const std::exception& e)
+	{
+		program.RenderStatus("Invalid Argument: must be a unsigned integer");
+	}
+}
+
+// TODO: Add css colours
 void Command::BackgroundColour(const std::vector<std::string> args)
 {
 	/* 
@@ -200,8 +249,6 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
 	program.RenderStatus("Background set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
-
-// TODO: redo
 void Command::ForegroundColour(const std::vector<std::string> args)
 {
 	/*
@@ -248,61 +295,7 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	program.RenderStatus("Foreground set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
-// done
-void Command::CursorSpeed(const std::vector<std::string> args)
-{
-	/* 
-	> speed +
-	: increases the text speed by one
-	:
-	> speed -
-	: decreases the text speed by one
-	:
-	> speed n
-	: sets the text speed to n
-	:
-	> speed default
-	: sets the text speed to the default value
-	*/
 
-	if (args.size() != 1)
-	{
-		program.RenderStatus("Command 'speed' only takes one argument");
-		return;
-	}
-
-	String speedStr = args[0];
-
-	if (speedStr == "default")
-	{
-		program.textSize = 16;
-		program.RenderStatus("Cursor Speed set to 16");
-		return;
-	}
-	else if (speedStr == "+")
-	{
-		program.RenderStatus("Cursor Speed set to " + std::to_string(++program.cursorSpeed));
-		return;
-	}
-	else if (speedStr == "-")
-	{
-		program.RenderStatus("Cursor Speed set to " + std::to_string(--program.cursorSpeed));
-		return;
-	}
-
-	try
-	{
-		float speed = std::stof(speedStr);
-		program.cursorSpeed = speed;
-		program.RenderStatus("Cursor Speed set to " + std::to_string(program.cursorSpeed));
-	}
-	catch (const std::exception& e)
-	{
-		program.RenderStatus("Invalid Argument: must be a unsigned integer");
-	}
-}
-
-// done
 void Command::Help(const std::vector<std::string> args) 
 {
 	/* 
@@ -345,8 +338,6 @@ void Command::Help(const std::vector<std::string> args)
 	program.LoadHelp(true, true);
 	program.RenderStatus("Help page loaded");
 }
-
-// done
 void Command::Settings(const std::vector<std::string> args)
 {
 	/* 
@@ -373,13 +364,56 @@ void Command::Open(const std::vector<std::string> args)
 	:
 	> open dir
 	: opens new text file in dir
-	:
-	> open location name
-	: opens new text file in location (eg Desktop) named name
 	*/
+
+	if (args.size() != 1)
+	{
+		// error msg
+		return;
+	}
+
+	if (args[0] == "new")
+	{
+		// open new editor
+		return;
+	}
+
+	if (args[1][0] != 'C' || args[1][1] != ':' || args[1][2] != '\\')
+	{
+		// not valid path
+		return;
+	}
+
+	// open new editor
+	// create editor variable
+	// update file dir and name
+
+	std::ifstream file("full path");
+	String str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+	for (char ch : str)
+	{
+		if (ch == ' ')
+		{
+			// space()
+			return;
+		}
+		else if (ch == '\n')
+		{
+			// return()
+			return;
+		}
+		else if (ch == '\t')
+		{
+			// tab()
+			return;
+		}
+		
+		// AddCharacter()
+	}
 }
 
-// TODO: Implement 'save' command
+// TODO: Make good error messages
 void Command::Save(const std::vector<std::string> args)
 {
 	/*
@@ -393,20 +427,20 @@ void Command::Save(const std::vector<std::string> args)
 	: saves the file in the absolute path
 	*/
 
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+
+	if (editor == nullptr) // Not in TextEditor mode
+		return;
+
 	if (args.size() == 0)
 	{
-		auto editor = dynamic_cast<TextEditor*>(program.area);
-
-		if (editor == nullptr) // Not in TextEditor
-			return;
-
 		if (editor->fileName == "")
 		{
 			program.RenderStatus("File path unkown");
 			return;
 		}
 
-		if (!WriteToFile(editor->fileDirectory))
+		if (!WriteToFile(editor->fileDirectory + editor->fileName))
 		{
 			program.RenderStatus("Error: " + editor->fileName + " failed to save successfully");
 			return;
@@ -417,7 +451,6 @@ void Command::Save(const std::vector<std::string> args)
 	}
 
 	String dir = GetDir(args);
-	String fileName = "file"; // TODO: Get file name from dir
 
 	if (dir == "")
 	{
@@ -425,11 +458,20 @@ void Command::Save(const std::vector<std::string> args)
 		return;
 	}
 
+	Vector<String> dirVec = Split(dir, '\\');
+	String fileName = dirVec[dirVec.size() -1]; 
+
 	if (!WriteToFile(dir))
 	{
 		program.RenderStatus("Error: " + fileName + " failed to save successfully");
 		return;
 	}
+
+	std::stringstream ss;
+	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
+	editor->fileDirectory = ss.str();
+
+	editor->fileName = fileName;
 
 	program.RenderStatus(fileName + " saved successfully");
 }
@@ -537,6 +579,7 @@ Vector<String> Split(const String str, const char separator)
 	return strings;
 }
 
+// TODO: Complete colours https://www.w3schools.com/cssref/css_colors.php
 Map<String, Colour> GenerateColourMap()
 {
 	std::map<String, Colour> colours;
@@ -693,7 +736,6 @@ Map<String, Colour> GenerateColourMap()
 	return colours;
 }
 
-// TODO: Get Dirs
 String GetDir(const Vector<String> args)
 {
 	if (args.size() != 2)
@@ -701,24 +743,34 @@ String GetDir(const Vector<String> args)
 
 	if (args[0] == "abs") // absolute path
 	{
-		
+		if (args[1][0] != 'C' || args[1][1] != ':' || args[1][2] != '\\')
+			return "";
+			
+		return args[1];
 	}
 
 	if (args[0] == "rel") // relative path
 	{
-		// check if fileDir is ""
-		// otherwize + them
+		auto editor = dynamic_cast<TextEditor*>(program.area);
+
+		if (editor->fileDirectory == "")
+			return "";
+
+		return editor->fileDirectory + args[1];
 	}
 
 	return "";
 }
 
-// TODO: Check if file exists
 bool WriteToFile(const String dir)
 {
 	try
 	{
 		std::ofstream out(dir);
+
+		if (out.bad())
+			return false;
+
 		out << GetTextFromEditor();
 	}
 	catch (const std::exception& e)
@@ -726,9 +778,8 @@ bool WriteToFile(const String dir)
 		return false;
 	}
 
-	// check if file exists
-
-	return true;
+	std::ifstream file(dir);
+	return file.good(); 
 }
 
 String GetTextFromEditor()
