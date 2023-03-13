@@ -64,7 +64,7 @@ public:
 
 	/* TextArea Methods */
 	void OpenEditor();
-	void OpenEditor(const std::string text, const std::string dir, const std::string fileName);
+	void OpenEditor(const std::string text, const std::string dir);
 	void OpenFile(const std::string dir);
 	void OpenJournal(const std::string name);
 	void OpenViewer(const std::string str, const std::string pageName);

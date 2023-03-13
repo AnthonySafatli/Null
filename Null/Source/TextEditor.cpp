@@ -3,11 +3,14 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "GLFW/glfw3.h"
 
 #include "Headers/Program.h"
 #include "Headers/Character.h"
+
+std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
@@ -43,11 +46,10 @@ TextEditor::TextEditor() : fileDirectory(""), fileName("")
 	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 
-	program.RenderStatus("Editor Loaded Successfully");
+	program.RenderStatus("New Editor Loaded Successfully");
 }
 
-// TODO: Implement ctor
-TextEditor::TextEditor(std::string text)
+TextEditor::TextEditor(const std::string text, const std::string directory, const std::string fileName) : fileName(fileName), fileDirectory(directory)
 {
 	if (program.openGL.init)
 		SetLeftMargin(4);
@@ -96,7 +98,7 @@ TextEditor::TextEditor(std::string text)
 		AddCharacter(text[i]);
 	}
 
-	program.RenderStatus("Editor Loaded Successfully");
+	program.RenderStatus(fileName + " Loaded Successfully");
 }
 
 void TextEditor::ProcessKey(int key, int action, int mods)
@@ -223,5 +225,16 @@ std::string TextEditor::GetText()
 	}
 
 	return ss.str();
+}
+
+void TextEditor::SetPath(std::string path)
+{
+	std::vector<std::string> pathVec = Split(path, '/');
+	std::stringstream ss;
+	for (int i = 0; i < pathVec.size() - 1; i++) ss << pathVec[i] + '/';
+	fileDirectory = ss.str();
+	
+	std::string file = pathVec[pathVec.size() - 1];
+	fileName = file;
 }
 

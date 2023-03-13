@@ -2,6 +2,11 @@
 
 #include "GLFW/glfw3.h"
 
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "Headers/TextArea.h"
 #include "Headers/TextEditor.h"
 #include "Headers/TextViewer.h"
@@ -9,6 +14,8 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
 #include "Headers/Command.h"
+
+std::vector<std::string> Split(const std::string str, const char separator);
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
@@ -389,7 +396,7 @@ void Program::OpenEditor()
 	area = new TextEditor();
 }
 
-void Program::OpenEditor(const std::string text, const std::string dir, const std::string fileName)
+void Program::OpenEditor(const std::string text, const std::string dir)
 {
 	vertices.clear();
 	marginVertices.clear();
@@ -397,29 +404,30 @@ void Program::OpenEditor(const std::string text, const std::string dir, const st
 
 	delete area;
 
-	area = new TextEditor(text);
+	std::vector<std::string> dirVec = Split(dir, '\\');
+	std::string fileName = dirVec[dirVec.size() - 1];
+	std::stringstream ss;
+	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
 
-	((TextEditor*)area)->fileDirectory = dir;
-	((TextEditor*)area)->fileName = fileName;
+	area = new TextEditor(text, ss.str(), fileName);
 }
 
 void Program::OpenFile(const std::string dir)
 {
-	vertices.clear();
-	marginVertices.clear();
-	UpdateIndices();
+	std::ifstream file(dir);
+	if (!file.is_open())
+	{
+		RenderStatus("Error occured while opening " + dir);
+		return;
+	}
 
-	delete area;
-
-	// TODO: Get text from file
-	std::string text; 
-
-	area = new TextEditor(text);
+	std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	OpenEditor(str, dir);
 }
 
+// TODO: Get path for journal file
 void Program::OpenJournal(const std::string name)
 {
-	// TODO: Get path for journal file
 	std::string path; 
 
 	OpenFile(path);
@@ -436,9 +444,9 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 	area = new TextViewer(str, pageName);
 }
 
+// TODO: Fix background and foreground
 void Program::LoadSettings()
 {
-	// TODO: Fix background and foreground
 	std::string settings = "Settings:"
 		"\n\n"
 		"Size: " + std::to_string(textSize) +
@@ -450,9 +458,9 @@ void Program::LoadSettings()
 	OpenViewer(settings, "Settings");
 }
 
+// TODO: Write out help string
 void Program::LoadHelp(const bool commands, const bool shortcuts)
 {
-	// TODO: Write out help string
 	std::string help;
 
 	OpenViewer(help, "Help");

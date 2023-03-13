@@ -20,7 +20,7 @@ class TextEditor : public TextArea
 {
 public:
 	TextEditor();
-	TextEditor(std::string text);
+	TextEditor(const std::string text, const std::string directory, const std::string fileName);
 
 	/* Callback Methods */
 	void ProcessKey(int key, int action, int mods);
@@ -35,6 +35,7 @@ public:
 	void IncreaseLeftMargin();
 	void UpdateRowChange();
 	std::string GetText();
+	void SetPath(std::string path);
 
 	/* Editor Data */
 	std::string fileDirectory;

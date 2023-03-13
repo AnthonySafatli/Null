@@ -5,6 +5,7 @@
 #include <map>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 #include "Headers/Program.h"
 #include "Headers/Uniforms.h"
@@ -32,7 +33,6 @@ Map<String, Colour> GenerateColourMap();
 String GetDir(const Vector<String> args);
 bool WriteToFile(const String dir);
 String GetTextFromEditor();
-String RemoveWhiteSpace(const std::string& str);
 
 void Command::Execute(const std::string input)
 {
@@ -83,6 +83,7 @@ void Command::Echo(const std::vector<std::string> args)
 
 	program.RenderStatus(ss.str());
 }
+
 void Command::TextSize(const std::vector<std::string> args)
 {
 	/* 
@@ -139,6 +140,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		program.RenderStatus("Invalid Argument: must be a number");
 	}
 }
+
 void Command::CursorSpeed(const std::vector<std::string> args)
 {
 	/* 
@@ -250,6 +252,7 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
 	program.RenderStatus("Background set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
+
 void Command::ForegroundColour(const std::vector<std::string> args)
 {
 	/*
@@ -296,7 +299,6 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	program.RenderStatus("Foreground set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
-
 void Command::Help(const std::vector<std::string> args) 
 {
 	/* 
@@ -339,6 +341,7 @@ void Command::Help(const std::vector<std::string> args)
 	program.LoadHelp(true, true);
 	program.RenderStatus("Help page loaded");
 }
+
 void Command::Settings(const std::vector<std::string> args)
 {
 	/* 
@@ -356,7 +359,7 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Fix commands
+// TODO: Error msg
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -414,37 +417,20 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 
 		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 3);
 	}
-	
-	std::ifstream file(path);
-	if (!file.is_open() && !newCommand)
+	else
 	{
-		program.RenderStatus("Error occured while opening " + path);
-		return;
+		// check if 'c:\'
 	}
 
-	String str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	Vector<String> dirVec = Split(path, '\\');
-	String fileName = dirVec[dirVec.size() - 1];
-	std::stringstream ss;
-	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
-
-	program.OpenEditor(newCommand ? "" : str, ss.str(), fileName);
+	if (newCommand)
+		program.OpenEditor("", path);
+	else
+		program.OpenFile(path);
 }
-// TODO: Make good error messages and fix file naming
-// TODO: Fix commands
+
+// TODO: Make good error messages
 void Command::Save(const std::vector<std::string> args, std::string input)
 {
-	/*
-	> save
-	: saves the file
-	:
-	> save rel path
-	: saves the file with the relative path
-	:
-	> save abs path
-	: saves the file in the absolute path
-	*/
-
 	/*
 	> save
 	: saves the file
@@ -456,9 +442,6 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	: saves the file as dir (realtive path)
 	*/
 
-
-
-	/*
 	auto editor = dynamic_cast<TextEditor*>(program.area);
 
 	if (editor == nullptr) // Not in TextEditor mode
@@ -482,32 +465,32 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 		return;
 	}
 
-	String dir = GetDir(args);
+	String path = input.substr(input.find_first_of("save") + (4));
 
-	if (dir == "")
+	if (args[0] == "rel")
 	{
-		program.RenderStatus("Error: Invalid Arguments");
-		return;
+		if (editor->fileDirectory == "")
+		{
+			program.RenderStatus("Current file location cannot be found");
+			return;
+		}
+
+		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 3);
+	}
+	else
+	{
+		// check if 'c:\'
 	}
 
-	Vector<String> dirVec = Split(dir, '\\');
-	String fileName = dirVec[dirVec.size() -1]; 
+	Vector<String> pathVec = Split(path, '/');
+	String fileName = pathVec[pathVec.size() - 1];
 
-	if (!WriteToFile(dir))
-	{
-		program.RenderStatus("Error: " + fileName + " failed to save successfully");
+	if (!WriteToFile(path))
 		return;
-	}
 
-	// TODO: Not Working
-	std::stringstream ss;
-	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
-	editor->fileDirectory = ss.str();
-
-	editor->fileName = fileName;
+	editor->SetPath(path);
 
 	program.RenderStatus(fileName + " saved successfully");
-	*/
 }
 
 // TODO: Implement 'journal' command
@@ -796,24 +779,26 @@ String GetDir(const Vector<String> args)
 	return "";
 }
 
-bool WriteToFile(const String dir)
+bool WriteToFile(const String path)
 {
-	try
-	{
-		std::ofstream out(dir);
+	std::ofstream outputFile(path);
 
-		if (out.bad())
-			return false;
-
-		out << GetTextFromEditor();
-	}
-	catch (const std::exception& e)
-	{
+	if (!outputFile.is_open()) {
+		std::cout << "Error opening file " << path << std::endl;
+		// TODO: Add error msg
 		return false;
 	}
 
-	std::ifstream file(dir);
-	return file.good(); 
+	outputFile << GetTextFromEditor();
+	outputFile.close();
+
+	if (outputFile.fail()) {
+		// TODO: Add error msg
+		std::cout << "Error writing to file " << path << std::endl;
+		return false;
+	}
+
+	return true;
 }
 
 String GetTextFromEditor()
@@ -824,16 +809,4 @@ String GetTextFromEditor()
 		return "";
 
 	return editor->GetText();
-}
-
-String RemoveWhiteSpace(const std::string& str)
-{
-	const auto strBegin = str.find_first_not_of(" ");
-	if (strBegin == std::string::npos)
-		return ""; // no content
-
-	const auto strEnd = str.find_last_not_of(" ");
-	const auto strRange = strEnd - strBegin + 1;
-
-	return str.substr(strBegin, strRange);
 }
