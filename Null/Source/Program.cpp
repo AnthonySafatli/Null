@@ -389,6 +389,20 @@ void Program::OpenEditor()
 	area = new TextEditor();
 }
 
+void Program::OpenEditor(const std::string text, const std::string dir, const std::string fileName)
+{
+	vertices.clear();
+	marginVertices.clear();
+	UpdateIndices();
+
+	delete area;
+
+	area = new TextEditor(text);
+
+	((TextEditor*)area)->fileDirectory = dir;
+	((TextEditor*)area)->fileName = fileName;
+}
+
 void Program::OpenFile(const std::string dir)
 {
 	vertices.clear();

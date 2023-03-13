@@ -355,7 +355,9 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Implement 'open' command
+// TODO: Rethink path input
+
+// TODO: Make error messages
 void Command::Open(const std::vector<std::string> args)
 {
 	/*
@@ -374,45 +376,31 @@ void Command::Open(const std::vector<std::string> args)
 
 	if (args[0] == "new")
 	{
-		// open new editor
+		program.OpenEditor();
 		return;
 	}
 
-	if (args[1][0] != 'C' || args[1][1] != ':' || args[1][2] != '\\')
+	if (args[0][0] != 'C' || args[0][1] != ':' || args[0][2] != '\\')
 	{
-		// not valid path
+		// errornot valid path
 		return;
 	}
 
-	// open new editor
-	// create editor variable
-	// update file dir and name
-
-	std::ifstream file("full path");
+	std::ifstream file(args[0]);
+	if (!file.is_open()) 
+	{
+		// error 
+		return;
+	}
 	String str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
-	for (char ch : str)
-	{
-		if (ch == ' ')
-		{
-			// space()
-			return;
-		}
-		else if (ch == '\n')
-		{
-			// return()
-			return;
-		}
-		else if (ch == '\t')
-		{
-			// tab()
-			return;
-		}
-		
-		// AddCharacter()
-	}
-}
+	Vector<String> dirVec = Split(args[0], '\\');
+	String fileName = dirVec[dirVec.size() - 1];
+	std::stringstream ss;
+	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
 
+	program.OpenEditor(str, ss.str(), fileName);
+}
 // TODO: Make good error messages
 void Command::Save(const std::vector<std::string> args)
 {

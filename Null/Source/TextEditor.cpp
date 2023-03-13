@@ -18,6 +18,9 @@ TextEditor::TextEditor() : fileDirectory(""), fileName("")
 	else
 		leftMargin = 4;
 
+	program.textX = 0;
+	program.textY = 0;
+
 	rows.push_back(std::string());
 
 	// add ' '
@@ -43,9 +46,57 @@ TextEditor::TextEditor() : fileDirectory(""), fileName("")
 	program.RenderStatus("Editor Loaded Successfully");
 }
 
+// TODO: Implement ctor
 TextEditor::TextEditor(std::string text)
 {
+	if (program.openGL.init)
+		SetLeftMargin(4);
+	else
+		leftMargin = 4;
 
+	program.textX = 0;
+	program.textY = 0;
+
+	rows.push_back(std::string());
+
+	// add ' '
+	TexCoords spaceTexCoords = GetCoords(' ');
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u, spaceTexCoords.v, 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v, 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u, spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+
+	// add ' '
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u, spaceTexCoords.v, 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v, 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u, spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
+
+	// add '1'
+	TexCoords oneTexCoords = GetCoords('1');
+	program.marginVertices.push_back(Vertex(0.0, 0.0, oneTexCoords.u, oneTexCoords.v, 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v, 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, oneTexCoords.u, oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+
+	for (int i = 0; i < text.size(); i++)
+	{
+		if (text[i] == '\n')
+		{
+			Return();
+			continue;
+		}
+
+		if (text[i] == '\t')
+		{
+			AddTab();
+			continue;
+		}
+
+		AddCharacter(text[i]);
+	}
+
+	program.RenderStatus("Editor Loaded Successfully");
 }
 
 void TextEditor::ProcessKey(int key, int action, int mods)
