@@ -22,18 +22,20 @@ extern Program program;
 struct Colour 
 {
 	bool error; float r; float g; float b; float a;
-	Colour(); Colour(float r, float g, float b);
+	Colour(); Colour(float r, float g, float b); Colour(float r, float g, float b, float a);
 };
 Colour::Colour()                          : error(false), r(0), g(0), b(0), a(1) {}
 Colour::Colour(float r, float g, float b) : error(false), r(r), g(g), b(b), a(1) {}
+Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b(b), a(a) {}
 
 Vector<String> Split(const String str, const char separator);
-Colour ParseColour(const Vector<String> args);
+Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour);
 Map<String, Colour> GenerateColourMap();
 String GetDir(const Vector<String> args);
 bool WriteToFile(const String dir);
 String GetTextFromEditor();
 void RemoveLeadingWhitespace(String& str);
+bool isFloat(const String number);
 
 void Command::Execute(const std::string input)
 {
@@ -195,7 +197,6 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	}
 }
 
-// TODO: Add css colours
 void Command::BackgroundColour(const std::vector<std::string> args)
 {
 	/* 
@@ -218,40 +219,8 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	: sets the background colour to a css colour and the a channel to a
 	*/
 
-	if (args.size() < 4 || args.size() < 1)
-	{
-		program.RenderStatus("Command 'background' can only take 1-4 arguments");
-		return;
-	}
-
-	if (args.size() == 1 || args.size() == 2)
-	{
-		if (args[0] == "default" && args.size() == 1)
-		{
-			UpdateBackground(0.03, 0.05, 0.09, 0.85);
-			program.RenderStatus("Background set to 0.03 0.05 0.09 0.85");
-			return;
-		}
-
-		std::map<String, Colour> colourMap = GenerateColourMap();
-
-		if (colourMap.count(args[0]))
-		{
-			// get colour
-			// check next arguement 
-			// if number change a
-		}
-	}
-
-	Colour colour = ParseColour(args);
-	if (colour.error)
-	{
-		program.RenderStatus("Command 'background' only takes numbers as arguments");
-		return;
-	}
-
+	Colour colour = ParseColour(args, "background", Colour(0.03, 0.05, 0.09, 0.85));
 	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
-	program.RenderStatus("Background set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
 void Command::ForegroundColour(const std::vector<std::string> args)
@@ -276,28 +245,8 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	: sets the foreground colour to a css colour and the a channel to a
 	*/
 
-	if (args.size() != 1 && args.size() != 3 && args.size() != 4)
-	{
-		program.RenderStatus("Command 'foreground' takes 1 3 or 4 arguments");
-		return;
-	}
-
-	if (args.size() == 1 && args[0] == "default")
-	{
-		UpdateUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
-		program.RenderStatus("Foreground set to 1.0 1.0 1.0 1.0");
-		return;
-	}
-
-	Colour colour = ParseColour(args);
-	if (colour.error)
-	{
-		program.RenderStatus("Command 'foreground' only takes numbers as arguments");
-		return;
-	}
-
+	Colour colour = ParseColour(args, "foreground", Colour(1.0, 1.0, 1.0));
 	UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
-	program.RenderStatus("Foreground set to " + std::to_string(colour.r) + " " + std::to_string(colour.g) + " " + std::to_string(colour.b) + " " + std::to_string(colour.a));
 }
 
 void Command::Help(const std::vector<std::string> args) 
@@ -360,6 +309,7 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
+// TODO: Test open and save commands
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -429,7 +379,6 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		program.OpenFile(path);
 }
 
-// TODO: Make good error messages
 void Command::Save(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -480,7 +429,11 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	}
 	else
 	{
-		// check if 'c:\'
+		if (path[0] != 'C' || path[1] != ':' || path[2] != '\\')
+		{
+			program.RenderStatus("This is not an absolute path");
+			return;
+		}
 	}
 
 	Vector<String> pathVec = Split(path, '/');
@@ -534,39 +487,85 @@ More Possible Commands:
 
 /* ====== Misc ====== */
 
-Colour ParseColour(const Vector<String> args)
+Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour)
 {
 	Colour colour;
-	colour.error = false;
+	colour.error = true;
+
+	if (args.size() < 4 || args.size() < 1)
+	{
+		program.RenderStatus("Command '" + commandName + "' can only take 1-4 arguments");
+		return;
+	}
+
+	if (!isFloat(args[0]))
+	{
+		if (args.size() == 1 && args[0] == "default")
+		{
+			colour.error = false;
+			colour = defaultColour;
+			return;
+		}
+
+		Map<String, Colour> colourMap = GenerateColourMap();
+		if (colourMap.find(args[0]) != colourMap.end())
+		{
+			colour = colourMap[args[0]];
+
+			if (args.size() == 2)
+			{
+				if (!isFloat(args[2]))
+				{
+					// error alpha is not number
+					return;
+				}
+
+				colour.a = std::stof(args[2]);
+			}
+
+			return;
+		}
+
+		// error colour not found
+		return;
+	}
 
 	try
 	{
 		if (args.size() == 1)      // x
 		{
+			colour.error = false;
 			colour.r = std::stof(args[0]);
 			colour.g = std::stof(args[0]);
 			colour.b = std::stof(args[0]);
 			colour.a = 1.0f;
 		}
-		else                       // r g b
+		else if (args.size() >= 3) // r g b
 		{
+			colour.error = false;
 			colour.r = std::stof(args[0]);
 			colour.g = std::stof(args[1]);
 			colour.b = std::stof(args[2]);
 			colour.a = 1.0f;
 		}
-		
+
 		if (args.size() == 4)      // r g b a
 		{
 			colour.a = std::stof(args[3]);
 		}
+
+		if (colour.error)
+		{
+			// invalid number amount
+			return;
+		}
 	}
 	catch (const std::exception& e)
 	{
+		// error not all numbers
 		colour.error = true;
+		return;
 	}
-
-	return colour;
 }
 
 Vector<String> Split(const String str, const char separator)
@@ -817,4 +816,17 @@ void RemoveLeadingWhitespace(String& str) {
 
 	if (pos != std::string::npos) 
 		str.erase(0, pos);
+}
+
+bool isFloat(const String number)
+{
+	try 
+	{
+		float f = std::stof(number);
+		return true;
+	}
+	catch (...) 
+	{
+		return false;
+	}
 }
