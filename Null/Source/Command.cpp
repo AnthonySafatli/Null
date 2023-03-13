@@ -33,6 +33,7 @@ Map<String, Colour> GenerateColourMap();
 String GetDir(const Vector<String> args);
 bool WriteToFile(const String dir);
 String GetTextFromEditor();
+void RemoveLeadingWhitespace(String& str);
 
 void Command::Execute(const std::string input)
 {
@@ -359,7 +360,6 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Error msg
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -369,7 +369,6 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 	> open new
 	: opens new editor in dir
 	:
-	> open new dir
 	: opens new text file in dir
 	:
 	> open rel dir
@@ -391,35 +390,37 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		return;
 	}
 
-	bool newCommand = false;
-
-	if (args[0] == "new")
-		newCommand = true;
+	bool newCommand = args[0] == "new";
 	
-	bool relativable = true;
 	auto editor = dynamic_cast<TextEditor*>(program.area);
+	bool relativable = true;
 
-	if (editor == nullptr) // Not in TextEditor mode
+	if (editor == nullptr)                           // Not in TextEditor mode
+		relativable = false;
+	if (relativable && editor->fileDirectory == "")  // No path to references
 		relativable = false;
 
-	if (relativable && editor->fileDirectory == "") // No path to references
-		relativable = false;
+	String path = input.substr(input.find_first_of(newCommand ? "open new" : "open") + (newCommand ? 8 : 4)); 
+	RemoveLeadingWhitespace(path);
 
-	String path = input.substr(input.find_first_of(newCommand ? "open new" : "open") + (newCommand ? 8 : 4));
-
-	if (args[0] == "rel")
+	if (args[0] == "rel" || (args.size() > 1 && args.at(1) == "rel"))
 	{
 		if (!relativable)
 		{
-			// connot use rel
+			program.RenderStatus("Cannot use argument 'rel', there is nothing to reference");
 			return;
 		}
 
-		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 3);
+		RemoveLeadingWhitespace(path);
+		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 2);
 	}
 	else
 	{
-		// check if 'c:\'
+		if (path[0] != 'C' || path[1] != ':' || path[2] != '\\')
+		{
+			program.RenderStatus("This is not an absolute path");
+			return;
+		}
 	}
 
 	if (newCommand)
@@ -809,4 +810,11 @@ String GetTextFromEditor()
 		return "";
 
 	return editor->GetText();
+}
+
+void RemoveLeadingWhitespace(String& str) {
+	int pos = str.find_first_not_of(" \t\n\r\f\v");
+
+	if (pos != std::string::npos) 
+		str.erase(0, pos);
 }
