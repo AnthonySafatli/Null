@@ -20,8 +20,8 @@ private:
 	/* Opens Pages */
 	static void Help(const std::vector<std::string> args);             
 	static void Settings(const std::vector<std::string> args);
-	static void Open(const std::vector<std::string> args);
-	static void Save(const std::vector<std::string> args);
+	static void Open(const std::vector<std::string> args, std::string input);
+	static void Save(const std::vector<std::string> args, std::string input);
 	static void Journal(const std::vector<std::string> args);          
 
 public:

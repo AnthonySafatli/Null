@@ -32,6 +32,7 @@ Map<String, Colour> GenerateColourMap();
 String GetDir(const Vector<String> args);
 bool WriteToFile(const String dir);
 String GetTextFromEditor();
+String RemoveWhiteSpace(const std::string& str);
 
 void Command::Execute(const std::string input)
 {
@@ -59,9 +60,9 @@ void Command::Execute(const std::string input)
 	else if (command == "help")
 		Help(args);
 	else if (command == "open")
-		Open(args);
+		Open(args, input);
 	else if (command == "save")
-		Save(args);
+		Save(args, input);
 	else if (command == "journal")
 		Journal(args);
 	else
@@ -355,54 +356,83 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Rethink path input
-
-// TODO: Make error messages
-void Command::Open(const std::vector<std::string> args)
+// TODO: Fix commands
+void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
-	> open new
-	: opens new editor
-	:
 	> open dir
+	: opens text file in dir
+	:
+	> open new
+	: opens new editor in dir
+	:
+	> open new dir
 	: opens new text file in dir
+	:
+	> open rel dir
+	: opens text file in dir (relative path)
+	:
+	> open new rel dir
+	: opens new text file in dir (relative path)
 	*/
 
-	if (args.size() != 1)
+	if (args.size() == 0)
 	{
-		// error msg
+		program.RenderStatus("Command 'open' must have at least one argument");
 		return;
 	}
 
-	if (args[0] == "new")
+	if (args.size() == 1 && args[0] == "new")
 	{
 		program.OpenEditor();
 		return;
 	}
 
-	if (args[0][0] != 'C' || args[0][1] != ':' || args[0][2] != '\\')
+	bool newCommand = false;
+
+	if (args[0] == "new")
+		newCommand = true;
+	
+	bool relativable = true;
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+
+	if (editor == nullptr) // Not in TextEditor mode
+		relativable = false;
+
+	if (relativable && editor->fileDirectory == "") // No path to references
+		relativable = false;
+
+	String path = input.substr(input.find_first_of(newCommand ? "open new" : "open") + (newCommand ? 8 : 4));
+
+	if (args[0] == "rel")
 	{
-		// errornot valid path
+		if (!relativable)
+		{
+			// connot use rel
+			return;
+		}
+
+		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 3);
+	}
+	
+	std::ifstream file(path);
+	if (!file.is_open() && !newCommand)
+	{
+		program.RenderStatus("Error occured while opening " + path);
 		return;
 	}
 
-	std::ifstream file(args[0]);
-	if (!file.is_open()) 
-	{
-		// error 
-		return;
-	}
 	String str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-
-	Vector<String> dirVec = Split(args[0], '\\');
+	Vector<String> dirVec = Split(path, '\\');
 	String fileName = dirVec[dirVec.size() - 1];
 	std::stringstream ss;
 	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
 
-	program.OpenEditor(str, ss.str(), fileName);
+	program.OpenEditor(newCommand ? "" : str, ss.str(), fileName);
 }
-// TODO: Make good error messages
-void Command::Save(const std::vector<std::string> args)
+// TODO: Make good error messages and fix file naming
+// TODO: Fix commands
+void Command::Save(const std::vector<std::string> args, std::string input)
 {
 	/*
 	> save
@@ -415,6 +445,20 @@ void Command::Save(const std::vector<std::string> args)
 	: saves the file in the absolute path
 	*/
 
+	/*
+	> save
+	: saves the file
+	:
+	> save dir
+	: saves the file as dir
+	:
+	> save rel dir
+	: saves the file as dir (realtive path)
+	*/
+
+
+
+	/*
 	auto editor = dynamic_cast<TextEditor*>(program.area);
 
 	if (editor == nullptr) // Not in TextEditor mode
@@ -455,6 +499,7 @@ void Command::Save(const std::vector<std::string> args)
 		return;
 	}
 
+	// TODO: Not Working
 	std::stringstream ss;
 	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
 	editor->fileDirectory = ss.str();
@@ -462,6 +507,7 @@ void Command::Save(const std::vector<std::string> args)
 	editor->fileName = fileName;
 
 	program.RenderStatus(fileName + " saved successfully");
+	*/
 }
 
 // TODO: Implement 'journal' command
@@ -778,4 +824,16 @@ String GetTextFromEditor()
 		return "";
 
 	return editor->GetText();
+}
+
+String RemoveWhiteSpace(const std::string& str)
+{
+	const auto strBegin = str.find_first_not_of(" ");
+	if (strBegin == std::string::npos)
+		return ""; // no content
+
+	const auto strEnd = str.find_last_not_of(" ");
+	const auto strRange = strEnd - strBegin + 1;
+
+	return str.substr(strBegin, strRange);
 }
