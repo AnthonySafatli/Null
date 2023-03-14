@@ -24,8 +24,8 @@ struct Colour
 	bool error; float r; float g; float b; float a;
 	Colour(); Colour(float r, float g, float b); Colour(float r, float g, float b, float a);
 };
-Colour::Colour()                          : error(false), r(0), g(0), b(0), a(1) {}
-Colour::Colour(float r, float g, float b) : error(false), r(r), g(g), b(b), a(1) {}
+Colour::Colour()                                   : error(false), r(0), g(0), b(0), a(1) {}
+Colour::Colour(float r, float g, float b)          : error(false), r(r), g(g), b(b), a(1) {}
 Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b(b), a(a) {}
 
 Vector<String> Split(const String str, const char separator);
@@ -36,6 +36,7 @@ bool WriteToFile(const String dir);
 String GetTextFromEditor();
 void RemoveLeadingWhitespace(String& str);
 bool isFloat(const String number);
+void PrintColour(const String commandName, const Colour colour);
 
 void Command::Execute(const std::string input)
 {
@@ -220,7 +221,8 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	*/
 
 	Colour colour = ParseColour(args, "background", Colour(0.03, 0.05, 0.09, 0.85));
-	UpdateBackground(colour.r, colour.g, colour.b, colour.a);
+	if (!colour.error)
+		UpdateBackground(colour.r, colour.g, colour.b, colour.a);
 }
 
 void Command::ForegroundColour(const std::vector<std::string> args)
@@ -246,7 +248,9 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	*/
 
 	Colour colour = ParseColour(args, "foreground", Colour(1.0, 1.0, 1.0));
-	UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
+
+	if (!colour.error)
+		UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
 }
 
 void Command::Help(const std::vector<std::string> args) 
@@ -362,7 +366,7 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		}
 
 		RemoveLeadingWhitespace(path);
-		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 2);
+		path = editor->fileDirectory + path.substr(input.find_first_of("r") + 2);
 	}
 	else
 	{
@@ -425,7 +429,7 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 			return;
 		}
 
-		path = editor->fileDirectory + path.substr(input.find_first_of("rel") + 3);
+		path = editor->fileDirectory + path.substr(input.find_first_of("r") + 3);
 	}
 	else
 	{
@@ -490,21 +494,20 @@ More Possible Commands:
 Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour)
 {
 	Colour colour;
-	colour.error = true;
 
-	if (args.size() < 4 || args.size() < 1)
+	if (args.size() > 4 || args.size() < 1)
 	{
+		colour.error = true;
 		program.RenderStatus("Command '" + commandName + "' can only take 1-4 arguments");
-		return;
+		return colour;
 	}
 
 	if (!isFloat(args[0]))
 	{
 		if (args.size() == 1 && args[0] == "default")
 		{
-			colour.error = false;
-			colour = defaultColour;
-			return;
+			PrintColour(commandName, defaultColour);
+			return defaultColour;
 		}
 
 		Map<String, Colour> colourMap = GenerateColourMap();
@@ -514,22 +517,26 @@ Colour ParseColour(const Vector<String> args, const String commandName, const Co
 
 			if (args.size() == 2)
 			{
-				if (!isFloat(args[2]))
+				if (!isFloat(args[1]))
 				{
-					// error alpha is not number
-					return;
+					colour.error = true;
+					program.RenderStatus("Error invalid argument after colour value");
+					return colour;
 				}
 
-				colour.a = std::stof(args[2]);
+				colour.a = std::stof(args[1]);
 			}
 
-			return;
+			PrintColour(commandName, colour);
+			return colour;
 		}
 
-		// error colour not found
-		return;
+		colour.error = true;
+		program.RenderStatus("Error Invalid Argument(s)");
+		return colour;
 	}
 
+	colour.error = true;
 	try
 	{
 		if (args.size() == 1)      // x
@@ -556,16 +563,19 @@ Colour ParseColour(const Vector<String> args, const String commandName, const Co
 
 		if (colour.error)
 		{
-			// invalid number amount
-			return;
+			program.RenderStatus("Error Invalid Argument(s)"); // invalid amount of numbers
+			return colour;
 		}
 	}
 	catch (const std::exception& e)
 	{
-		// error not all numbers
-		colour.error = true;
-		return;
+		program.RenderStatus("Error Invalid Argument(s)");     // not all args are numbers
+		return colour;
 	}
+
+	colour.error = false;
+	PrintColour(commandName, colour);
+	return colour;
 }
 
 Vector<String> Split(const String str, const char separator)
@@ -829,4 +839,26 @@ bool isFloat(const String number)
 	{
 		return false;
 	}
+}
+
+void PrintColour(const String commandName, const Colour colour) 
+{
+	Vector<String> nums = { std::to_string(colour.r), std::to_string(colour.g), std::to_string(colour.b), std::to_string(colour.a) };
+	std::stringstream ss;
+	ss << commandName << " has been changed to ";
+
+	for (String s : nums)
+	{
+		int lastZeroIndex = s.find_last_not_of("0");
+		if (lastZeroIndex != std::string::npos) {
+			s.erase(lastZeroIndex + 1);
+		}
+		else {
+			s.clear();
+		}
+
+		ss << (s.size() == 0 ? "0" : s) << " ";
+	}
+
+	program.RenderStatus(ss.str());
 }
