@@ -13,17 +13,8 @@ flat in uint vHighlight;
 out vec4 color;
 
 void main() {
-	if (vHighlight == 0u)
-		color = texture(tex, vTexCoords) * foreground;
+    color = texture(tex, vTexCoords) * foreground;
 
-	else 
-	{
-		vec4 result = texture(tex, vTexCoords) * foreground;
-		color = vec4(1 - result.x, 1 - result.y, 1 - result.z, 1 - result.w);
-
-		/*
-		if (vRow == STATUS_BAR_ROW)
-			color *= 0.75;
-		*/
-	}
+    if (vHighlight != 0u)
+        color = foreground;
 }

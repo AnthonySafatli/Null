@@ -22,7 +22,7 @@ private:
 	static void Settings(const std::vector<std::string> args);
 	static void Open(const std::vector<std::string> args, std::string input);
 	static void Save(const std::vector<std::string> args, std::string input);
-	static void Journal(const std::vector<std::string> args);          
+	static void Notebook(const std::vector<std::string> args);          
 
 public:
 	static void Execute(const std::string input);

@@ -34,7 +34,7 @@ Map<String, Colour> GenerateColourMap();
 String GetDir(const Vector<String> args);
 bool WriteToFile(const String dir);
 String GetTextFromEditor();
-void RemoveLeadingWhitespace(String& str);
+String RemoveLeadingWhitespace(const String str);
 bool isFloat(const String number);
 void PrintColour(const String commandName, const Colour colour);
 
@@ -48,7 +48,6 @@ void Command::Execute(const std::string input)
 	String command = args[0];
 	args.erase(args.begin());
 
-	// TODO: Update status for commands
 	if (command == "echo")
 		Echo(args);
 	else if (command == "size")
@@ -67,8 +66,8 @@ void Command::Execute(const std::string input)
 		Open(args, input);
 	else if (command == "save")
 		Save(args, input);
-	else if (command == "journal")
-		Journal(args);
+	else if (command == "notebook")
+		Notebook(args);
 	else
 		program.RenderStatus("Error: Unknown Command " + command);
 }
@@ -313,7 +312,6 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Test open and save commands
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -323,6 +321,7 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 	> open new
 	: opens new editor in dir
 	:
+	> open new rel dir
 	: opens new text file in dir
 	:
 	> open rel dir
@@ -355,7 +354,7 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		relativable = false;
 
 	String path = input.substr(input.find_first_of(newCommand ? "open new" : "open") + (newCommand ? 8 : 4)); 
-	RemoveLeadingWhitespace(path);
+	path = RemoveLeadingWhitespace(path);
 
 	if (args[0] == "rel" || (args.size() > 1 && args.at(1) == "rel"))
 	{
@@ -365,8 +364,8 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 			return;
 		}
 
-		RemoveLeadingWhitespace(path);
-		path = editor->fileDirectory + path.substr(input.find_first_of("r") + 2);
+		String subStr = path.substr(3);
+		path = editor->fileDirectory + RemoveLeadingWhitespace(subStr);
 	}
 	else
 	{
@@ -420,6 +419,7 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	}
 
 	String path = input.substr(input.find_first_of("save") + (4));
+	path = RemoveLeadingWhitespace(path);
 
 	if (args[0] == "rel")
 	{
@@ -429,7 +429,8 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 			return;
 		}
 
-		path = editor->fileDirectory + path.substr(input.find_first_of("r") + 3);
+		String subStr = path.substr(3);
+		path = editor->fileDirectory + RemoveLeadingWhitespace(subStr);
 	}
 	else
 	{
@@ -446,40 +447,45 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	if (!WriteToFile(path))
 		return;
 
+	// TODO: see if it works when saving relative
 	editor->SetPath(path);
 
 	program.RenderStatus(fileName + " saved successfully");
 }
 
-// TODO: Implement 'journal' command
-void Command::Journal(const std::vector<std::string> args)
+// TODO: Implement 'notebook' command
+void Command::Notebook(const std::vector<std::string> args)
 {
 	/*
-	> journal
-	: opens journal file viewer
+	> notebook
+	: opens notebook file viewer
 	:
-	> journal ..
-	: opens journal file viewer at subfolder
+	> notebook ..
+	: opens notebook file viewer at subfolder
 	:
-	> journal folder subfolder ... subfolder
-	: opens journal file viewer at folder / subfolder
+	> notebook folder subfolder ... subfolder
+	: opens notebook file viewer at folder / subfolder
 	:
-	> journal folder subfolder ... file
+	> notebook folder subfolder ... file
 	: opens file editor at file
 	:
-	> journal new
+	> notebook new
 	: opens new text editor in folder without name
 	:
-	> journal new name
+	> notebook new name
 	: opens new text editor in current folder with name
 	:
-	> journal new subfolder ... subfolder
+	> notebook new subfolder ... subfolder
 	: opens new text editor in subfolder without name
 	:
-	> journal new subfolder ... subfolder name
+	> notebook new subfolder ... subfolder name
 	: opens new text editor in subfolder with name
 	*/
 }
+
+// TODO: Bugs: cursor deletes when change to not editable scene
+//             cursor moves back when on command line sometimes
+//             path not saved when saving new relative file
 
 /* 
 More Possible Commands:
@@ -532,7 +538,7 @@ Colour ParseColour(const Vector<String> args, const String commandName, const Co
 		}
 
 		colour.error = true;
-		program.RenderStatus("Error Invalid Argument(s)");
+		program.RenderStatus("Colour " + args[0] + " not found");
 		return colour;
 	}
 
@@ -606,7 +612,7 @@ Vector<String> Split(const String str, const char separator)
 	return strings;
 }
 
-// TODO: Complete colours https://www.w3schools.com/cssref/css_colors.php
+// Colours list https://www.w3schools.com/cssref/css_colors.php
 Map<String, Colour> GenerateColourMap()
 {
 	std::map<String, Colour> colours;
@@ -821,11 +827,14 @@ String GetTextFromEditor()
 	return editor->GetText();
 }
 
-void RemoveLeadingWhitespace(String& str) {
-	int pos = str.find_first_not_of(" \t\n\r\f\v");
+String RemoveLeadingWhitespace(const String str) {
+	String newStr(str);
+	int pos = newStr.find_first_not_of(" \t\n\r\f\v");
 
 	if (pos != std::string::npos) 
-		str.erase(0, pos);
+		newStr.erase(0, pos);
+
+	return newStr;
 }
 
 bool isFloat(const String number)
