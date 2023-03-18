@@ -33,7 +33,9 @@ public:
 
 	/* Editor Methods */
 	void IncreaseLeftMargin();
-	void UpdateRowChange();
+	void UpdateCol();
+	void UpdateRowColVisual();
+	void UpdateColVisual();
 	std::string GetText();
 	void SetPath(std::string path);
 

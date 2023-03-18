@@ -21,6 +21,7 @@ out vec2 vTexCoords;
 out float vRow;
 flat out uint vHighlight;
 
+// TODO: Remake
 void main() {
 	vTexCoords = texCoords;
 	vRow = row;

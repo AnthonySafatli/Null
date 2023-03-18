@@ -9,6 +9,7 @@
 
 #include "Headers/Program.h"
 #include "Headers/Character.h"
+#include "Headers/Uniforms.h"
 
 std::vector<std::string> Split(const std::string str, const char separator);
 
@@ -101,6 +102,8 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 		AddCharacter(text[i]);
 	}
 
+	program.textX = 0;
+	program.textY = 0;
 	program.RenderStatus(fileName + " Loaded Successfully");
 }
 
@@ -113,36 +116,46 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 	{
 	case KEYCODE_HOME:
 		MoveHome();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_END:
 		MoveEnd();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_RIGHT:
 		MoveRight();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_LEFT:
 		MoveLeft();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_UP:
 		MoveUp();
-		UpdateRowChange();
+		UpdateCol();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_DOWN:
 		MoveDown();
-		UpdateRowChange();
+		UpdateCol();
+		UpdateRowColVisual();
 		break;
 
 	case KEYCODE_ENTER:
 		Return();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_DEL:
 		RemoveCharacterFromLeft();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_DELETE:
 		RemoveCharacterFromRight();
+		UpdateRowColVisual();
 		break;
 	case KEYCODE_TAB:
 		AddTab();
+		UpdateRowColVisual();
 		break;
 	}
 }
@@ -151,8 +164,9 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 {
 	if (!(codepoint > 31 && codepoint < 128))
 		return;
-
+	
 	AddCharacter((char)codepoint);
+	UpdateRowColVisual();
 }
 
 void TextEditor::OnResize(int width, int height)
@@ -209,10 +223,65 @@ void TextEditor::IncreaseLeftMargin()
 	SetLeftMargin(leftMargin + 1);
 }
 
-void TextEditor::UpdateRowChange()
+/// <summary>
+/// If you move up or down to a shorter row, the cursor will move to the end of the shorter row rather than hang out in empty space 
+/// </summary>
+void TextEditor::UpdateCol()
 {
 	if (program.textX > rows[program.textY].size())
 		MoveEnd();
+}
+
+/// <summary>
+/// Make sure the cursor is visible by updating row / column Index
+/// </summary>
+void TextEditor::UpdateRowColVisual()
+{
+	int rows = ((1.0 / ((float)program.textSize * 0.001)) * ((float)program.height / (float)program.idealHeight)) - 4;
+	int cols = ((1.0 / ((float)program.textSize * 0.001)) * ((float)program.width / (float)program.idealWidth)) - 4;
+
+	if ((int)program.rowIndex + rows - 1 < (int)program.textY) // if cursor if under the viewport
+	{
+		program.rowIndex += program.textY - ((int)program.rowIndex + rows) + 1;
+		UpdateUniform1i(program.openGL.u_sceneRowIndex.location, (int)program.rowIndex);
+	}
+	else if ((int)program.rowIndex > (int)program.textY) // if cursor is above the viewport
+	{
+		program.rowIndex = (int)program.textY;
+		UpdateUniform1i(program.openGL.u_sceneRowIndex.location, (int)program.rowIndex);
+	}
+
+	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if right of the viewport
+	{
+		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
+		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+	}
+	else if ((int)program.columnIndex > (int)program.textX) // if cursor is left of the viewport
+	{
+		program.columnIndex = (int)program.textX;
+		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+	}
+}
+
+/// <summary>
+/// Make sure the cursor is visible by updating row / column Index
+/// </summary>
+void TextEditor::UpdateColVisual()
+{
+	int cols = ((1.0 / ((float)program.textSize * 0.001)) * ((float)program.width / (float)program.idealWidth)) - 4;
+
+	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if under the viewport
+	{
+		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
+		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+		return;
+	}
+
+	if ((int)program.columnIndex > (int)program.textX) // if cursor is above the viewport
+	{
+		program.columnIndex = (int)program.textX;
+		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+	}
 }
 
 std::string TextEditor::GetText()
