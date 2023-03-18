@@ -29,6 +29,7 @@ public:
 	void ProcessKey(int key, int action, int mods);
 	void ProcessChar(unsigned int codepoint);
 	void OnResize(int width, int height);
+	void OnScroll(double xOffset, double yOffset);
 
 	/* Update */
 	void Update(const double deltaTime);
@@ -85,8 +86,8 @@ public:
 	/* Text Cursor */
 	unsigned int textX;
 	unsigned int textY;
-	unsigned int rowIndex;
-	unsigned int columnIndex;
+	double rowIndex;
+	double columnIndex;
 
 	/* Command Cursor */
 	bool commandSelected;

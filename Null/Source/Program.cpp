@@ -65,11 +65,11 @@ void Program::SetData()
 {
 	// TODO: Change method to accept pointer
 
-	std::vector<Vertex> all = vertices;
-	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
+	std::vector<Vertex> all = cursorVertices;
 	all.insert(all.end(), commandVertices.begin(), commandVertices.end());
 	all.insert(all.end(), statusVertices.begin(), statusVertices.end());
-	all.insert(all.end(), cursorVertices.begin(), cursorVertices.end());
+	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
+	all.insert(all.end(), vertices.begin(), vertices.end());
 
 	openGL.vertexBuffer.SetData(all);
 	openGL.indexBuffer.SetData(indices);
@@ -154,6 +154,21 @@ void Program::OnResize(int width, int height)
 	SetData();
 
 	area->OnResize(width, height);
+}
+
+void Program::OnScroll(double xOffset, double yOffset)
+{
+	rowIndex -= yOffset;
+	columnIndex -= xOffset;
+
+	if (rowIndex < 0)
+		rowIndex = 0;
+
+	if (columnIndex < 0)
+		columnIndex = 0;
+
+	UpdateUniform1i(openGL.u_sceneRowIndex.location, (int)rowIndex);
+	UpdateUniform1i(openGL.u_sceneColumnIndex.location, (int)columnIndex);
 }
 
 void Program::Update(const double deltaTime)
@@ -464,9 +479,9 @@ void Program::OpenFile(const std::string dir)
 	OpenEditor(str, dir);
 }
 
-// TODO: Get path for journal file
 void Program::OpenJournal(const std::string name)
 {
+	// TODO: Get path for journal file
 	std::string path; 
 
 	OpenFile(path);

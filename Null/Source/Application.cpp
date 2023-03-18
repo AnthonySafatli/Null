@@ -39,6 +39,7 @@ int main(void)
     glfwSetKeyCallback(window, CallBack::KeyCallBack);
     glfwSetCharCallback(window, CallBack::CharCallBack);
     glfwSetFramebufferSizeCallback(window, CallBack::FrameBufferResizeCallBack);
+    glfwSetScrollCallback(window, CallBack::ScrollCallBack);
 
     /* OpenGL Setup */
     if (glewInit())
@@ -71,6 +72,7 @@ int main(void)
 
         program.Update(deltaTime);
 
+        // TODO: Make drawing more than 1000 vertices
         glDrawElements(GL_TRIANGLES, program.indices.size(), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);

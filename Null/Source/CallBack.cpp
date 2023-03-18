@@ -20,3 +20,8 @@ void CallBack::FrameBufferResizeCallBack(GLFWwindow* window, int width, int heig
 {
 	program.OnResize(width, height);
 }
+
+void CallBack::ScrollCallBack(GLFWwindow* window, double xoffset, double yoffset)
+{
+	program.OnScroll(xoffset, yoffset);
+}
