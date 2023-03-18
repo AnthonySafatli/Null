@@ -161,15 +161,43 @@ void Program::Update(const double deltaTime)
 	// Cursor Animations
 	// TODO: Add way to convert between COMMAND_STATUS and not
 	float deltaRow = deltaTime * ((commandSelected ? -1.0f : (float)(textY + 1)) - cursorVertices[0].row) * (float)cursorSpeed;
-	float deltaColumn = deltaTime * ((commandSelected ? (float)(commandX + 1): (float)(textX + 1)) - cursorVertices[0].column) * (float)cursorSpeed;
+	float deltaColumn = deltaTime * ((commandSelected ? (float)(commandX + 1) : (float)(textX + 1)) - cursorVertices[0].column) * (float)cursorSpeed;
 
 	if (std::abs(deltaColumn) < 0.0001) deltaColumn = 0;
 	
+	bool rowSet = false;
+	bool colSet = false;
+
+	// overshooting logic
+	if (deltaRow > 0 && cursorVertices[0].row + deltaRow > (commandSelected ? -1.0f : (float)(textY + 1)))
+	{
+		for (int i = 0; i < 4; i++) cursorVertices[i].row = (commandSelected ? -1.0f : (float)(textY + 1)); // overshot
+		rowSet = true;
+	}
+	else if (deltaRow < 0 && cursorVertices[0].row + deltaRow < (commandSelected ? -1.0f : (float)(textY + 1)))
+	{
+		for (int i = 0; i < 4; i++) cursorVertices[i].row = (commandSelected ? -1.0f : (float)(textY + 1)); // overshot
+		rowSet = true;
+	}
+
+	if (deltaColumn > 0 && cursorVertices[0].column + deltaColumn > (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)))
+	{
+		for (int i = 0; i < 4; i++) cursorVertices[i].column = (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)); // overshot
+		colSet = true;
+	}
+	else if (deltaColumn < 0 && cursorVertices[0].column + deltaColumn < (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)))
+	{
+		for (int i = 0; i < 4; i++) cursorVertices[i].column = (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)); // overshot
+		colSet = true;
+	}
+
 	for (int i = 0; i < 4; i++)
 	{
-		// TODO: Add checking so you dont overshoot target
-		cursorVertices[i].row += deltaRow;
-		cursorVertices[i].column += deltaColumn;
+		if (!rowSet)
+			cursorVertices[i].row += deltaRow;
+
+		if (!colSet)
+			cursorVertices[i].column += deltaColumn;
 	}
 
 	// Update Data Every Frame
