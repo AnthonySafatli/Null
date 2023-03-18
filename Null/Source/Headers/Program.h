@@ -71,6 +71,10 @@ public:
 	void LoadSettings();
 	void LoadHelp(const bool commands, const bool shortcuts);
 
+	/* Cursor Methods */
+	void ShowCursor();
+	void HideCursor();
+
 	/* Text Data */
 	std::string commandText;
 	TextArea *area;

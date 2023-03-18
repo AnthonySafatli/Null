@@ -12,7 +12,8 @@ TextViewer::TextViewer(const std::string text, const std::string pageName)
 	SetLeftMargin(2);
 	rows.push_back(std::string());
 
-	for (int i = 0; i < 4; i++) program.cursorVertices[i].highlight = 0;
+	program.textX = 0;
+	program.textY = 0;
 
 	TexCoords tildaCoords = GetCoords('~');
 	program.marginVertices.push_back(Vertex(0.0, 0.0, tildaCoords.u,                tildaCoords.v,                1, -1, 0.0));
@@ -21,6 +22,9 @@ TextViewer::TextViewer(const std::string text, const std::string pageName)
 	program.marginVertices.push_back(Vertex(0.0, 1.0, tildaCoords.u,                tildaCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 
 	UpdateText(text);
+
+	program.HideCursor();
+	program.showCursor = false;
 
 	program.RenderStatus(pageName + " Loaded Successfully");
 }

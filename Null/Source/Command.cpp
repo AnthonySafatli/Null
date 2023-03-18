@@ -312,6 +312,7 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
+// TODO: Test properly
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -448,6 +449,7 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 		return;
 
 	// TODO: see if it works when saving relative
+	// TODO:path not saved when saving new relative file
 	editor->SetPath(path);
 
 	program.RenderStatus(fileName + " saved successfully");
@@ -483,9 +485,6 @@ void Command::Notebook(const std::vector<std::string> args)
 	*/
 }
 
-// TODO: Bugs: cursor deletes when change to not editable scene
-//             cursor moves back when on command line sometimes
-//             path not saved when saving new relative file
 
 /* 
 More Possible Commands:

@@ -36,7 +36,7 @@ void main() {
 
 	// Calculate screen row and column
 	float actualRow = 0;
-	float actualColumn = column - sceneColumnIndex;
+	float actualColumn = column - float(sceneColumnIndex);
 
 	if (row != COMMAND_LINE_ROW && row != STATUS_BAR_ROW) 
 	{

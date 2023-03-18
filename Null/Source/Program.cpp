@@ -2,6 +2,8 @@
 
 #include "GLFW/glfw3.h"
 
+#include <cmath>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -115,9 +117,13 @@ void Program::ProcessKey(int key, int action, int mods)
 
 	if (commandSelected)
 	{
+		ShowCursor();
 		ProcessKeyCommand(key, action, mods);
 		return;
 	}
+
+	if (!showCursor)
+		HideCursor();
 
 	area->ProcessKey(key, action, mods);
 }
@@ -152,11 +158,15 @@ void Program::OnResize(int width, int height)
 void Program::Update(const double deltaTime)
 {
 	// Cursor Animations
-	double deltaRow = deltaTime * ((commandSelected ? -1 : (int)(textY + 1)) - cursorVertices[0].row) * cursorSpeed;
-	double deltaColumn = deltaTime * ((commandSelected ? commandX : (int)(textX + 1)) - cursorVertices[0].column) * cursorSpeed;
+	// TODO: Add way to convert between COMMAND_STATUS and not
+	float deltaRow = deltaTime * ((commandSelected ? -1.0f : (float)(textY + 1)) - cursorVertices[0].row) * (float)cursorSpeed;
+	float deltaColumn = deltaTime * ((commandSelected ? (float)(commandX + 1): (float)(textX + 1)) - cursorVertices[0].column) * (float)cursorSpeed;
 
+	if (std::abs(deltaColumn) < 0.0001) deltaColumn = 0;
+	
 	for (int i = 0; i < 4; i++)
 	{
+		// TODO: Add checking so you dont overshoot target
 		cursorVertices[i].row += deltaRow;
 		cursorVertices[i].column += deltaColumn;
 	}
@@ -227,7 +237,7 @@ void Program::StatusResize()
 	UpdateIndices();
 }
 
-/* Command Methods */
+/* Command Line Methods */
 
 void Program::ProcessKeyCommand(int key, int action, int mods)
 {
@@ -464,4 +474,14 @@ void Program::LoadHelp(const bool commands, const bool shortcuts)
 	std::string help;
 
 	OpenViewer(help, "Help");
+}
+
+void Program::ShowCursor()
+{
+	for (int i = 0; i < 4; i++) cursorVertices[i].highlight = 1;
+}
+
+void Program::HideCursor()
+{
+	for (int i = 0; i < 4; i++) cursorVertices[i].highlight = 0;
 }

@@ -24,6 +24,11 @@ Vertex::Vertex(const float x, const float y, const float u, const float v, const
 	texCoords[1] = v;
 }
 
+void Vertex::Print()
+{
+	std::cout << "pos: " << reletivePosition[0] << " " << reletivePosition[1] << " row: " << row << " col: " << column << " high: " << highlight << std::endl;
+}
+
 /* ====== Vertex Buffer ====== */
 
 VertexBuffer::VertexBuffer() : handle(0)

@@ -46,6 +46,9 @@ TextEditor::TextEditor() : fileDirectory(""), fileName("")
 	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
 
+	program.ShowCursor();
+	program.showCursor = true;
+
 	program.RenderStatus("New Editor Loaded Successfully");
 }
 
