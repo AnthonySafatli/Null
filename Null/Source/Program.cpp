@@ -21,8 +21,9 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
-	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(16),
-	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false)
+	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(50),
+	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false),
+	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1)
 {
 	// Add > to Command Line
 	AddCommandSymbol();
@@ -454,10 +455,10 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 	area = new TextViewer(str, pageName);
 }
 
-// TODO: Fix background and foreground
 void Program::LoadSettings()
 {
-	std::string settings = "Settings:"
+	// TODO: Write settings string
+	const std::string settings = "Settings:"
 		"\n\n"
 		"Size: " + std::to_string(textSize) +
 		"\n\n"
@@ -468,10 +469,13 @@ void Program::LoadSettings()
 	OpenViewer(settings, "Settings");
 }
 
-// TODO: Write out help string
 void Program::LoadHelp(const bool commands, const bool shortcuts)
 {
-	std::string help;
+	// TODO: Write out help string
+	const std::string help = 
+		"Help:\n"
+		"Commands:\n\n\n"
+		"Shortcuts:\n";
 
 	OpenViewer(help, "Help");
 }

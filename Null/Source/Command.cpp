@@ -19,17 +19,12 @@
 
 extern Program program;
 
-struct Colour 
-{
-	bool error; float r; float g; float b; float a;
-	Colour(); Colour(float r, float g, float b); Colour(float r, float g, float b, float a);
-};
 Colour::Colour()                                   : error(false), r(0), g(0), b(0), a(1) {}
 Colour::Colour(float r, float g, float b)          : error(false), r(r), g(g), b(b), a(1) {}
 Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b(b), a(a) {}
 
 Vector<String> Split(const String str, const char separator);
-Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour);
+Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour, const float defaultA);
 Map<String, Colour> GenerateColourMap();
 String GetDir(const Vector<String> args);
 bool WriteToFile(const String dir);
@@ -172,8 +167,8 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 
 	if (speedStr == "default")
 	{
-		program.textSize = 16;
-		program.RenderStatus("Cursor Speed set to 16");
+		program.cursorSpeed = 50;
+		program.RenderStatus("Cursor Speed set to 50");
 		return;
 	}
 	else if (speedStr == "+")
@@ -221,7 +216,9 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	: sets the background colour to a css colour and the a channel to a
 	*/
 
-	Colour colour = ParseColour(args, "background", Colour(0.03, 0.05, 0.09, 0.85));
+	Colour colour = ParseColour(args, "background", Colour(0.03, 0.05, 0.09, 0.85), program.background.a);
+	program.background = colour;
+
 	if (!colour.error)
 		UpdateBackground(colour.r, colour.g, colour.b, colour.a);
 }
@@ -248,7 +245,8 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	: sets the foreground colour to a css colour and the a channel to a
 	*/
 
-	Colour colour = ParseColour(args, "foreground", Colour(1.0, 1.0, 1.0));
+	Colour colour = ParseColour(args, "foreground", Colour(1.0, 1.0, 1.0), program.foreground.a);
+	program.foreground = colour;
 
 	if (!colour.error)
 		UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
@@ -507,7 +505,7 @@ More Possible Commands:
 
 /* ====== Misc ====== */
 
-Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour)
+Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour, const float defaultA)
 {
 	Colour colour;
 
@@ -530,6 +528,7 @@ Colour ParseColour(const Vector<String> args, const String commandName, const Co
 		if (colourMap.find(args[0]) != colourMap.end())
 		{
 			colour = colourMap[args[0]];
+			colour.a = defaultA;
 
 			if (args.size() == 2)
 			{
@@ -810,8 +809,7 @@ bool WriteToFile(const String path)
 	std::ofstream outputFile(path);
 
 	if (!outputFile.is_open()) {
-		std::cout << "Error opening file " << path << std::endl;
-		// TODO: Add error msg
+		program.RenderStatus("Error opening file " + path);
 		return false;
 	}
 
@@ -819,8 +817,7 @@ bool WriteToFile(const String path)
 	outputFile.close();
 
 	if (outputFile.fail()) {
-		// TODO: Add error msg
-		std::cout << "Error writing to file " << path << std::endl;
+		program.RenderStatus("Error writing to file " + path);
 		return false;
 	}
 

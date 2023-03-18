@@ -15,9 +15,6 @@ CursorController::CursorController(int x, int y)
 
 void CursorController::Move(const Direction dir)
 {
-	// TODO: Proper bounds checking
-	// TODO: Add Command bounds checking
-
 	switch (dir)
 	{
 	case HOME:

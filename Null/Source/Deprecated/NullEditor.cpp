@@ -79,7 +79,6 @@ void NullEditor::SetData()
 
 void NullEditor::ProcessKey(int key, int action, int mods)
 {
-	// TODO: Implement shortcuts
 
 	if (action == GLFW_RELEASE)
 		return;
@@ -207,7 +206,6 @@ void NullEditor::AddCharacterCommand(const char ch)
 	// Add vertices
 	TexCoords texCoords = GetCoords(ch);
 
-	// TODO: Insert once by making array
 	command.row.vertices.insert(command.row.vertices.begin() + offset++,                                      // Add Vertex 1
 		Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1.0, cursor.commandX, 0));
 	command.row.vertices.insert(command.row.vertices.begin() + offset++,                                      // Add Vertex 2
@@ -256,7 +254,6 @@ void NullEditor::AddTab()
 
 void NullEditor::RemoveCharacterFromLeft()
 {
-	// TODO: Redo (keep in mind scroll)
 
 	if (cursor.isOnCommand)
 	{
@@ -350,7 +347,6 @@ void NullEditor::RemoveCharacterFromLeftCommand()
 
 void NullEditor::RemoveCharacterFromRight()
 {
-	// TODO: Redo (keep in mind scroll)
 
 	if (cursor.isOnCommand)
 	{
@@ -440,11 +436,6 @@ void NullEditor::Return()
 		
 		for (int i = 0; i < charAmount * 6; i++) indices.pop_back();
 		
-		// TODO: Execute command if on CommandRow
-		// Turn chars to string 
-		// Clear char vector
-		// Parse string
-		// Execute command
 
 		SetData();
 		return;

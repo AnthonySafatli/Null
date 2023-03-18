@@ -36,3 +36,9 @@ public:
 	static void Execute(const std::string input);
 
 };
+
+struct Colour
+{
+	bool error; float r; float g; float b; float a;
+	Colour(); Colour(float r, float g, float b); Colour(float r, float g, float b, float a);
+};

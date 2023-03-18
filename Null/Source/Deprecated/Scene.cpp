@@ -125,11 +125,6 @@ void Scene::ToNotebookScene()
     //appContents.AddCharacter('~');
     //appContents.AddCharacter(' ');
 
-    // TODO: Setup notebook scene
-    //       - Get all the notebooks
-    //       - Print them
-    // 
-    // TODO: Set functionality for opening them
 }
 
 void Scene::ToTextEditor()
@@ -146,12 +141,10 @@ void Scene::ToTextEditor()
 
 void Scene::ToSettingsScene()
 {
-    // TODO: Print Settings
 }
 
 void Scene::ToPropertiesScene()
 {
-    // TODO: Print Properties
 }
 
 void Scene::AddLine(const std::string text)

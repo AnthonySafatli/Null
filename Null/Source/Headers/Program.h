@@ -3,6 +3,7 @@
 #include "TextArea.h"
 #include "GLObejct.h"
 #include "GLAbstraction.h"
+#include "Command.h"
 
 #include <vector>
 #include <string>
@@ -98,6 +99,8 @@ public:
 	float textSize;
 
 	/* Window Properties */
+	Colour background;
+	Colour foreground;
 	int width;
 	int height;
 	const int idealWidth;
