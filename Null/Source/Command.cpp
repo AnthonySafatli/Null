@@ -68,6 +68,8 @@ void Command::Execute(const std::string input)
 		Save(args, input);
 	else if (command == "notebook")
 		Notebook(args);
+	else if (command == "quit")
+		Quit(args);
 	else
 		program.RenderStatus("Error: Unknown Command " + command);
 }
@@ -312,7 +314,6 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Test properly
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -448,8 +449,6 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	if (!WriteToFile(path))
 		return;
 
-	// TODO: see if it works when saving relative
-	// TODO:path not saved when saving new relative file
 	editor->SetPath(path);
 
 	program.RenderStatus(fileName + " saved successfully");
@@ -485,9 +484,21 @@ void Command::Notebook(const std::vector<std::string> args)
 	*/
 }
 
+void Command::Quit(const std::vector<std::string> args)
+{
+	if (args.size() > 0)
+	{
+		program.RenderStatus("Command 'quit' can not take any arguments");
+		return;
+	}
+
+	program.shouldClose = true;
+}
+
 
 /* 
 More Possible Commands:
+- quit
 - undo   (ctrl + z)
 - redo   (ctrl + y)
 - reload (ctrl + r)

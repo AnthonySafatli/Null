@@ -81,6 +81,8 @@ int main(void)
         GetErrors();
 #endif
 
+        if (program.shouldClose)
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
     glfwTerminate();

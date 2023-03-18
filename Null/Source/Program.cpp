@@ -22,7 +22,7 @@ std::vector<std::string> Split(const std::string str, const char separator);
 Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(16),
-	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false)
+	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false)
 {
 	// Add > to Command Line
 	AddCommandSymbol();

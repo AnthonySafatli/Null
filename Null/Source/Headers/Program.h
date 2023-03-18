@@ -102,6 +102,7 @@ public:
 	int height;
 	const int idealWidth;
 	const int idealHeight;
+	bool shouldClose;
 
 private:
 	void AddCommandSymbol();

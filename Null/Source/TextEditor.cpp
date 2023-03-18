@@ -232,9 +232,9 @@ std::string TextEditor::GetText()
 
 void TextEditor::SetPath(std::string path)
 {
-	std::vector<std::string> pathVec = Split(path, '/');
+	std::vector<std::string> pathVec = Split(path, '\\');
 	std::stringstream ss;
-	for (int i = 0; i < pathVec.size() - 1; i++) ss << pathVec[i] + '/';
+	for (int i = 0; i < pathVec.size() - 1; i++) ss << pathVec[i] + '\\';
 	fileDirectory = ss.str();
 	
 	std::string file = pathVec[pathVec.size() - 1];
