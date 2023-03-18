@@ -28,6 +28,9 @@ public:
     void AddTab();
     void Return();
 
+    /* Char Methods */
+    int LongestRowSize();
+
     /* Margin Methods */
     void AddCharacterToMargin(const char ch, const int index);
 

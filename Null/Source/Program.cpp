@@ -163,9 +163,13 @@ void Program::OnScroll(double xOffset, double yOffset)
 
 	if (rowIndex < 0)
 		rowIndex = 0;
+	else if (rowIndex >= area->rows.size())
+		rowIndex = area->rows.size() - 1;
 
 	if (columnIndex < 0)
 		columnIndex = 0;
+	else if (columnIndex >= area->LongestRowSize()) // TODO: Causing some problems
+		columnIndex = area->LongestRowSize() - 1;
 
 	UpdateUniform1i(openGL.u_sceneRowIndex.location, (int)rowIndex);
 	UpdateUniform1i(openGL.u_sceneColumnIndex.location, (int)columnIndex);

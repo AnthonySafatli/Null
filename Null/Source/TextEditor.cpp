@@ -251,6 +251,7 @@ void TextEditor::UpdateRowColVisual()
 		UpdateUniform1i(program.openGL.u_sceneRowIndex.location, (int)program.rowIndex);
 	}
 
+	// TODO: Debug left
 	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if right of the viewport
 	{
 		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;

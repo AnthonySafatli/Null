@@ -184,6 +184,17 @@ void TextArea::Return()
 	MoveHome();
 }
 
+int TextArea::LongestRowSize()
+{
+	int highest = 0;
+
+	for (std::string row : rows)
+		if (row.size() > highest)
+			highest = row.size();
+
+	return highest;
+}
+
 void TextArea::AddCharacterToMargin(const char ch, const int index)
 {
 	TexCoords texCoords = GetCoords(ch);
