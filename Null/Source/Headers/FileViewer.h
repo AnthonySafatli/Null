@@ -19,6 +19,8 @@ public:
 	void RemoveLeftMargin();
 
 	/* FileViewer Methods */
+	std::vector<std::filesystem::path> GetAllPaths(const std::string initPath);
 
 	/* FileViewer Data */
+	std::vector<std::filesystem::path> paths;
 };

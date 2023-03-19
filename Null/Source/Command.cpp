@@ -312,6 +312,8 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
+// TODO: Use filesystem namespace
+
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
