@@ -58,21 +58,17 @@ void Program::GLInit()
 {
 	openGL.Init();
 	UpdateIndices();
-	SetData();
 }
 
-void Program::SetData()
+std::vector<Vertex> Program::GetVertices()
 {
-	// TODO: Change method to accept pointer
+	std::vector<Vertex> allVertices = cursorVertices;
+	allVertices.insert(allVertices.end(), commandVertices.begin(), commandVertices.end());
+	allVertices.insert(allVertices.end(), statusVertices.begin(), statusVertices.end());
+	allVertices.insert(allVertices.end(), marginVertices.begin(), marginVertices.end());
+	allVertices.insert(allVertices.end(), vertices.begin(), vertices.end());
 
-	std::vector<Vertex> all = cursorVertices;
-	all.insert(all.end(), commandVertices.begin(), commandVertices.end());
-	all.insert(all.end(), statusVertices.begin(), statusVertices.end());
-	all.insert(all.end(), marginVertices.begin(), marginVertices.end());
-	all.insert(all.end(), vertices.begin(), vertices.end());
-
-	openGL.vertexBuffer.SetData(all);
-	openGL.indexBuffer.SetData(indices);
+	return allVertices;
 }
 
 void Program::UpdateIndices()
@@ -151,8 +147,6 @@ void Program::OnResize(int width, int height)
 
 	StatusResize();
 
-	SetData();
-
 	area->OnResize(width, height);
 }
 
@@ -218,9 +212,6 @@ void Program::Update(const double deltaTime)
 		if (!colSet)
 			cursorVertices[i].column += deltaColumn;
 	}
-
-	// Update Data Every Frame
-	SetData();
 }
 
 /* Status Methods */

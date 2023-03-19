@@ -3,6 +3,7 @@
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Headers/GLAbstraction.h"
 #include "Headers/NullEditor.h"
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
@@ -23,8 +24,6 @@ int main(void)
 
     // TODO: Fix Transparent Window
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
-
-    int maxSquaresToRender = 1000;
 
     window = glfwCreateWindow(program.width, program.height, "Null", NULL, NULL);
     if (!window)
@@ -71,9 +70,32 @@ int main(void)
         lastFrame = currentFrame;
 
         program.Update(deltaTime);
+        
+        std::vector<Vertex> allVertices = program.GetVertices();
 
-        // TODO: Make drawing more than 1000 vertices
-        glDrawElements(GL_TRIANGLES, program.indices.size(), GL_UNSIGNED_INT, nullptr);
+        int j = 0;
+        int ii = 0;
+        for (int i = 0; i + (MAX_SQAURES_TO_RENDER * 4) < allVertices.size(); i += MAX_SQAURES_TO_RENDER * 4)
+        {
+            std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + i, allVertices.begin() + i + (MAX_SQAURES_TO_RENDER * 4));
+            std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.begin() + j + (MAX_SQAURES_TO_RENDER * 6));
+
+            program.openGL.vertexBuffer.SetData(batchVertices);
+            program.openGL.indexBuffer.SetData(batchIndices);
+
+            glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
+
+            ii += MAX_SQAURES_TO_RENDER * 4;
+            j += MAX_SQAURES_TO_RENDER * 6;
+        }
+        // TODO: Figure out why not working :(((
+        std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + ii, allVertices.end());
+        std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.end());
+
+        program.openGL.vertexBuffer.SetData(batchVertices);
+        program.openGL.indexBuffer.SetData(batchIndices);
+
+        glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 

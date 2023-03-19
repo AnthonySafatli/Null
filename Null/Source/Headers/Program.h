@@ -23,7 +23,7 @@ public:
 	/* OpenGL */
 	GLObject openGL;
 	void GLInit();
-	void SetData();
+	std::vector<Vertex> GetVertices();
 
 	/* Callback */
 	void ProcessKey(int key, int action, int mods);

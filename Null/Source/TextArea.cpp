@@ -57,8 +57,6 @@ void TextArea::AddCharacter(const char ch)
 	rows[program.textY].insert(rows[program.textY].begin() + program.textX, ch);
 
 	MoveRight();
-
-	program.SetData();
 }
 
 void TextArea::RemoveCharacterFromLeft()
@@ -103,8 +101,6 @@ void TextArea::RemoveCharacterFromLeft()
 	rows[program.textY].erase(rows[program.textY].begin() + program.textX - 1);
 
 	MoveLeft();
-
-	program.SetData();
 }
 
 void TextArea::RemoveCharacterFromRight()
