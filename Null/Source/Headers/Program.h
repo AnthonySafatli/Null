@@ -72,6 +72,7 @@ public:
 	void OpenViewer(const std::string str, const std::string pageName);
 	void LoadSettings();
 	void LoadHelp(const bool commands, const bool shortcuts);
+	void ExploreFolder(const std::string path);
 
 	/* Cursor Methods */
 	void ShowCursor();

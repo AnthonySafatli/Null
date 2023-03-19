@@ -207,14 +207,12 @@ void TextArea::AddCharacterToMargin(const char ch, const int index)
 
 void TextArea::MoveUp()
 {
-	// TODO: Remake but with scrolling in mind
 	if (program.textY > 0)
 		program.textY--;
 }
 
 void TextArea::MoveDown()
 {
-	// TODO: Remake but with scrolling in mind
 	if (program.textY < rows.size() - 1)
 		program.textY++;
 }

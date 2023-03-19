@@ -11,6 +11,8 @@
 
 #define DEBUG 1
 
+void Draw();
+
 // TODO: Maybe don't use global variables
 Program program = Program(1800, 1100, 24, 4);
 
@@ -71,31 +73,7 @@ int main(void)
 
         program.Update(deltaTime);
         
-        std::vector<Vertex> allVertices = program.GetVertices();
-
-        int j = 0;
-        int ii = 0;
-        for (int i = 0; i + (MAX_SQAURES_TO_RENDER * 4) < allVertices.size(); i += MAX_SQAURES_TO_RENDER * 4)
-        {
-            std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + i, allVertices.begin() + i + (MAX_SQAURES_TO_RENDER * 4));
-            std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.begin() + j + (MAX_SQAURES_TO_RENDER * 6));
-
-            program.openGL.vertexBuffer.SetData(batchVertices);
-            program.openGL.indexBuffer.SetData(batchIndices);
-
-            glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
-
-            ii += MAX_SQAURES_TO_RENDER * 4;
-            j += MAX_SQAURES_TO_RENDER * 6;
-        }
-        // TODO: Figure out why not working :(((
-        std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + ii, allVertices.end());
-        std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.end());
-
-        program.openGL.vertexBuffer.SetData(batchVertices);
-        program.openGL.indexBuffer.SetData(batchIndices);
-
-        glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
+        Draw();
 
         glfwSwapBuffers(window);
 
@@ -112,6 +90,35 @@ int main(void)
     glfwTerminate();
 
     return 0;
+}
+
+void Draw()
+{
+    std::vector<Vertex> allVertices = program.GetVertices();
+
+    int j = 0;
+    int ii = 0;
+    for (int i = 0; i + (MAX_SQAURES_TO_RENDER * 4) < allVertices.size(); i += MAX_SQAURES_TO_RENDER * 4)
+    {
+        std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + i, allVertices.begin() + i + (MAX_SQAURES_TO_RENDER * 4));
+        std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.begin() + j + (MAX_SQAURES_TO_RENDER * 6));
+
+        program.openGL.vertexBuffer.SetData(batchVertices);
+        program.openGL.indexBuffer.SetData(batchIndices);
+
+        glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
+
+        ii += MAX_SQAURES_TO_RENDER * 4;
+        j += MAX_SQAURES_TO_RENDER * 6;
+    }
+    // TODO: Figure out why not working :(((
+    std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + ii, allVertices.end());
+    std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.end());
+
+    program.openGL.vertexBuffer.SetData(batchVertices);
+    program.openGL.indexBuffer.SetData(batchIndices);
+
+    glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)

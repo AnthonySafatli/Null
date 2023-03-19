@@ -89,6 +89,7 @@
     <ClCompile Include="Source\Deprecated\CursorController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CallBack.cpp" />
+    <ClCompile Include="Source\FileViewer.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\Command.cpp" />
     <ClCompile Include="Source\TextArea.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="Source\Headers\Character.h" />
     <ClInclude Include="Source\Headers\Command.h" />
     <ClInclude Include="Source\Deprecated\CursorController.h" />
+    <ClInclude Include="Source\Headers\FileViewer.h" />
     <ClInclude Include="Source\Headers\GLObejct.h" />
     <ClInclude Include="Source\Headers\Program.h" />
     <ClInclude Include="Source\Deprecated\Scene.h" />

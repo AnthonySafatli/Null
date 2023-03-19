@@ -12,6 +12,7 @@
 #include "Headers/TextArea.h"
 #include "Headers/TextEditor.h"
 #include "Headers/TextViewer.h"
+#include "Headers/FileViewer.h"
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
@@ -517,6 +518,19 @@ void Program::LoadHelp(const bool commands, const bool shortcuts)
 
 	OpenViewer(help, "Help");
 }
+
+void Program::ExploreFolder(const std::string path)
+{
+	vertices.clear();
+	marginVertices.clear();
+	UpdateIndices();
+
+	delete area;
+
+	area = new FileViewer(path);
+}
+
+/* Cursor Methods */
 
 void Program::ShowCursor()
 {
