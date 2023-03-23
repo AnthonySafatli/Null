@@ -475,7 +475,7 @@ void Program::OpenFile(const std::string dir)
 	OpenEditor(str, dir);
 }
 
-void Program::OpenJournal(const std::string name)
+void Program::OpenNote(const std::string name)
 {
 	// TODO: Get path for journal file
 	std::string path; 

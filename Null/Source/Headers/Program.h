@@ -68,7 +68,7 @@ public:
 	void OpenEditor();
 	void OpenEditor(const std::string text, const std::string dir);
 	void OpenFile(const std::string dir);
-	void OpenJournal(const std::string name);
+	void OpenNote(const std::string name);
 	void OpenViewer(const std::string str, const std::string pageName);
 	void LoadSettings();
 	void LoadHelp(const bool commands, const bool shortcuts);

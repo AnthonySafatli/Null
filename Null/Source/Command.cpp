@@ -482,6 +482,9 @@ void Command::Notebook(const std::vector<std::string> args)
 	> notebook new subfolder ... subfolder name
 	: opens new text editor in subfolder with name
 	*/
+
+	// TODO: Continue
+	program.ExploreFolder("C:/Users/Anthony/source/repos/Null/Null");
 }
 
 void Command::Quit(const std::vector<std::string> args)
