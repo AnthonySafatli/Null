@@ -43,10 +43,10 @@ void TextArea::AddCharacter(const char ch)
 
 	TexCoords texCoords = GetCoords(ch);
 
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , program.textY + 1, program.textX + 1, 0.0));
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , program.textY + 1, program.textX + 1, 0.0));
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
-	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, 0.0));
+	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , program.textY + 1, program.textX + 1, NORMAL));
+	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , program.textY + 1, program.textX + 1, NORMAL));
+	program.vertices.insert(program.vertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, NORMAL));
+	program.vertices.insert(program.vertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), program.textY + 1, program.textX + 1, NORMAL));
 
 	int lastIndexInRowVertices = (GetLastIndexInRow() + 1) * 4;
 	for (int i = offset; i < lastIndexInRowVertices; i++)
@@ -195,10 +195,10 @@ void TextArea::AddCharacterToMargin(const char ch, const int index)
 {
 	TexCoords texCoords = GetCoords(ch);
 
-	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rows.size(), index, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rows.size(), index, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, MARGIN));
 
 	program.UpdateIndices();
 }

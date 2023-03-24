@@ -51,10 +51,10 @@ int main(void)
     program.GLInit();
 
     glUniform2f(program.openGL.u_idealRatio.location, (float) program.idealWidth / (float) program.width, (float) program.idealHeight / (float) program.height);
-    glUniform1i(program.openGL.u_leftMargin.location, program.area->leftMargin);
     glUniform1f(program.openGL.u_size.location, 0.001 * program.textSize);
-    glUniform1i(program.openGL.u_sceneRowIndex.location, 0);
-    glUniform1i(program.openGL.u_sceneColumnIndex.location, 0);
+    glUniform1i(program.openGL.u_leftMargin.location, program.area->leftMargin);
+    glUniform1i(program.openGL.u_rowIndex.location, 0);
+    glUniform1i(program.openGL.u_columnIndex.location, 0);
     glUniform1i(program.openGL.u_tex.location, 0);
     glUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
 

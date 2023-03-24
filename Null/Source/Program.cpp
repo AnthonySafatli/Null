@@ -35,17 +35,17 @@ Program::Program(const int width, const int height, const float textSize, const 
 
 	for (int i = 0; i < columnAmount; i++)
 	{
-		statusVertices.push_back(Vertex(0.0, 0.0, texCoordsStatus.u               , texCoordsStatus.v               , -2, i, 0.0));
-		statusVertices.push_back(Vertex(1.0, 0.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v               , -2, i, 0.0));
-		statusVertices.push_back(Vertex(1.0, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), -2, i, 0.0));
-		statusVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), -2, i, 0.0));
+		statusVertices.push_back(Vertex(0.0, 0.0, texCoordsStatus.u               , texCoordsStatus.v               , -2, i, STATUS));
+		statusVertices.push_back(Vertex(1.0, 0.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v               , -2, i, STATUS));
+		statusVertices.push_back(Vertex(1.0, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), -2, i, STATUS));
+		statusVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), -2, i, STATUS));
 	}
 
 	// Create Cursor
-	cursorVertices.push_back(Vertex(0.0, 0.0, texCoordsStatus.u               , texCoordsStatus.v               , 1, 1, 1.0));
-	cursorVertices.push_back(Vertex(0.1, 0.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v               , 1, 1, 1.0));
-	cursorVertices.push_back(Vertex(0.1, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), 1, 1, 1.0));
-	cursorVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), 1, 1, 1.0));
+	cursorVertices.push_back(Vertex(0.0, 0.0, texCoordsStatus.u               , texCoordsStatus.v               , 1, 1, CURSOR));
+	cursorVertices.push_back(Vertex(0.1, 0.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v               , 1, 1, CURSOR));
+	cursorVertices.push_back(Vertex(0.1, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), 1, 1, CURSOR));
+	cursorVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), 1, 1, CURSOR));
 
 	area = new TextEditor();
 }
@@ -99,10 +99,10 @@ void Program::AddCommandSymbol()
 {
 	TexCoords texCoordsCommand = GetCoords('>');
 
-	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u, texCoordsCommand.v, -1, -2, 0.0));
-	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v, -1, -2, 0.0));
-	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
-	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u, texCoordsCommand.v + (1.0 / 10.0), -1, -2, 0.0));
+	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u               , texCoordsCommand.v               , -1, -2, COMMAND));
+	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v               , -1, -2, COMMAND));
+	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, -2, COMMAND));
+	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u               , texCoordsCommand.v + (1.0 / 10.0), -1, -2, COMMAND));
 }
 
 void Program::ProcessKey(int key, int action, int mods)
@@ -166,8 +166,8 @@ void Program::OnScroll(double xOffset, double yOffset)
 	else if (columnIndex >= area->LongestRowSize()) // TODO: Causing some problems
 		columnIndex = area->LongestRowSize() - 1;
 
-	UpdateUniform1i(openGL.u_sceneRowIndex.location, (int)rowIndex);
-	UpdateUniform1i(openGL.u_sceneColumnIndex.location, (int)columnIndex);
+	UpdateUniform1i(openGL.u_rowIndex.location, (int)rowIndex);
+	UpdateUniform1i(openGL.u_columnIndex.location, (int)columnIndex);
 }
 
 void Program::Update(const double deltaTime)
@@ -268,10 +268,10 @@ void Program::StatusResize()
 		if (i < statusVertices.size() / 4)
 			continue;
 
-		statusVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -2, i, 0.0));
-		statusVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -2, i, 0.0));
-		statusVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, i, 0.0));
-		statusVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -2, i, 0.0));
+		statusVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -2, i, STATUS));
+		statusVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -2, i, STATUS));
+		statusVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, i, STATUS));
+		statusVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -2, i, STATUS));
 	}
 
 	UpdateIndices();
@@ -336,10 +336,10 @@ void Program::AddCharacterCommand(const char ch)
 
 	TexCoords texCoords = GetCoords(ch);
 
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1, commandX + 1, 0.0));
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1, commandX + 1, 0.0));
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1, commandX + 1, 0.0));
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1, commandX + 1, 0.0));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1, commandX + 1, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1, commandX + 1, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1, commandX + 1, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1, commandX + 1, COMMAND));
 
 	for (int i = offset; i < commandVertices.size(); i++)
 		commandVertices[i].column++;
@@ -534,10 +534,10 @@ void Program::ExploreFolder(const std::string path)
 
 void Program::ShowCursor()
 {
-	for (int i = 0; i < 4; i++) cursorVertices[i].highlight = 1;
+	for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR;
 }
 
 void Program::HideCursor()
 {
-	for (int i = 0; i < 4; i++) cursorVertices[i].highlight = 0;
+	for (int i = 0; i < 4; i++) cursorVertices[i].type = INVISIBLE;
 }

@@ -4,10 +4,17 @@
 
 #define MAX_SQAURES_TO_RENDER 10000
 
+#define INVISIBLE 0.0
+#define NORMAL    1.0
+#define CURSOR    2.0
+#define STATUS    3.0
+#define COMMAND   4.0
+#define MARGIN    5.0
+
 struct Vertex
 {
 	Vertex();
-	Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight);
+	Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const float type);
 
 	void Print();
 
@@ -15,7 +22,7 @@ struct Vertex
 	float texCoords[2];
 	float row;
 	float column;
-	unsigned int highlight;
+	float type;
 };
 
 class VertexBuffer

@@ -17,10 +17,11 @@ public:
     ShaderProgram shaderProgram;
     Texture texture;
     Uniform u_idealRatio;
-    Uniform u_leftMargin;
     Uniform u_size;
-    Uniform u_sceneRowIndex;
-    Uniform u_sceneColumnIndex;
+    Uniform u_leftMargin;
+    Uniform u_rowIndex;
+    Uniform u_columnIndex;
+
     Uniform u_tex;
     Uniform u_foreground;
 };

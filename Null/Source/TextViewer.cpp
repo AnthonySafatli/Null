@@ -16,10 +16,10 @@ TextViewer::TextViewer(const std::string text, const std::string pageName)
 	program.textY = 0;
 
 	TexCoords tildaCoords = GetCoords('~');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, tildaCoords.u,                tildaCoords.v,                1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v,                1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v + (1.0 / 10.0), 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, tildaCoords.u,                tildaCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, tildaCoords.u,                tildaCoords.v,                1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v,                1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, tildaCoords.u + (1.0 / 10.0), tildaCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, tildaCoords.u,                tildaCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
 
 	UpdateText(text);
 

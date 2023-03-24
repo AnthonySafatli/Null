@@ -29,23 +29,23 @@ TextEditor::TextEditor() : fileDirectory(""), fileName("")
 
 	// add ' '
 	TexCoords spaceTexCoords = GetCoords(' ');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
 				
 	// add ' '
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
 				
 	// add '1'
 	TexCoords oneTexCoords = GetCoords('1');
-	program.marginVertices.push_back(Vertex(0.0, 0.0,   oneTexCoords.u               ,   oneTexCoords.v               , 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v               , 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0,   oneTexCoords.u               ,   oneTexCoords.v               , 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v               , 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
 
 	program.ShowCursor();
 	program.showCursor = true;
@@ -67,23 +67,23 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 
 	// add ' '
 	TexCoords spaceTexCoords = GetCoords(' ');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u, spaceTexCoords.v, 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v, 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u, spaceTexCoords.v + (1.0 / 10.0), 1, -3, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
 
 	// add ' '
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u, spaceTexCoords.v, 1, -2, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v, 1, -2, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u, spaceTexCoords.v + (1.0 / 10.0), 1, -2, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
 
 	// add '1'
 	TexCoords oneTexCoords = GetCoords('1');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, oneTexCoords.u, oneTexCoords.v, 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v, 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, oneTexCoords.u, oneTexCoords.v + (1.0 / 10.0), 1, -1, 0.0));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, oneTexCoords.u               , oneTexCoords.v               , 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v               , 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, oneTexCoords.u               , oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
 
 	for (int i = 0; i < text.size(); i++)
 	{
@@ -206,10 +206,10 @@ void TextEditor::IncreaseLeftMargin()
 
 	std::vector<Vertex> spaceVertices;
 
-	spaceVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , 0, -leftMargin, 0.0));
-	spaceVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , 0, -leftMargin, 0.0));
-	spaceVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), 0, -leftMargin, 0.0));
-	spaceVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), 0, -leftMargin, 0.0));
+	spaceVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , 0, -leftMargin, MARGIN));
+	spaceVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , 0, -leftMargin, MARGIN));
+	spaceVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), 0, -leftMargin, MARGIN));
+	spaceVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), 0, -leftMargin, MARGIN));
 
 	for (int i = 0; i < rows.size(); i++)
 	{
@@ -243,24 +243,24 @@ void TextEditor::UpdateRowColVisual()
 	if ((int)program.rowIndex + rows - 1 < (int)program.textY) // if cursor if under the viewport
 	{
 		program.rowIndex += program.textY - ((int)program.rowIndex + rows) + 1;
-		UpdateUniform1i(program.openGL.u_sceneRowIndex.location, (int)program.rowIndex);
+		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
 	else if ((int)program.rowIndex > (int)program.textY) // if cursor is above the viewport
 	{
 		program.rowIndex = (int)program.textY;
-		UpdateUniform1i(program.openGL.u_sceneRowIndex.location, (int)program.rowIndex);
+		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
 
 	// TODO: Debug left (after vertex.glsl remake)
 	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if right of the viewport
 	{
 		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
-		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
 	}
 	else if ((int)program.columnIndex > (int)program.textX) // if cursor is left of the viewport
 	{
 		program.columnIndex = (int)program.textX;
-		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
 	}
 }
 
@@ -274,14 +274,14 @@ void TextEditor::UpdateColVisual()
 	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if under the viewport
 	{
 		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
-		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
 		return;
 	}
 
 	if ((int)program.columnIndex > (int)program.textX) // if cursor is above the viewport
 	{
 		program.columnIndex = (int)program.textX;
-		UpdateUniform1i(program.openGL.u_sceneColumnIndex.location, (int)program.columnIndex);
+		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
 	}
 }
 

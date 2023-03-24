@@ -1,10 +1,6 @@
 #include "Headers/GLObejct.h"
 
-GLObject::GLObject() 
-	: vertexBuffer(), indexBuffer(), vertexArray(),
-	  shaderProgram(), texture(), 
-	  u_idealRatio(), u_leftMargin(), u_size(), u_sceneRowIndex(), u_sceneColumnIndex(), u_tex(), u_foreground(),
-	  init(false)
+GLObject::GLObject() : init(false)
 {
 }
 
@@ -17,6 +13,7 @@ void GLObject::Init()
 
 	indexBuffer.Init();
 
+	// TODO: Fix paths
 	shaderProgram.Init(
 		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\vertex.glsl",
 		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\fragment.glsl"
@@ -25,10 +22,11 @@ void GLObject::Init()
 	texture.Init("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\font texture.png");
 
 	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
-	u_leftMargin.Init(shaderProgram.handle, "leftMargin");
 	u_size.Init(shaderProgram.handle, "size");
-	u_sceneRowIndex.Init(shaderProgram.handle, "sceneRowIndex");
-	u_sceneColumnIndex.Init(shaderProgram.handle, "sceneColumnIndex");
+	u_leftMargin.Init(shaderProgram.handle, "leftMargin");
+	u_rowIndex.Init(shaderProgram.handle, "sceneRowIndex");
+	u_columnIndex.Init(shaderProgram.handle, "sceneColumnIndex");
+	
 	u_tex.Init(shaderProgram.handle, "tex");
 	u_foreground.Init(shaderProgram.handle, "foreground");
 

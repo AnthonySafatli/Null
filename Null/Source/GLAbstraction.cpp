@@ -15,7 +15,7 @@ Vertex::Vertex()
 {
 }
 
-Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const unsigned int highlight) : row(row), column(column), highlight(highlight)
+Vertex::Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const float type) : row(row), column(column), type(type)
 {
 	reletivePosition[0] = x;
 	reletivePosition[1] = y;
@@ -26,7 +26,7 @@ Vertex::Vertex(const float x, const float y, const float u, const float v, const
 
 void Vertex::Print()
 {
-	std::cout << "pos: " << reletivePosition[0] << " " << reletivePosition[1] << " row: " << row << " col: " << column << " high: " << highlight << std::endl;
+	std::cout << "pos: " << reletivePosition[0] << " " << reletivePosition[1] << " row: " << row << " col: " << column << " type: " << type << std::endl;
 }
 
 /* ====== Vertex Buffer ====== */
@@ -107,7 +107,7 @@ void VertexArray::EnableAttributes()
 	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, column)));
 
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, highlight)));
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(offsetof(Vertex, type)));
 
 }
 
