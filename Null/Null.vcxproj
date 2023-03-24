@@ -108,6 +108,7 @@
   <ItemGroup>
     <None Include="commands.md" />
     <None Include="Resources\Shaders\fragment.glsl" />
+    <None Include="Resources\Shaders\newvertex.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>

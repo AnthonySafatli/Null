@@ -9,7 +9,6 @@ uniform float size;
 uniform int sceneRowIndex;
 uniform int sceneColumnIndex;
 uniform int leftMargin;
-// uniform int maxLength;
 
 in layout(location = 0) vec2 reletivePosition;
 in layout(location = 1) vec2 texCoords;
