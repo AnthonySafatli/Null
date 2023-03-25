@@ -179,7 +179,10 @@ void Program::OnScroll(double xOffset, double yOffset)
 
 void Program::Update(const double deltaTime)
 {
+	UpdateUniform1i(openGL.u_cursorRow.location, textY + 1);
+
 	/* Cursor Animations */
+	// TODO: cursor can go offscreen when in text area
 	float targetRow = commandSelected ? rowIndex - 1 : textY + 1;
 	float targetColumn = commandSelected ? (float)(commandX + 4 - area->leftMargin + columnIndex) : textX + 1;
 

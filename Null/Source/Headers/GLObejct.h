@@ -26,4 +26,5 @@ public:
 
     Uniform u_tex;
     Uniform u_foreground;
+    Uniform u_cursorRow;
 };

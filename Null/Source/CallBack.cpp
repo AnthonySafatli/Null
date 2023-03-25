@@ -1,5 +1,4 @@
 #include "Headers/CallBack.h"
-#include "Headers/NullEditor.h"
 #include "Headers/Program.h"
 
 /* ====== CallBack ====== */

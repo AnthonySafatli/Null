@@ -31,6 +31,7 @@ void GLObject::Init()
 	
 	u_tex.Init(shaderProgram.handle, "tex");
 	u_foreground.Init(shaderProgram.handle, "foreground");
+	u_cursorRow.Init(shaderProgram.handle, "cursorRow");
 
 	init = true;
 }

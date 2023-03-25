@@ -24,21 +24,6 @@
     <ClCompile Include="Source\GLAbstraction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Deprecated\NullEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Deprecated\MainRows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Deprecated\TextRow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Deprecated\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Deprecated\CursorController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,7 +56,6 @@
     <None Include="Resources\Shaders\fragment.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
     <None Include="commands.md" />
-    <None Include="Resources\Shaders\newvertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\font texture.png">
@@ -80,21 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Headers\GLAbstraction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Headers\NullEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Deprecated\MainRows.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Deprecated\TextRow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Deprecated\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Deprecated\CursorController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Headers\Character.h">

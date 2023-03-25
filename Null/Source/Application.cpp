@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 
 #include "Headers/GLAbstraction.h"
-#include "Headers/NullEditor.h"
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
@@ -60,6 +59,7 @@ int main(void)
 
     glUniform1i(program.openGL.u_tex.location, 0);
     glUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
+    glUniform1i(program.openGL.u_cursorRow.location, 1);
 
     double currentFrame = glfwGetTime();
     double lastFrame = currentFrame;

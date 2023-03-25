@@ -9,6 +9,7 @@
 #define MARGIN    5.0
 
 uniform vec4 foreground;
+uniform int cursorRow;
 uniform sampler2D tex;
 
 in vec2 vTexCoords;
@@ -26,6 +27,12 @@ void main() {
     if (vType == CURSOR)
         color = foreground;
 
-    if (vType == MARGIN || vType == STATUS)
-        color.w *= 0.6;
+    if (vType == STATUS)
+        color.w *= 0.7;
+
+    if (vType == MARGIN)
+    {
+        if (vRow != cursorRow)
+            color.w *= 0.2;
+    }
 }

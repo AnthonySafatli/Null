@@ -116,7 +116,6 @@
     <ClInclude Include="Source\Headers\GLObejct.h" />
     <ClInclude Include="Source\Headers\Program.h" />
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
-    <ClInclude Include="Source\Headers\NullEditor.h" />
     <ClInclude Include="Source\Headers\TextArea.h" />
     <ClInclude Include="Source\Headers\TextEditor.h" />
     <ClInclude Include="Source\Headers\TextViewer.h" />
