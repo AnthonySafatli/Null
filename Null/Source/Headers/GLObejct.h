@@ -21,6 +21,8 @@ public:
     Uniform u_leftMargin;
     Uniform u_rowIndex;
     Uniform u_columnIndex;
+    Uniform u_maxHeight;
+    Uniform u_maxWidth;
 
     Uniform u_tex;
     Uniform u_foreground;

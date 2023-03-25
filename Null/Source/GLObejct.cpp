@@ -24,8 +24,10 @@ void GLObject::Init()
 	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
 	u_size.Init(shaderProgram.handle, "size");
 	u_leftMargin.Init(shaderProgram.handle, "leftMargin");
-	u_rowIndex.Init(shaderProgram.handle, "sceneRowIndex");
-	u_columnIndex.Init(shaderProgram.handle, "sceneColumnIndex");
+	u_rowIndex.Init(shaderProgram.handle, "rowIndex");
+	u_columnIndex.Init(shaderProgram.handle, "columnIndex");
+	u_maxHeight.Init(shaderProgram.handle, "maxHeight");
+	u_maxWidth.Init(shaderProgram.handle, "maxWidth");
 	
 	u_tex.Init(shaderProgram.handle, "tex");
 	u_foreground.Init(shaderProgram.handle, "foreground");

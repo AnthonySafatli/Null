@@ -55,6 +55,9 @@ int main(void)
     glUniform1i(program.openGL.u_leftMargin.location, program.area->leftMargin);
     glUniform1i(program.openGL.u_rowIndex.location, 0);
     glUniform1i(program.openGL.u_columnIndex.location, 0);
+    glUniform1i(program.openGL.u_maxHeight.location, ((1.0 / (program.textSize * 0.001)) * ((float)program.height / (float)IDEAL_HEIGHT)) - 4);
+    glUniform1i(program.openGL.u_maxWidth.location,  ((1.0 / (program.textSize * 0.001)) * ((float)program.width / (float)IDEAL_WIDTH)) - program.area->leftMargin);
+
     glUniform1i(program.openGL.u_tex.location, 0);
     glUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
 

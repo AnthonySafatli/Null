@@ -143,6 +143,9 @@ void Program::OnResize(int width, int height)
 
 	UpdateUniform2f(openGL.u_idealRatio.location, (float)IDEAL_WIDTH / (float)width, (float)IDEAL_HEIGHT / (float)height);
 
+	UpdateUniform1i(openGL.u_maxHeight.location, ((1.0 / (textSize * 0.001)) * ((float)height / (float)IDEAL_HEIGHT)) - 4);
+	UpdateUniform1i(openGL.u_maxWidth.location, ((1.0 / (textSize * 0.001)) * ((float)width / (float)IDEAL_WIDTH)) - area->leftMargin);
+
 	this->width = width;
 	this->height = height;
 
@@ -161,9 +164,13 @@ void Program::OnScroll(double xOffset, double yOffset)
 	else if (rowIndex >= area->rows.size())
 		rowIndex = area->rows.size() - 1;
 
-	if (columnIndex < 0)
+	int longestRow = area->LongestRowSize();
+
+	if (longestRow == 0)
 		columnIndex = 0;
-	else if (columnIndex >= area->LongestRowSize()) // TODO: Causing some problems
+	else if (columnIndex < 0)
+		columnIndex = 0;
+	else if (columnIndex >= longestRow)
 		columnIndex = area->LongestRowSize() - 1;
 
 	UpdateUniform1i(openGL.u_rowIndex.location, (int)rowIndex);
