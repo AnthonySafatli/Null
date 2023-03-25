@@ -99,10 +99,10 @@ void Program::AddCommandSymbol()
 {
 	TexCoords texCoordsCommand = GetCoords('>');
 
-	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u               , texCoordsCommand.v               , -1, -2, COMMAND));
-	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v               , -1, -2, COMMAND));
-	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, -2, COMMAND));
-	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u               , texCoordsCommand.v + (1.0 / 10.0), -1, -2, COMMAND));
+	commandVertices.push_back(Vertex(0.0, 0.0, texCoordsCommand.u               , texCoordsCommand.v               , -1, 2, COMMAND));
+	commandVertices.push_back(Vertex(1.0, 0.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v               , -1, 2, COMMAND));
+	commandVertices.push_back(Vertex(1.0, 1.0, texCoordsCommand.u + (1.0 / 10.0), texCoordsCommand.v + (1.0 / 10.0), -1, 2, COMMAND));
+	commandVertices.push_back(Vertex(0.0, 1.0, texCoordsCommand.u               , texCoordsCommand.v + (1.0 / 10.0), -1, 2, COMMAND));
 }
 
 void Program::ProcessKey(int key, int action, int mods)
@@ -150,7 +150,7 @@ void Program::OnResize(int width, int height)
 	this->height = height;
 
 	StatusResize();
-
+	
 	area->OnResize(width, height);
 }
 
@@ -179,36 +179,38 @@ void Program::OnScroll(double xOffset, double yOffset)
 
 void Program::Update(const double deltaTime)
 {
-	// Cursor Animations
-	// TODO: Add way to convert between COMMAND_STATUS and not
-	float deltaRow = deltaTime * ((commandSelected ? -1.0f : (float)(textY + 1)) - cursorVertices[0].row) * (float)cursorSpeed;
-	float deltaColumn = deltaTime * ((commandSelected ? (float)(commandX + 1) : (float)(textX + 1)) - cursorVertices[0].column) * (float)cursorSpeed;
+	/* Cursor Animations */
+	float targetRow = commandSelected ? rowIndex - 1 : textY + 1;
+	float targetColumn = commandSelected ? (float)(commandX + 4 - area->leftMargin + columnIndex) : textX + 1;
+
+	float deltaRow = deltaTime * (targetRow - cursorVertices[0].row) * (float)cursorSpeed;
+	float deltaColumn = deltaTime * (targetColumn - cursorVertices[0].column) * (float)cursorSpeed;
 
 	if (std::abs(deltaColumn) < 0.0001) deltaColumn = 0;
 	
 	bool rowSet = false;
 	bool colSet = false;
 
-	// overshooting logic
+	// Overshooting logic
 	if (deltaRow > 0 && cursorVertices[0].row + deltaRow > (commandSelected ? -1.0f : (float)(textY + 1)))
 	{
-		for (int i = 0; i < 4; i++) cursorVertices[i].row = (commandSelected ? -1.0f : (float)(textY + 1)); // overshot
+		for (int i = 0; i < 4; i++) cursorVertices[i].row = targetRow; 
 		rowSet = true;
 	}
 	else if (deltaRow < 0 && cursorVertices[0].row + deltaRow < (commandSelected ? -1.0f : (float)(textY + 1)))
 	{
-		for (int i = 0; i < 4; i++) cursorVertices[i].row = (commandSelected ? -1.0f : (float)(textY + 1)); // overshot
+		for (int i = 0; i < 4; i++) cursorVertices[i].row = targetRow;
 		rowSet = true;
 	}
 
 	if (deltaColumn > 0 && cursorVertices[0].column + deltaColumn > (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)))
 	{
-		for (int i = 0; i < 4; i++) cursorVertices[i].column = (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)); // overshot
+		for (int i = 0; i < 4; i++) cursorVertices[i].column = targetColumn;
 		colSet = true;
 	}
 	else if (deltaColumn < 0 && cursorVertices[0].column + deltaColumn < (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)))
 	{
-		for (int i = 0; i < 4; i++) cursorVertices[i].column = (commandSelected ? (float)(commandX + 1) : (float)(textX + 1)); // overshot
+		for (int i = 0; i < 4; i++) cursorVertices[i].column = targetColumn;
 		colSet = true;
 	}
 
@@ -343,10 +345,10 @@ void Program::AddCharacterCommand(const char ch)
 
 	TexCoords texCoords = GetCoords(ch);
 
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1, commandX + 1, COMMAND));
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1, commandX + 1, COMMAND));
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1, commandX + 1, COMMAND));
-	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1, commandX + 1, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , -1, commandX + 4, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , -1, commandX + 4, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -1, commandX + 4, COMMAND));
+	commandVertices.insert(commandVertices.begin() + offset++, Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -1, commandX + 4, COMMAND));
 
 	for (int i = offset; i < commandVertices.size(); i++)
 		commandVertices[i].column++;

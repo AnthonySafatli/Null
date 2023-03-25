@@ -60,7 +60,7 @@ void main() {
 	{
 		// Fixed to top of viewport
 		actualRow = 1;
-		actualColumn = column + 3;
+		actualColumn = column;
 	}
 	if (type == MARGIN)
 	{
