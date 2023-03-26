@@ -32,7 +32,7 @@ public:
     int LongestRowSize();
 
     /* Margin Methods */
-    void AddCharacterToMargin(const char ch, const int index);
+    void AddCharacterToMargin(const char ch, const int index, const float type);
 
     /* Cursor Methods */
     void MoveUp();

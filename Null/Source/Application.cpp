@@ -148,3 +148,9 @@ void UpdateBackground(const float r, const float g, const float b, const float a
 {
     glClearColor(r, g, b, a);
 }
+
+void UpdateMaxHeightWidth()
+{
+    glUniform1i(program.openGL.u_maxHeight.location, ((1.0 / (program.textSize * 0.001)) * ((float)program.height / (float)IDEAL_HEIGHT)) - 4);
+    glUniform1i(program.openGL.u_maxWidth.location, ((1.0 / (program.textSize * 0.001)) * ((float)program.width / (float)IDEAL_WIDTH)) - program.area->leftMargin);
+}

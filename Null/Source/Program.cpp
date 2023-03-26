@@ -72,6 +72,7 @@ std::vector<Vertex> Program::GetVertices()
 	return allVertices;
 }
 
+// TODO: Add to update method, remove everywhere else
 void Program::UpdateIndices()
 {
 	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size() + statusVertices.size() + cursorVertices.size()) / 4 * 6;
@@ -140,15 +141,12 @@ void Program::ProcessChar(unsigned int codepoint)
 void Program::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
-
 	UpdateUniform2f(openGL.u_idealRatio.location, (float)IDEAL_WIDTH / (float)width, (float)IDEAL_HEIGHT / (float)height);
-
-	UpdateUniform1i(openGL.u_maxHeight.location, ((1.0 / (textSize * 0.001)) * ((float)height / (float)IDEAL_HEIGHT)) - 4);
-	UpdateUniform1i(openGL.u_maxWidth.location, ((1.0 / (textSize * 0.001)) * ((float)width / (float)IDEAL_WIDTH)) - area->leftMargin);
 
 	this->width = width;
 	this->height = height;
 
+	UpdateMaxHeightWidth();
 	StatusResize();
 	
 	area->OnResize(width, height);
@@ -179,12 +177,21 @@ void Program::OnScroll(double xOffset, double yOffset)
 
 void Program::Update(const double deltaTime)
 {
+	// TODO: Maybe move from Update
+	// ============================
 	UpdateUniform1i(openGL.u_cursorRow.location, textY + 1);
+
+	if (commandSelected)
+		for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR_COMMAND;
+	else
+		for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR;
+		
+	// ============================
 
 	/* Cursor Animations */
 	// TODO: cursor can go offscreen when in text area
-	float targetRow = commandSelected ? rowIndex - 1 : textY + 1;
-	float targetColumn = commandSelected ? (float)(commandX + 4 - area->leftMargin + columnIndex) : textX + 1;
+	float targetRow = commandSelected ? (float)(((int)rowIndex) - 1) : textY + 1;
+	float targetColumn = commandSelected ? (float)(commandX + 4 - area->leftMargin + ((int)columnIndex)) : textX + 1;
 
 	float deltaRow = deltaTime * (targetRow - cursorVertices[0].row) * (float)cursorSpeed;
 	float deltaColumn = deltaTime * (targetColumn - cursorVertices[0].column) * (float)cursorSpeed;

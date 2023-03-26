@@ -112,6 +112,7 @@ void Command::TextSize(const std::vector<std::string> args)
 	{
 		program.textSize = 24;
 		UpdateUniform1f(program.openGL.u_size.location, program.textSize * 0.001);
+		UpdateMaxHeightWidth();
 		program.RenderStatus("Text Size set to 24");
 		return;
 	}
@@ -119,11 +120,13 @@ void Command::TextSize(const std::vector<std::string> args)
 	{
 		UpdateUniform1f(program.openGL.u_size.location, ++program.textSize * 0.001);
 		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
+		UpdateMaxHeightWidth();
 		return;
 	}
 	else if (sizeStr == "-")
 	{
 		UpdateUniform1f(program.openGL.u_size.location, --program.textSize * 0.001);
+		UpdateMaxHeightWidth();
 		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
 		return;
 	}
@@ -133,6 +136,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		float size = std::stof(sizeStr);
 		program.textSize = size;
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
+		UpdateMaxHeightWidth();
 		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
 	}
 	catch (const std::exception& e)

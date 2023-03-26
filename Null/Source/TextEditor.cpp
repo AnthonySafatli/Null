@@ -185,12 +185,12 @@ void TextEditor::AddLeftMargin()
 		if (leftMargin - i - 1 <= rowNumberString.size())
 		{
 			int index = i - (leftMargin - rowNumberString.size() - 1);
-			AddCharacterToMargin(rowNumberString[index], -leftMargin + i + 1);
+			AddCharacterToMargin(rowNumberString[index], -leftMargin + i + 1, MARGIN);
 
 			continue;
 		}
 
-		AddCharacterToMargin(' ', -leftMargin + i + 1);
+		AddCharacterToMargin(' ', -leftMargin + i + 1, MARGIN);
 	}
 }
 

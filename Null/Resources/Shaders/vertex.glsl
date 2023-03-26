@@ -1,12 +1,15 @@
 // VERTEX
 #version 330 core
 
-#define INVISIBLE 0.0
-#define NORMAL    1.0
-#define CURSOR    2.0
-#define STATUS    3.0
-#define COMMAND   4.0
-#define MARGIN    5.0
+#define INVISIBLE        0.0
+#define NORMAL           1.0
+#define CURSOR           2.0
+#define CURSOR_COMMAND   3.0
+#define CURSOR_INVISIBLE 4.0
+#define STATUS           5.0
+#define COMMAND          6.0
+#define MARGIN           7.0
+#define MARGIN_SELECTED  8.0
 
 uniform vec2 idealRatio; // idealSize / currentSize
 uniform float size;
@@ -43,6 +46,17 @@ void main() {
 	{
 		if (column - columnIndex <= 0)
 			vType = INVISIBLE;
+	}
+
+	// Remove out of bounds cursor
+	if (type == CURSOR)
+	{
+		if (row - rowIndex <= 0)
+			vType = CURSOR_INVISIBLE;
+		if (row - rowIndex > maxHeight)
+			vType = CURSOR_INVISIBLE;
+		if (column - columnIndex <= 0)
+			vType = CURSOR_INVISIBLE;
 	}
 
 	// Calculate screen row and column

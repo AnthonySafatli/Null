@@ -4,12 +4,15 @@
 
 #define MAX_SQAURES_TO_RENDER 10000
 
-#define INVISIBLE 0.0
-#define NORMAL    1.0
-#define CURSOR    2.0
-#define STATUS    3.0
-#define COMMAND   4.0
-#define MARGIN    5.0
+#define INVISIBLE        0.0
+#define NORMAL           1.0
+#define CURSOR           2.0
+#define CURSOR_COMMAND   3.0
+#define CURSOR_INVISIBLE 4.0
+#define STATUS           5.0
+#define COMMAND          6.0
+#define MARGIN           7.0
+#define MARGIN_SELECTED  8.0
 
 struct Vertex
 {

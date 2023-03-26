@@ -191,14 +191,14 @@ int TextArea::LongestRowSize()
 	return highest;
 }
 
-void TextArea::AddCharacterToMargin(const char ch, const int index)
+void TextArea::AddCharacterToMargin(const char ch, const int index, const float type)
 {
 	TexCoords texCoords = GetCoords(ch);
 
-	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rows.size(), index, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, MARGIN));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rows.size(), index, type));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, type));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, type));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, type));
 
 	program.UpdateIndices();
 }
