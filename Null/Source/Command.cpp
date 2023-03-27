@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "Headers/Program.h"
 #include "Headers/Uniforms.h"
@@ -480,15 +481,42 @@ void Command::Notebook(const std::vector<std::string> args)
 	> notebook new name
 	: opens new text editor in current folder with name
 	:
-	> notebook new subfolder ... subfolder
-	: opens new text editor in subfolder without name
-	:
 	> notebook new subfolder ... subfolder name
 	: opens new text editor in subfolder with name
+	:
+	> notebook del name
+	: deletes note
+	:
+	> notebook del subfolder .. subfolder name
+	: deletes note in subfolder
 	*/
 
-	// TODO: Continue
-	program.ExploreFolder("C:/Users/Anthony/source/repos/Null/Null");
+	std::string folder = "C:/Users/Anthony/source/repos/Null/Null";
+
+	if (args.size() == 0)
+	{
+		program.ExploreFolder(folder);
+		return;
+	}
+
+	if (args[0] == "new")
+	{
+		// TODO: Create new folder / file
+		return;
+	}
+
+	if (args[0] == "del")
+	{
+		// TODO: Delete file
+		return;
+	}
+
+	std::stringstream ss = std::stringstream();
+	ss << folder;
+	for (std::string s : args)
+		ss << "/" << s;
+
+	program.ExploreFolder(ss.str());
 }
 
 void Command::Quit(const std::vector<std::string> args)

@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "GLFW/glfw3.h"
+
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 
@@ -40,7 +42,6 @@ FileViewer::FileViewer(const std::string path)
 
 void FileViewer::ProcessKey(int key, int action, int mods)
 {
-	// TODO: Other cursor?
 }
 
 void FileViewer::ProcessChar(unsigned int codepoint)
@@ -107,3 +108,4 @@ void FileViewer::PrintDir()
 
 	RemoveCharacterFromLeft();
 }
+
