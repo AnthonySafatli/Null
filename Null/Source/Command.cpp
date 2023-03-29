@@ -62,8 +62,8 @@ void Command::Execute(const std::string input)
 		Open(args, input);
 	else if (command == "save")
 		Save(args, input);
-	else if (command == "notebook")
-		Notebook(args);
+	/*else if (command == "notebook")
+		Notebook(args);*/
 	else if (command == "quit")
 		Quit(args);
 	else
@@ -322,7 +322,7 @@ void Command::Settings(const std::vector<std::string> args)
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
-	> open dir
+	> open dir 
 	: opens text file in dir
 	:
 	> open new

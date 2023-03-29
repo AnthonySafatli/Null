@@ -35,7 +35,7 @@ void main() {
 	vType = type;
 
 	// Remove out of bounds letters
-	if (type == NORMAL || type == MARGIN)
+	if (type == NORMAL || type == MARGIN || type == MARGIN_SELECTED)
 	{
 		if (row - rowIndex <= 0)
 			vType = INVISIBLE;
