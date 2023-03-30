@@ -184,7 +184,7 @@ void Program::Update(const double deltaTime)
 	if (commandSelected)
 		for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR_COMMAND;
 	else
-		for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR;
+		for (int i = 0; i < 4; i++) cursorVertices[i].type = showCursor ? CURSOR : INVISIBLE;
 		
 	// ============================
 
@@ -515,14 +515,16 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 
 void Program::LoadSettings()
 {
-	// TODO: Write settings string
+	// TODO: Create custom tostring method that crops 0s
 	const std::string settings = "Settings:"
 		"\n\n"
 		"Size: " + std::to_string(textSize) +
 		"\n\n"
-		"Background: 0.03, 0.05, 0.09, 0.85"
+		"Background: " + std::to_string(background.r) + " " + std::to_string(background.g) + " " + std::to_string(background.b) + " " + std::to_string(background.a) +
 		"\n\n"
-		"Foreground: 1.0, 1.0, 1.0, 1.0";
+		"Foreground: " + std::to_string(background.r) + " " + std::to_string(background.g) + " " + std::to_string(background.b) + " " + std::to_string(background.a) +
+		"\n\n"
+		"Speed: " + std::to_string(cursorSpeed);
 
 	OpenViewer(settings, "Settings");
 }

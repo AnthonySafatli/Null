@@ -34,6 +34,9 @@ void main() {
 	vRow = row;
 	vType = type;
 
+	if (type == INVISIBLE)
+		return;
+
 	// Remove out of bounds letters
 	if (type == NORMAL || type == MARGIN || type == MARGIN_SELECTED)
 	{
@@ -76,7 +79,7 @@ void main() {
 		actualRow = 1;
 		actualColumn = column;
 	}
-	if (type == MARGIN)
+	if (type == MARGIN || type == MARGIN_SELECTED)
 	{
 		// Fixed to left of viewport
 		actualColumn = column + leftMargin;

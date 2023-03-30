@@ -13,6 +13,8 @@
 
 #define KEYCODE_ESCAPE 256
 
+enum Page { WELCOME, EDITOR, SETTINGS, HELP };
+
 class Program
 {
 public:
@@ -96,13 +98,16 @@ public:
 
 	/* Text Properties */
 	bool showCursor;
-	unsigned int cursorSpeed;
 	int tabAmount;
-	float textSize;
 
-	/* Window Properties */
+	/* Program Properties */
+	Page currentPage;
+	unsigned int cursorSpeed;
+	float textSize;
 	Colour background;
 	Colour foreground;
+
+	/* Window Properties */
 	int width;
 	int height;
 	const int idealWidth;

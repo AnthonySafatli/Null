@@ -5,8 +5,8 @@
 #include <map>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 #include <iostream>
-#include <sstream>
 
 #include "Headers/Program.h"
 #include "Headers/Uniforms.h"
@@ -225,7 +225,10 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	program.background = colour;
 
 	if (!colour.error)
+	{
+		program.background = colour;
 		UpdateBackground(colour.r, colour.g, colour.b, colour.a);
+	}
 }
 
 void Command::ForegroundColour(const std::vector<std::string> args)
@@ -254,7 +257,10 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	program.foreground = colour;
 
 	if (!colour.error)
+	{
+		program.foreground = colour;
 		UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
+	}
 }
 
 void Command::Help(const std::vector<std::string> args) 
@@ -317,27 +323,28 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Use filesystem namespace
-
+// TODO: Implement File Dialog
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
 	/*
+	> open new
+	: opens new editor
+	:
 	> open dir 
 	: opens text file in dir
 	:
-	> open new
-	: opens new editor in dir
-	:
-	> open new rel dir
-	: opens new text file in dir
-	:
 	> open rel dir
 	: opens text file in dir (relative path)
-	:
-	> open new rel dir
-	: opens new text file in dir (relative path)
 	*/
 
+	/* With NFD
+	> open new
+	: Opens new editor
+	: 
+	> open
+	: Opens NFD and file selected
+	*/
+	
 	if (args.size() == 0)
 	{
 		program.RenderStatus("Command 'open' must have at least one argument");
@@ -349,8 +356,6 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		program.OpenEditor();
 		return;
 	}
-
-	bool newCommand = args[0] == "new";
 	
 	auto editor = dynamic_cast<TextEditor*>(program.area);
 	bool relativable = true;
@@ -360,10 +365,10 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 	if (relativable && editor->fileDirectory == "")  // No path to references
 		relativable = false;
 
-	String path = input.substr(input.find_first_of(newCommand ? "open new" : "open") + (newCommand ? 8 : 4)); 
+	String path = input.substr(input.find_first_of("open") + 4); 
 	path = RemoveLeadingWhitespace(path);
 
-	if (args[0] == "rel" || (args.size() > 1 && args.at(1) == "rel"))
+	if (args[0] == "rel")
 	{
 		if (!relativable)
 		{
@@ -376,19 +381,20 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 	}
 	else
 	{
-		if (path[0] != 'C' || path[1] != ':' || path[2] != '\\')
+		if (path[0] != 'C' || path[1] != ':' || (path[2] != '\\' && path[2] != '/'))
 		{
 			program.RenderStatus("This is not an absolute path");
 			return;
 		}
 	}
-
-	if (newCommand)
-		program.OpenEditor("", path);
-	else
+	
+	if (std::filesystem::exists(path))
 		program.OpenFile(path);
+	else
+		program.OpenEditor("", path);
 }
 
+// TODO: Implement File Dialog
 void Command::Save(const std::vector<std::string> args, std::string input)
 {
 	/*
@@ -400,6 +406,13 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	:
 	> save rel dir
 	: saves the file as dir (realtive path)
+	*/
+
+	/* With NFD
+	> save
+	: saves the text
+	> save as
+	: saves with a new name
 	*/
 
 	auto editor = dynamic_cast<TextEditor*>(program.area);
