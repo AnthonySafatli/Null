@@ -1,6 +1,6 @@
 #include <iostream>
 
-//#include <nfd.h>
+#include <NFD/nfd.h>
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -9,44 +9,25 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
 
-#define DEBUG 1
-
 void Draw();
 
 // TODO: Maybe don't use global variables
+// TODO: Set after init for glfw and glew
 Program program = Program(1800, 1100, 24, 4);
 
 int main(void)
 {
-    /*NFD_Init();
-
-    nfdchar_t* outPath;
-    nfdfilteritem_t filterItem[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
-    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, NULL);
-    if (result == NFD_OKAY)
-    {
-        puts("Success!");
-        puts(outPath);
-        NFD_FreePath(outPath);
-    }
-    else if (result == NFD_CANCEL)
-    {
-        puts("User pressed cancel.");
-    }
-    else
-    {
-        printf("Error: %s\n", NFD_GetError());
-    }
-
-    NFD_Quit();
-    return 0;*/
-
-
+    /* Initialize NFD */
+    NFD_Init();
+    
     /* Initialize GLFW */
     GLFWwindow* window;
 
     if (!glfwInit())
+    {
+        NFD_Quit();
         return -1;
+    }
 
     // TODO: Fix Transparent Window
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
@@ -54,6 +35,7 @@ int main(void)
     window = glfwCreateWindow(program.width, program.height, "Null", NULL, NULL);
     if (!window)
     {
+        NFD_Quit();
         glfwTerminate();
         return -2;
     }
@@ -68,7 +50,11 @@ int main(void)
 
     /* OpenGL Setup */
     if (glewInit())
+    {
+        NFD_Quit();
+        glfwTerminate();
         return -3;
+    }
 
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
@@ -107,14 +93,15 @@ int main(void)
 
         glfwPollEvents();
 
-#if DEBUG
-        GetErrors();
-#endif
+        #if _DEBUG
+            GetErrors();
+        #endif
 
         if (program.shouldClose)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
+    NFD_Quit();
     glfwTerminate();
 
     return 0;
