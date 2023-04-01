@@ -68,8 +68,8 @@ public:
 
 	/* TextArea Methods */
 	void OpenEditor();
-	void OpenEditor(const std::string text, const std::string dir);
-	void OpenFile(const std::string dir);
+	void OpenEditor(const std::string text, const std::string path);
+	void OpenFile(const std::string path);
 	void OpenNote(const std::string name);
 	void OpenViewer(const std::string str, const std::string pageName);
 	void LoadSettings();

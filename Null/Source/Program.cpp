@@ -465,7 +465,7 @@ void Program::OpenEditor()
 	area = new TextEditor();
 }
 
-void Program::OpenEditor(const std::string text, const std::string dir)
+void Program::OpenEditor(const std::string text, const std::string path)
 {
 	vertices.clear();
 	marginVertices.clear();
@@ -473,7 +473,8 @@ void Program::OpenEditor(const std::string text, const std::string dir)
 
 	delete area;
 
-	std::vector<std::string> dirVec = Split(dir, '\\');
+	// TODO: Use filesystem to get filename
+	std::vector<std::string> dirVec = Split(path, '\\');
 	std::string fileName = dirVec[dirVec.size() - 1];
 	std::stringstream ss;
 	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
@@ -481,17 +482,18 @@ void Program::OpenEditor(const std::string text, const std::string dir)
 	area = new TextEditor(text, ss.str(), fileName);
 }
 
-void Program::OpenFile(const std::string dir)
+void Program::OpenFile(const std::string path)
 {
-	std::ifstream file(dir);
+	std::ifstream file(path);
 	if (!file.is_open())
 	{
-		RenderStatus("Error occured while opening " + dir);
+		RenderStatus("Error occured while opening " + path);
 		return;
 	}
 
+	// TODO: Close file?
 	std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	OpenEditor(str, dir);
+	OpenEditor(str, path);
 }
 
 void Program::OpenNote(const std::string name)

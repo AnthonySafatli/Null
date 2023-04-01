@@ -1,5 +1,7 @@
 #include "Headers/Command.h"
 
+#include "NFD/nfd.h"
+
 #include <string>
 #include <vector>
 #include <map>
@@ -323,31 +325,33 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-// TODO: Implement File Dialog
 void Command::Open(const std::vector<std::string> args, std::string input)
 {
-	/*
-	> open new
-	: opens new editor
-	:
-	> open dir 
-	: opens text file in dir
-	:
-	> open rel dir
-	: opens text file in dir (relative path)
-	*/
-
-	/* With NFD
-	> open new
-	: Opens new editor
-	: 
+	/* 
 	> open
 	: Opens NFD and file selected
+	: 
+	> open new
+	: Opens new editor
 	*/
 	
 	if (args.size() == 0)
 	{
-		program.RenderStatus("Command 'open' must have at least one argument");
+		nfdchar_t* path;
+		nfdresult_t result = NFD_OpenDialogU8(&path, NULL, 0, NULL);
+
+		if (result != NFD_OKAY)
+		{
+			if (result != NFD_CANCEL)
+				program.RenderStatus("An error occured opening the file dialog");
+
+			return;
+		}
+
+		// TODO: Change parameter to nfdchar_t**
+		// program.OpenFile(path);
+
+		NFD_FreePath(path);
 		return;
 	}
 
@@ -356,120 +360,33 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		program.OpenEditor();
 		return;
 	}
-	
-	auto editor = dynamic_cast<TextEditor*>(program.area);
-	bool relativable = true;
 
-	if (editor == nullptr)                           // Not in TextEditor mode
-		relativable = false;
-	if (relativable && editor->fileDirectory == "")  // No path to references
-		relativable = false;
-
-	String path = input.substr(input.find_first_of("open") + 4); 
-	path = RemoveLeadingWhitespace(path);
-
-	if (args[0] == "rel")
-	{
-		if (!relativable)
-		{
-			program.RenderStatus("Cannot use argument 'rel', there is nothing to reference");
-			return;
-		}
-
-		String subStr = path.substr(3);
-		path = editor->fileDirectory + RemoveLeadingWhitespace(subStr);
-	}
-	else
-	{
-		if (path[0] != 'C' || path[1] != ':' || (path[2] != '\\' && path[2] != '/'))
-		{
-			program.RenderStatus("This is not an absolute path");
-			return;
-		}
-	}
-	
-	if (std::filesystem::exists(path))
-		program.OpenFile(path);
-	else
-		program.OpenEditor("", path);
+	program.RenderStatus("Command " + input + " is invalid");
 }
 
-// TODO: Implement File Dialog
 void Command::Save(const std::vector<std::string> args, std::string input)
 {
-	/*
-	> save
-	: saves the file
-	:
-	> save dir
-	: saves the file as dir
-	:
-	> save rel dir
-	: saves the file as dir (realtive path)
-	*/
-
 	/* With NFD
 	> save
 	: saves the text
+	:
 	> save as
 	: saves with a new name
 	*/
 
-	auto editor = dynamic_cast<TextEditor*>(program.area);
-
-	if (editor == nullptr) // Not in TextEditor mode
-		return;
-
 	if (args.size() == 0)
 	{
-		if (editor->fileName == "")
-		{
-			program.RenderStatus("File path unkown");
-			return;
-		}
-
-		if (!WriteToFile(editor->fileDirectory + editor->fileName))
-		{
-			program.RenderStatus("Error: " + editor->fileName + " failed to save successfully");
-			return;
-		}
-
-		program.RenderStatus(editor->fileName + " saved successfully");
+		// save
 		return;
 	}
 
-	String path = input.substr(input.find_first_of("save") + (4));
-	path = RemoveLeadingWhitespace(path);
-
-	if (args[0] == "rel")
+	if (args.size() == 1 && args[0] == "as")
 	{
-		if (editor->fileDirectory == "")
-		{
-			program.RenderStatus("Current file location cannot be found");
-			return;
-		}
-
-		String subStr = path.substr(3);
-		path = editor->fileDirectory + RemoveLeadingWhitespace(subStr);
-	}
-	else
-	{
-		if (path[0] != 'C' || path[1] != ':' || path[2] != '\\')
-		{
-			program.RenderStatus("This is not an absolute path");
-			return;
-		}
-	}
-
-	Vector<String> pathVec = Split(path, '/');
-	String fileName = pathVec[pathVec.size() - 1];
-
-	if (!WriteToFile(path))
+		// save as
 		return;
+	}
 
-	editor->SetPath(path);
-
-	program.RenderStatus(fileName + " saved successfully");
+	program.RenderStatus("Command \"" + input + "\" is invalid");
 }
 
 // TODO: Implement 'notebook' command
