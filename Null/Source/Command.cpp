@@ -29,10 +29,7 @@ Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b
 Vector<String> Split(const String str, const char separator);
 Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour, const float defaultA);
 Map<String, Colour> GenerateColourMap();
-String GetDir(const Vector<String> args);
-bool WriteToFile(const String dir);
-String GetTextFromEditor();
-String RemoveLeadingWhitespace(const String str);
+void SaveFile(auto* editor);
 bool isFloat(const String number);
 void PrintColour(const String commandName, const Colour colour);
 
@@ -338,7 +335,7 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 	if (args.size() == 0)
 	{
 		nfdchar_t* path;
-		nfdresult_t result = NFD_OpenDialogU8(&path, NULL, 0, NULL);
+		nfdresult_t result = NFD_OpenDialog(&path, NULL, 0, NULL);
 
 		if (result != NFD_OKAY)
 		{
@@ -348,8 +345,9 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 			return;
 		}
 
-		// TODO: Change parameter to nfdchar_t**
-		// program.OpenFile(path);
+		std::stringstream ss;
+		ss << path;
+		program.OpenFile(ss.str());
 
 		NFD_FreePath(path);
 		return;
@@ -361,12 +359,12 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		return;
 	}
 
-	program.RenderStatus("Command " + input + " is invalid");
+	program.RenderStatus("Command \"" + input + "\" is invalid");
 }
 
 void Command::Save(const std::vector<std::string> args, std::string input)
 {
-	/* With NFD
+	/*
 	> save
 	: saves the text
 	:
@@ -374,15 +372,27 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	: saves with a new name
 	*/
 
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+	if (editor == NULL)
+		return;
+
 	if (args.size() == 0)
 	{
-		// save
-		return;
+		if (editor->fileName == "")
+		{
+			SaveFile(&editor);
+			return;
+		}
+
+		std::ofstream file(editor->fileDirectory);
+		file << editor->GetText();
+
+		// TODO: check if file saved successfully, the print status to screen
 	}
 
 	if (args.size() == 1 && args[0] == "as")
 	{
-		// save as
+		SaveFile(&editor);
 		return;
 	}
 
@@ -745,70 +755,26 @@ Map<String, Colour> GenerateColourMap()
 	return colours;
 }
 
-String GetDir(const Vector<String> args)
+void SaveFile(auto* editor)
 {
-	if (args.size() != 2)
-		return "";
+	nfdchar_t* path;
+	nfdresult_t result = NFD_SaveDialog(&path, NULL, 0, NULL, NULL);
 
-	if (args[0] == "abs") // absolute path
+	if (result != NFD_OKAY)
 	{
-		if (args[1][0] != 'C' || args[1][1] != ':' || args[1][2] != '\\')
-			return "";
-			
-		return args[1];
+		if (result != NFD_CANCEL)
+			program.RenderStatus("An error occured opening the file dialog");
+
+		return;
 	}
 
-	if (args[0] == "rel") // relative path
-	{
-		auto editor = dynamic_cast<TextEditor*>(program.area);
+	std::ofstream file(path);
+	file << (*(*editor)).GetText();
 
-		if (editor->fileDirectory == "")
-			return "";
+	// TODO: check if file saved successfully, the print status to screen
+	// TODO: Set fileName and fileDir in 
 
-		return editor->fileDirectory + args[1];
-	}
-
-	return "";
-}
-
-bool WriteToFile(const String path)
-{
-	std::ofstream outputFile(path);
-
-	if (!outputFile.is_open()) {
-		program.RenderStatus("Error opening file " + path);
-		return false;
-	}
-
-	outputFile << GetTextFromEditor();
-	outputFile.close();
-
-	if (outputFile.fail()) {
-		program.RenderStatus("Error writing to file " + path);
-		return false;
-	}
-
-	return true;
-}
-
-String GetTextFromEditor()
-{
-	auto editor = dynamic_cast<TextEditor*>(program.area);
-
-	if (editor == nullptr)
-		return "";
-
-	return editor->GetText();
-}
-
-String RemoveLeadingWhitespace(const String str) {
-	String newStr(str);
-	int pos = newStr.find_first_not_of(" \t\n\r\f\v");
-
-	if (pos != std::string::npos) 
-		newStr.erase(0, pos);
-
-	return newStr;
+	NFD_FreePath(path);
 }
 
 bool isFloat(const String number)
