@@ -10,12 +10,13 @@ private:
 
 	/* Commands */
 	static void Echo(const std::vector<std::string> args);                    // prints text in status bar
+	static void Refresh(const std::vector<std::string> args);                 // recreates all the vertices based on the text
 
 	/* Change Settings */
 	static void TextSize(const std::vector<std::string> args);                // changes text size
+	static void CursorSpeed(const std::vector<std::string> args);             // changes cursor speed
 	static void BackgroundColour(const std::vector<std::string> args);        // changes background colour
 	static void ForegroundColour(const std::vector<std::string> args);        // changes foreground colour
-	static void CursorSpeed(const std::vector<std::string> args);             // changes cursor speed
 	
 	/* Opens Pages */
 	static void Help(const std::vector<std::string> args);                    // opens help page

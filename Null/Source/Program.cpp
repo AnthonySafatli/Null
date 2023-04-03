@@ -58,7 +58,6 @@ Program::~Program()
 void Program::GLInit()
 {
 	openGL.Init();
-	UpdateIndices();
 }
 
 std::vector<Vertex> Program::GetVertices()
@@ -72,7 +71,6 @@ std::vector<Vertex> Program::GetVertices()
 	return allVertices;
 }
 
-// TODO: Add to update method, remove everywhere else
 void Program::UpdateIndices()
 {
 	int neededIndices = (vertices.size() + marginVertices.size() + commandVertices.size() + statusVertices.size() + cursorVertices.size()) / 4 * 6;
@@ -185,7 +183,6 @@ void Program::Update(const double deltaTime)
 		for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR_COMMAND;
 	else
 		for (int i = 0; i < 4; i++) cursorVertices[i].type = showCursor ? CURSOR : INVISIBLE;
-		
 	// ============================
 
 	/* Cursor Animations */
@@ -232,6 +229,8 @@ void Program::Update(const double deltaTime)
 		if (!colSet)
 			cursorVertices[i].column += deltaColumn;
 	}
+
+	UpdateIndices();
 }
 
 /* Status Methods */
@@ -292,8 +291,6 @@ void Program::StatusResize()
 		statusVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), -2, i, STATUS));
 		statusVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), -2, i, STATUS));
 	}
-
-	UpdateIndices();
 }
 
 /* Command Line Methods */
@@ -363,8 +360,6 @@ void Program::AddCharacterCommand(const char ch)
 	for (int i = offset; i < commandVertices.size(); i++)
 		commandVertices[i].column++;
 
-	UpdateIndices();
-
 	commandText.insert(commandText.begin() + commandX, ch);
 
 	MoveRightCommand();
@@ -410,7 +405,6 @@ void Program::EnterCommand()
 
 	commandVertices.clear();
 	AddCommandSymbol();
-	UpdateIndices();
 	commandText.clear(); 
 	commandX = 0;
 	commandSelected = false;
@@ -447,8 +441,6 @@ void Program::RemoveCharacterFromRightCommand()
 	for (int i = index; i < commandVertices.size(); i++)
 		commandVertices[i].column--;
 	
-	UpdateIndices();
-	
 	commandText.erase(commandText.begin() + commandX);
 }
 
@@ -458,7 +450,6 @@ void Program::OpenEditor()
 {
 	vertices.clear();
 	marginVertices.clear();
-	UpdateIndices();
 
 	delete area;
 
@@ -469,7 +460,6 @@ void Program::OpenEditor(const std::string text, const std::string path)
 {
 	vertices.clear();
 	marginVertices.clear();
-	UpdateIndices();
 
 	delete area;
 
@@ -508,7 +498,6 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 {
 	vertices.clear();
 	marginVertices.clear();
-	UpdateIndices();
 
 	delete area;
 
@@ -546,7 +535,6 @@ void Program::ExploreFolder(const std::string path)
 {
 	vertices.clear();
 	marginVertices.clear();
-	UpdateIndices();
 
 	delete area;
 

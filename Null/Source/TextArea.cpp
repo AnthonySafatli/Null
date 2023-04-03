@@ -52,8 +52,6 @@ void TextArea::AddCharacter(const char ch)
 	for (int i = offset; i < lastIndexInRowVertices; i++)
 		program.vertices[i].column++;
 
-	program.UpdateIndices();
-
 	rows[program.textY].insert(rows[program.textY].begin() + program.textX, ch);
 
 	MoveRight();
@@ -199,8 +197,6 @@ void TextArea::AddCharacterToMargin(const char ch, const int index, const float 
 	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, type));
 	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, type));
 	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, type));
-
-	program.UpdateIndices();
 }
 
 /* ================= Movement Methods ================= */

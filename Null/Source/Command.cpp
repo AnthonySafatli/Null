@@ -30,6 +30,7 @@ Vector<String> Split(const String str, const char separator);
 Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour, const float defaultA);
 Map<String, Colour> GenerateColourMap();
 void SaveFile(auto* editor);
+bool SavedSuccessfully(const std::string path);
 bool isFloat(const String number);
 void PrintColour(const String commandName, const Colour colour);
 
@@ -63,6 +64,8 @@ void Command::Execute(const std::string input)
 		Save(args, input);
 	/*else if (command == "notebook")
 		Notebook(args);*/
+	else if (command == "refresh")
+		Refresh(args);
 	else if (command == "quit")
 		Quit(args);
 	else
@@ -82,6 +85,15 @@ void Command::Echo(const std::vector<std::string> args)
 	for (String str : args) ss << str + " ";
 
 	program.RenderStatus(ss.str());
+}
+
+void Command::Refresh(const std::vector<std::string> args) 
+{
+	// cursor vertices
+	// margin vretices
+	// command vertices
+	// vertices
+	// status
 }
 
 void Command::TextSize(const std::vector<std::string> args)
@@ -387,7 +399,12 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 		std::ofstream file(editor->fileDirectory);
 		file << editor->GetText();
 
-		// TODO: check if file saved successfully, the print status to screen
+		if (SavedSuccessfully(editor->fileDirectory))
+			program.RenderStatus(editor->fileName + " saved successfully");
+		else
+			program.RenderStatus("Error occured while saving " + editor->fileName);
+
+		return;
 	}
 
 	if (args.size() == 1 && args[0] == "as")
@@ -399,9 +416,10 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	program.RenderStatus("Command \"" + input + "\" is invalid");
 }
 
-// TODO: Implement 'notebook' command
 void Command::Notebook(const std::vector<std::string> args)
 {
+	// TODO: Implement 'notebook' command
+
 	/*
 	> notebook
 	: opens notebook file viewer
@@ -430,33 +448,6 @@ void Command::Notebook(const std::vector<std::string> args)
 	> notebook del subfolder .. subfolder name
 	: deletes note in subfolder
 	*/
-
-	std::string folder = "C:/Users/Anthony/source/repos/Null/Null";
-
-	if (args.size() == 0)
-	{
-		program.ExploreFolder(folder);
-		return;
-	}
-
-	if (args[0] == "new")
-	{
-		// TODO: Create new folder / file
-		return;
-	}
-
-	if (args[0] == "del")
-	{
-		// TODO: Delete file
-		return;
-	}
-
-	std::stringstream ss = std::stringstream();
-	ss << folder;
-	for (std::string s : args)
-		ss << "/" << s;
-
-	program.ExploreFolder(ss.str());
 }
 
 void Command::Quit(const std::vector<std::string> args)
@@ -771,10 +762,26 @@ void SaveFile(auto* editor)
 	std::ofstream file(path);
 	file << (*(*editor)).GetText();
 
-	// TODO: check if file saved successfully, the print status to screen
+	std::string fileName;
+
+	if (!SavedSuccessfully(path))
+	{
+		program.RenderStatus("Error occured while saving " + fileName);
+		NFD_FreePath(path);
+		return;
+	}
+
+	program.RenderStatus(fileName + " saved successfully");
+
 	// TODO: Set fileName and fileDir in 
 
 	NFD_FreePath(path);
+}
+
+bool SavedSuccessfully(const std::string path) 
+{
+	// TODO: Implement
+	return false;
 }
 
 bool isFloat(const String number)
