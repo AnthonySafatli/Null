@@ -15,6 +15,7 @@
 #include "Headers/TextEditor.h"
 #include "Headers/TextViewer.h"
 #include "Headers/TextArea.h"
+#include "Headers/Character.h"
 
 #define String std::string
 #define Vector std::vector
@@ -89,11 +90,21 @@ void Command::Echo(const std::vector<std::string> args)
 
 void Command::Refresh(const std::vector<std::string> args) 
 {
-	// cursor vertices
-	// margin vretices
-	// command vertices
-	// vertices
-	// status
+	program.vertices.clear();
+	
+	for (int i = 0; i < program.area->rows.size(); i++)
+	{
+		for (int j = 0; j < program.area->rows[i].size(); j++) 
+		{
+			TexCoords coord = GetCoords(program.area->rows[i][j]);
+			program.vertices.push_back(Vertex(0.0, 0.0, coord.u               , coord.v               , i + 1, j + 1, NORMAL));
+			program.vertices.push_back(Vertex(1.0, 0.0, coord.u + (1.0 / 10.0), coord.v               , i + 1, j + 1, NORMAL));
+			program.vertices.push_back(Vertex(1.0, 1.0, coord.u + (1.0 / 10.0), coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
+			program.vertices.push_back(Vertex(0.0, 1.0, coord.u               , coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
+		}
+	}
+
+	program.RenderStatus("Refresh completed");
 }
 
 void Command::TextSize(const std::vector<std::string> args)
