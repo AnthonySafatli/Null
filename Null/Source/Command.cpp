@@ -13,8 +13,8 @@
 #include "Headers/Program.h"
 #include "Headers/Uniforms.h"
 #include "Headers/TextEditor.h"
-#include "Headers/TextViewer.h"
 #include "Headers/TextArea.h"
+#include "Headers/TextViewer.h"
 #include "Headers/Character.h"
 
 #define String std::string
@@ -30,7 +30,7 @@ Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b
 Vector<String> Split(const String str, const char separator);
 Colour ParseColour(const Vector<String> args, const String commandName, const Colour defaultColour, const float defaultA);
 Map<String, Colour> GenerateColourMap();
-void SaveFile(auto* editor);
+void SaveFile(TextEditor** editor);
 bool SavedSuccessfully(const std::string path);
 bool isFloat(const String number);
 void PrintColour(const String commandName, const Colour colour);
@@ -757,7 +757,7 @@ Map<String, Colour> GenerateColourMap()
 	return colours;
 }
 
-void SaveFile(auto* editor)
+void SaveFile(TextEditor** editor)
 {
 	nfdchar_t* path;
 	nfdresult_t result = NFD_SaveDialog(&path, NULL, 0, NULL, NULL);
@@ -773,7 +773,9 @@ void SaveFile(auto* editor)
 	std::ofstream file(path);
 	file << (*(*editor)).GetText();
 
-	std::string fileName;
+	std::stringstream ss;
+	ss << path;
+	std::string fileName = std::filesystem::path(path).filename().string();
 
 	if (!SavedSuccessfully(path))
 	{
@@ -784,14 +786,22 @@ void SaveFile(auto* editor)
 
 	program.RenderStatus(fileName + " saved successfully");
 
-	// TODO: Set fileName and fileDir in 
+	(*(*editor)).fileName = fileName;
+	(*(*editor)).fileDirectory = ss.str();
 
 	NFD_FreePath(path);
 }
 
-bool SavedSuccessfully(const std::string path) 
+bool SavedSuccessfully(const TextEditor editor) 
 {
-	// TODO: Implement
+	std::ofstream outfile(editor.fileDirectory); 
+
+	if (outfile.is_open()) 
+	{
+		outfile.close();
+		return true;
+	}
+
 	return false;
 }
 
