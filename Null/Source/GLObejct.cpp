@@ -13,7 +13,7 @@ void GLObject::Init()
 
 	indexBuffer.Init();
 
-	// TODO: Fix paths - end
+	// TODO: Fix paths 
 	shaderProgram.Init(
 		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\vertex.glsl",
 		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\fragment.glsl"

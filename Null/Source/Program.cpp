@@ -463,13 +463,7 @@ void Program::OpenEditor(const std::string text, const std::string path)
 
 	delete area;
 
-	// TODO: Use filesystem to get filename
-	std::vector<std::string> dirVec = Split(path, '\\');
-	std::string fileName = dirVec[dirVec.size() - 1];
-	std::stringstream ss;
-	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
-
-	area = new TextEditor(text, ss.str(), fileName);
+	area = new TextEditor(text, path, std::filesystem::path(path).filename().string());
 }
 
 void Program::OpenFile(const std::string path)
@@ -481,7 +475,6 @@ void Program::OpenFile(const std::string path)
 		return;
 	}
 
-	// TODO: Close file?
 	std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	OpenEditor(str, path);
 }
@@ -506,7 +499,6 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 
 void Program::LoadSettings()
 {
-	// TODO: Create custom tostring method that crops 0s
 	const std::string settings = "Settings:"
 		"\n\n"
 		"Size: " + std::to_string(textSize) +
