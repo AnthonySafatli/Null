@@ -93,7 +93,6 @@
     <ClCompile Include="Source\FileViewer.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\Command.cpp" />
-    <ClCompile Include="Source\Misc.cpp" />
     <ClCompile Include="Source\TextArea.cpp" />
     <ClCompile Include="Source\Program.cpp" />
     <ClCompile Include="Source\Application.cpp" />
@@ -116,7 +115,6 @@
     <ClInclude Include="Source\Headers\Command.h" />
     <ClInclude Include="Source\Headers\FileViewer.h" />
     <ClInclude Include="Source\Headers\GLObejct.h" />
-    <ClInclude Include="Source\Headers\Misc.h" />
     <ClInclude Include="Source\Headers\Program.h" />
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
     <ClInclude Include="Source\Headers\TextArea.h" />

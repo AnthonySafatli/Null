@@ -51,9 +51,6 @@
     <ClCompile Include="Source\FileViewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Misc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\fragment.glsl" />
@@ -97,9 +94,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Headers\FileViewer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Headers\Misc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -245,18 +245,19 @@ void TextEditor::UpdateRowColVisual()
 		program.rowIndex += program.textY - ((int)program.rowIndex + rows) + 1;
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
-	else if ((int)program.rowIndex > (int)program.textY)       // if cursor is above the viewport
+	else if ((int)program.rowIndex > (int)program.textY) // if cursor is above the viewport
 	{
 		program.rowIndex = (int)program.textY;
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
 
+	// TODO: Debug left (after vertex.glsl remake)
 	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if right of the viewport
 	{
 		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
 		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
 	}
-	else if ((int)program.columnIndex > (int)program.textX)       // if cursor is left of the viewport
+	else if ((int)program.columnIndex > (int)program.textX) // if cursor is left of the viewport
 	{
 		program.columnIndex = (int)program.textX;
 		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
