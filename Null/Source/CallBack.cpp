@@ -1,12 +1,15 @@
 #include "Headers/CallBack.h"
 #include "Headers/Program.h"
 
-/* ====== CallBack ====== */
+#include <iostream>
 
 extern Program program;
 
 void CallBack::KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+#if _DEBUG
+	std::cout << "Key: " << key << " Scancode: " << scancode << " Action: " << action << " Mods: " << mods << std::endl;
+#endif
 	program.ProcessKey(key, action, mods);
 }
 

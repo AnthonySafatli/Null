@@ -457,13 +457,3 @@ void Command::Quit(const std::vector<std::string> args)
 
 	program.shouldClose = true;
 }
-
-
-/* 
-More Possible Commands:
-- quit
-- undo   (ctrl + z)
-- redo   (ctrl + y)
-- reload (ctrl + r)
-- text / keyboard commands 
-*/

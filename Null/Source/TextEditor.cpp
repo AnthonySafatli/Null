@@ -113,7 +113,7 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 	if (action == GLFW_RELEASE)
 		return;
 
-	Shortcut::TextEditorShortcuts(key, action);
+	Shortcut::TextEditorShortcuts(key, action, mods);
 
 	switch (key)
 	{

@@ -112,7 +112,7 @@ void Program::ProcessKey(int key, int action, int mods)
 		return;
 	}
 
-	Shortcut::UniversalShortcuts(key, action);
+	Shortcut::UniversalShortcuts(key, action, mods);
 
 	if (commandSelected)
 	{
@@ -302,7 +302,7 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 	if (action == GLFW_RELEASE)
 		return;
 
-	Shortcut::CommandShortcuts(key, action);
+	Shortcut::CommandShortcuts(key, action, mods);
 
 	switch (key)
 	{
