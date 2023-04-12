@@ -115,13 +115,23 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 
 	Shortcut::TextEditorShortcuts(key, action, mods);
 
+	bool numLock = (mods & GLFW_MOD_NUM_LOCK) == GLFW_MOD_NUM_LOCK;
+
 	switch (key)
 	{
 	case GLFW_KEY_HOME:
 		MoveHome();
 		UpdateRowColVisual();
 		break;
+	case GLFW_KEY_KP_7: // TODO: Fix num lock stuff
+		MoveHome();
+		UpdateRowColVisual();
+		break;
 	case GLFW_KEY_END:
+		MoveEnd();
+		UpdateRowColVisual();
+		break;
+	case GLFW_KEY_KP_1:
 		MoveEnd();
 		UpdateRowColVisual();
 		break;

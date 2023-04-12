@@ -23,6 +23,8 @@ Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b
 
 void Command::Execute(const std::string input)
 {
+	std::string cleanInput = Trim(input, " ");
+	std::transform(cleanInput.begin(), cleanInput.end(), cleanInput.begin(), ::tolower);
 	std::vector<std::string> args = Split(input, ' ');
 
 	if (args.size() < 1)

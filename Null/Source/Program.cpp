@@ -309,7 +309,13 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 	case GLFW_KEY_HOME:
 		MoveHomeCommand();
 		break;
+	case GLFW_KEY_KP_7:
+		MoveHomeCommand();
+		break;
 	case GLFW_KEY_END:
+		MoveEndCommand();
+		break;
+	case GLFW_KEY_KP_1:
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_RIGHT:
