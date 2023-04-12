@@ -18,9 +18,10 @@
 #include "Headers/Character.h"
 #include "Headers/Command.h"
 #include "Headers/Misc.h"
+#include "Headers/Shortcut.h"
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount)
-	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
+	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT), 
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(50),
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false),
 	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1), window(0)
@@ -111,13 +112,7 @@ void Program::ProcessKey(int key, int action, int mods)
 		return;
 	}
 
-	int leftCtrl = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
-	int rightCtrl = glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL);
-	bool ctrl = leftCtrl == GLFW_PRESS || rightCtrl == GLFW_PRESS;
-	if (ctrl) 
-	{
-		
-	}
+	Shortcut::UniversalShortcuts(key, action);
 
 	if (commandSelected)
 	{
@@ -134,11 +129,6 @@ void Program::ProcessKey(int key, int action, int mods)
 
 void Program::ProcessChar(unsigned int codepoint)
 {
-	int leftCtrl = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
-	int rightCtrl = glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL);
-	bool ctrl = leftCtrl == GLFW_PRESS || rightCtrl == GLFW_PRESS;
-	if (ctrl) return;
-
 	if (commandSelected)
 	{
 		ProcessCharCommand(codepoint);
@@ -312,6 +302,8 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 	if (action == GLFW_RELEASE)
 		return;
 
+	Shortcut::CommandShortcuts(key, action);
+
 	switch (key)
 	{
 	case GLFW_KEY_HOME:
@@ -337,7 +329,7 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 		ScrollDownAutoComplete();
 		break;
 
-	case GLFW_KEY_ESCAPE:
+	case GLFW_KEY_ENTER:
 		EnterCommand();
 		break;
 		

@@ -10,6 +10,7 @@
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 #include "Headers/Uniforms.h"
+#include "Headers/Shortcut.h"
 
 std::vector<std::string> Split(const std::string str, const char separator);
 
@@ -111,6 +112,8 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
+
+	Shortcut::TextEditorShortcuts(key, action);
 
 	switch (key)
 	{

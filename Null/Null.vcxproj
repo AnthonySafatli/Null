@@ -94,6 +94,7 @@
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\Command.cpp" />
     <ClCompile Include="Source\Misc.cpp" />
+    <ClCompile Include="Source\Shortcut.cpp" />
     <ClCompile Include="Source\TextArea.cpp" />
     <ClCompile Include="Source\Program.cpp" />
     <ClCompile Include="Source\Application.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Source\Headers\Misc.h" />
     <ClInclude Include="Source\Headers\Program.h" />
     <ClInclude Include="Source\Headers\GLAbstraction.h" />
+    <ClInclude Include="Source\Headers\Shortcut.h" />
     <ClInclude Include="Source\Headers\TextArea.h" />
     <ClInclude Include="Source\Headers\TextEditor.h" />
     <ClInclude Include="Source\Headers\TextViewer.h" />
