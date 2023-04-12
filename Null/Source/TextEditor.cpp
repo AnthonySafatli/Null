@@ -114,46 +114,46 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 
 	switch (key)
 	{
-	case KEYCODE_HOME:
+	case GLFW_KEY_HOME:
 		MoveHome();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_END:
+	case GLFW_KEY_END:
 		MoveEnd();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_RIGHT:
+	case GLFW_KEY_RIGHT:
 		MoveRight();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_LEFT:
+	case GLFW_KEY_LEFT:
 		MoveLeft();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_UP:
+	case GLFW_KEY_UP:
 		MoveUp();
 		UpdateCol();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_DOWN:
+	case GLFW_KEY_DOWN:
 		MoveDown();
 		UpdateCol();
 		UpdateRowColVisual();
 		break;
 
-	case KEYCODE_ENTER:
+	case GLFW_KEY_ENTER:
 		Return();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_DEL:
+	case GLFW_KEY_BACKSPACE:
 		RemoveCharacterFromLeft();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_DELETE:
+	case GLFW_KEY_DELETE:
 		RemoveCharacterFromRight();
 		UpdateRowColVisual();
 		break;
-	case KEYCODE_TAB:
+	case GLFW_KEY_TAB:
 		AddTab();
 		UpdateRowColVisual();
 		break;

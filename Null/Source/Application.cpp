@@ -39,6 +39,7 @@ int main(void)
         glfwTerminate();
         return -2;
     }
+    program.window = window;
 
     glfwMakeContextCurrent(window);
 

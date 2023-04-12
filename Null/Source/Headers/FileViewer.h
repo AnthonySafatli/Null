@@ -5,9 +5,6 @@
 
 #include "TextArea.h"
 
-#define KEYCODE_UP   265
-#define KEYCODE_DOWN 264
-
 class FileViewer : public TextArea
 {
 public:

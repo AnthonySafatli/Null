@@ -17,14 +17,13 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
 #include "Headers/Command.h"
+#include "Headers/Misc.h"
 
-std::vector<std::string> Split(const std::string str, const char separator);
-
-Program::Program(const int width, const int height, const float textSize, const int tabAmount) 
+Program::Program(const int width, const int height, const float textSize, const int tabAmount)
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT),
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(50),
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false),
-	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1)
+	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1), window(0)
 {
 	// Add > to Command Line
 	AddCommandSymbol();
@@ -106,10 +105,18 @@ void Program::AddCommandSymbol()
 
 void Program::ProcessKey(int key, int action, int mods)
 {
-	if (key == KEYCODE_ESCAPE && action != GLFW_RELEASE)
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		commandSelected = !commandSelected;
 		return;
+	}
+
+	int leftCtrl = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
+	int rightCtrl = glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL);
+	bool ctrl = leftCtrl == GLFW_PRESS || rightCtrl == GLFW_PRESS;
+	if (ctrl) 
+	{
+		
 	}
 
 	if (commandSelected)
@@ -127,6 +134,11 @@ void Program::ProcessKey(int key, int action, int mods)
 
 void Program::ProcessChar(unsigned int codepoint)
 {
+	int leftCtrl = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
+	int rightCtrl = glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL);
+	bool ctrl = leftCtrl == GLFW_PRESS || rightCtrl == GLFW_PRESS;
+	if (ctrl) return;
+
 	if (commandSelected)
 	{
 		ProcessCharCommand(codepoint);
@@ -302,37 +314,37 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 
 	switch (key)
 	{
-	case KEYCODE_HOME:
+	case GLFW_KEY_HOME:
 		MoveHomeCommand();
 		break;
-	case KEYCODE_END:
+	case GLFW_KEY_END:
 		MoveEndCommand();
 		break;
-	case KEYCODE_RIGHT:
+	case GLFW_KEY_RIGHT:
 		MoveRightCommand();
 		break;
-	case KEYCODE_LEFT:
+	case GLFW_KEY_LEFT:
 		MoveLeftCommand();
 		break;
 
-	case KEYCODE_TAB:
+	case GLFW_KEY_TAB:
 		ToggleAutoComplete();
 		break;
-	case KEYCODE_UP:
+	case GLFW_KEY_UP:
 		ScrollUpAutoComplete();
 		break;
-	case KEYCODE_DOWN:
+	case GLFW_KEY_DOWN:
 		ScrollDownAutoComplete();
 		break;
 
-	case KEYCODE_ENTER:
+	case GLFW_KEY_ESCAPE:
 		EnterCommand();
 		break;
-
-	case KEYCODE_DEL:
+		
+	case GLFW_KEY_BACKSPACE:
 		RemoveCharacterFromLeftCommand();
 		break;
-	case KEYCODE_DELETE:
+	case GLFW_KEY_DELETE:
 		RemoveCharacterFromRightCommand();
 		break;
 	}

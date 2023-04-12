@@ -4,14 +4,13 @@
 #include "GLObejct.h"
 #include "GLAbstraction.h"
 #include "Command.h"
+#include "GLFW/glfw3.h"
 
 #include <vector>
 #include <string>
 
 #define IDEAL_WIDTH 800
 #define IDEAL_HEIGHT 1400
-
-#define KEYCODE_ESCAPE 256
 
 enum Page { WELCOME, EDITOR, SETTINGS, HELP };
 
@@ -21,6 +20,9 @@ public:
 	/* Constructor */
 	Program(const int width, const int height, const float textSize, const int tabAmount);
 	~Program();
+
+	/* Window */
+	GLFWwindow* window;
 
 	/* OpenGL */
 	GLObject openGL;
