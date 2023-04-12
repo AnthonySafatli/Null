@@ -463,13 +463,8 @@ void Program::OpenEditor(const std::string text, const std::string path)
 
 	delete area;
 
-	// TODO: Use filesystem to get filename
-	std::vector<std::string> dirVec = Split(path, '\\');
-	std::string fileName = dirVec[dirVec.size() - 1];
-	std::stringstream ss;
-	for (int i = 0; i < dirVec.size() - 1; i++) ss << dirVec[i] + '\\';
-
-	area = new TextEditor(text, ss.str(), fileName);
+	std::filesystem::path pathObj(path);
+	area = new TextEditor(text, path, pathObj.filename().string());
 }
 
 void Program::OpenFile(const std::string path)

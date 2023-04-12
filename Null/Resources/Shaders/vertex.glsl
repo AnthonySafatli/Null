@@ -58,7 +58,7 @@ void main() {
 			vType = CURSOR_INVISIBLE;
 		if (row - rowIndex > maxHeight)
 			vType = CURSOR_INVISIBLE;
-		if (column - columnIndex <= 0)
+		if (column - columnIndex < 0.01)
 			vType = CURSOR_INVISIBLE;
 	}
 
