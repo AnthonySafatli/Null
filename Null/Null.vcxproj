@@ -107,6 +107,7 @@
     <None Include="commands.md" />
     <None Include="Resources\Shaders\fragment.glsl" />
     <None Include="Resources\Shaders\vertex.glsl" />
+    <None Include="Source\TextEditor.cpp.vsspell" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\font texture.png" />

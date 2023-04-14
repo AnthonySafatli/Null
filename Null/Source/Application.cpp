@@ -29,7 +29,6 @@ int main(void)
         return -1;
     }
 
-    // TODO: Fix Transparent Window
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
     window = glfwCreateWindow(program.width, program.height, "Null", NULL, NULL);
