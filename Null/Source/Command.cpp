@@ -51,15 +51,23 @@ void Command::Execute(const std::string input)
 		Open(args, input);
 	else if (command == "save")
 		Save(args, input);
-	/*else if (command == "notebook")
-		Notebook(args);*/
 	else if (command == "refresh")
 		Refresh(args);
+	/*else if (command == "notebook")
+		Notebook(args);*/
 	else if (command == "quit")
 		Quit(args);
 	else
 		program.RenderStatus("Error: Unknown Command " + command);
 }
+
+// TODO: Implement shortcut commands
+/* 
+- Copy/Paste/Cut
+- Undo / Redo
+- Duplicate
+- Scroll
+*/
 
 /* ===== Commands ====== */
 
@@ -74,25 +82,6 @@ void Command::Echo(const std::vector<std::string> args)
 	for (std::string str : args) ss << str + " ";
 
 	program.RenderStatus(ss.str());
-}
-
-void Command::Refresh(const std::vector<std::string> args) 
-{
-	program.vertices.clear();
-	
-	for (int i = 0; i < program.area->rows.size(); i++)
-	{
-		for (int j = 0; j < program.area->rows[i].size(); j++) 
-		{
-			TexCoords coord = GetCoords(program.area->rows[i][j]);
-			program.vertices.push_back(Vertex(0.0, 0.0, coord.u               , coord.v               , i + 1, j + 1, NORMAL));
-			program.vertices.push_back(Vertex(1.0, 0.0, coord.u + (1.0 / 10.0), coord.v               , i + 1, j + 1, NORMAL));
-			program.vertices.push_back(Vertex(1.0, 1.0, coord.u + (1.0 / 10.0), coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
-			program.vertices.push_back(Vertex(0.0, 1.0, coord.u               , coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
-		}
-	}
-
-	program.RenderStatus("Refresh completed");
 }
 
 void Command::TextSize(const std::vector<std::string> args)
@@ -415,10 +404,91 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	program.RenderStatus("Command \"" + input + "\" is invalid");
 }
 
+// TODO: Implement 'copy' command
+void Command::Copy(const std::vector<std::string> args)
+{
+	/*
+	> copy
+	: copies line from cursor
+	*/
+}
+
+// TODO: Implement 'paste' command
+void Command::Paste(const std::vector<std::string> args)
+{
+	/*
+	> pastes
+	: pastes text into new line
+	*/
+}
+
+// TODO: Implement 'cut' command
+void Command::Cut(const std::vector<std::string> args)
+{
+	/*
+	> cut
+	: cuts line from cursor
+	*/
+}
+
+// TODO: Implement 'undo' command
+void Command::Undo(const std::vector<std::string> args)
+{
+	/*
+	> undo
+	: undoes the last change
+	*/
+}
+
+// TODO: Implement 'redo' command
+void Command::Redo(const std::vector<std::string> args)
+{
+	/*
+	> redo
+	: redoes the last change
+	*/
+}
+
+// TODO: Implement 'scroll' command
+void Command::Scroll(const std::vector<std::string> args)
+{
+	/*
+	> scroll +
+	: scrolls up a line
+	> scroll -
+	: scrolls down a line
+	> scroll n
+	: scroll to line n
+	*/
+}
+
+void Command::Refresh(const std::vector<std::string> args)
+{
+	/* 
+	> refresh
+	: Recomputes the vertices for the file
+	*/
+
+	program.vertices.clear();
+
+	for (int i = 0; i < program.area->rows.size(); i++)
+	{
+		for (int j = 0; j < program.area->rows[i].size(); j++)
+		{
+			TexCoords coord = GetCoords(program.area->rows[i][j]);
+			program.vertices.push_back(Vertex(0.0, 0.0, coord.u, coord.v, i + 1, j + 1, NORMAL));
+			program.vertices.push_back(Vertex(1.0, 0.0, coord.u + (1.0 / 10.0), coord.v, i + 1, j + 1, NORMAL));
+			program.vertices.push_back(Vertex(1.0, 1.0, coord.u + (1.0 / 10.0), coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
+			program.vertices.push_back(Vertex(0.0, 1.0, coord.u, coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
+		}
+	}
+
+	program.RenderStatus("Refresh completed");
+}
+
+// TODO: Implement 'notebook' command
 void Command::Notebook(const std::vector<std::string> args)
 {
-	// TODO: Implement 'notebook' command
-
 	/*
 	> notebook
 	: opens notebook file viewer
@@ -451,6 +521,11 @@ void Command::Notebook(const std::vector<std::string> args)
 
 void Command::Quit(const std::vector<std::string> args)
 {
+	/*
+	> quit
+	: quits the application
+	*/
+
 	if (args.size() > 0)
 	{
 		program.RenderStatus("Command 'quit' can not take any arguments");

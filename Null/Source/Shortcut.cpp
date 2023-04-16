@@ -31,44 +31,32 @@ void Shortcut::OpenNew()
 
 void Shortcut::Copy()
 {
-#if _DEBUG
-	std::cout << "Copy Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("copy");
 }
 
 void Shortcut::Paste()
 {
-#if _DEBUG
-	std::cout << "Paste Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("paste");
 }
 
 void Shortcut::Cut()
 {
-#if _DEBUG
-	std::cout << "Cut Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("cut");
 }
 
 void Shortcut::Undo()
 {
-#if _DEBUG
-	std::cout << "Undo Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("undo");
 }
 
 void Shortcut::Redo()
 {
-#if _DEBUG
-	std::cout << "Redo Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("redo");
 }
 
 void Shortcut::Duplicate()
 {
-#if _DEBUG
-	std::cout << "Duplicate Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("duplicate");
 }
 
 void Shortcut::Refresh()
@@ -78,16 +66,12 @@ void Shortcut::Refresh()
 
 void Shortcut::ScrollUp()
 {
-#if _DEBUG
-	std::cout << "Scroll Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("scroll +");
 }
 
 void Shortcut::ScrollDown()
 {
-#if _DEBUG
-	std::cout << "Scroll Not Implemented yet" << std::endl;
-#endif
+	Command::Execute("scroll -");
 }
 
 void Shortcut::SizeUp()
@@ -111,6 +95,7 @@ void Shortcut::UniversalShortcuts(int key, int action, int mods)
 	if (!ctrlPressed)
 		return;
 
+	// TODO: Filter universal shortcuts from command and text editor shortcuts
 	if (shftPressed && key == GLFW_KEY_S)
 		SaveAs();
 	else if (key == GLFW_KEY_S)

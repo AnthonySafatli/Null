@@ -11,7 +11,9 @@
 
 void Draw();
 
+// Random todos
 // TODO: Redo font texture
+// TODO: Redo all status bar messages
 
 // TODO: Maybe don't use global variables
 // TODO: Set after init for glfw and glew
