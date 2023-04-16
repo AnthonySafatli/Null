@@ -51,23 +51,15 @@ void Command::Execute(const std::string input)
 		Open(args, input);
 	else if (command == "save")
 		Save(args, input);
+	else if (command == "scroll")
+		Scroll(args);
 	else if (command == "refresh")
 		Refresh(args);
-	/*else if (command == "notebook")
-		Notebook(args);*/
 	else if (command == "quit")
 		Quit(args);
 	else
 		program.RenderStatus("Error: Unknown Command " + command);
 }
-
-// TODO: Implement shortcut commands
-/* 
-- Copy/Paste/Cut
-- Undo / Redo
-- Duplicate
-- Scroll
-*/
 
 /* ===== Commands ====== */
 
@@ -134,6 +126,7 @@ void Command::TextSize(const std::vector<std::string> args)
 	try
 	{
 		float size = std::stof(sizeStr);
+		// TODO: check negative nums
 		program.textSize = size;
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 		UpdateMaxHeightWidth();
@@ -449,7 +442,6 @@ void Command::Redo(const std::vector<std::string> args)
 	*/
 }
 
-// TODO: Implement 'scroll' command
 void Command::Scroll(const std::vector<std::string> args)
 {
 	/*
@@ -460,6 +452,49 @@ void Command::Scroll(const std::vector<std::string> args)
 	> scroll n
 	: scroll to line n
 	*/
+
+	if (args.size() < 1 || args.size() > 1) 
+	{
+		program.RenderStatus("Command 'scroll' takes only 1 argument");
+		return;
+	}
+
+	if (args[0] == "+")
+	{
+		if (program.rowIndex > 0)
+			program.rowIndex--;
+
+		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
+		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
+		return;
+	}
+	else if (args[0] == "-")
+	{
+		if (program.rowIndex + 1 < program.area->rows.size())
+			program.rowIndex++;
+
+		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
+		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
+		return;
+	}
+	
+	try 
+	{
+		int size = std::stof(args[0]);
+
+		if (size < 0) size = 0;
+		if (size > program.area->rows.size() - 1) size = program.area->rows.size();
+
+		program.rowIndex = size - 1;
+		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
+		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
+	}
+	catch (std::exception)
+	{
+		program.RenderStatus("Invalid argument for command 'scroll'");
+	}
+
+	return;
 }
 
 void Command::Refresh(const std::vector<std::string> args)
