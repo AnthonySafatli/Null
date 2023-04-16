@@ -19,8 +19,6 @@ struct Vertex
 	Vertex();
 	Vertex(const float x, const float y, const float u, const float v, const float row, const float column, const float type);
 
-	void Print();
-
 	float reletivePosition[2];
 	float texCoords[2];
 	float row;
@@ -35,7 +33,7 @@ public:
 	~VertexBuffer();
 
 	void Init();
-	void SetData(std::vector<Vertex> vertices);
+	void SetData(Vertex* vertices, int amount);
 
 	unsigned int handle; 
 };
@@ -47,7 +45,7 @@ public:
 	~IndexBuffer();
 
 	void Init();
-	void SetData(std::vector<unsigned int> indices);
+	void SetData(unsigned int* indices, int amount);
 
 	unsigned int handle;
 };

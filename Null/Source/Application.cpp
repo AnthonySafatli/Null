@@ -11,6 +11,8 @@
 
 void Draw();
 
+// TODO: Redo font texture
+
 // TODO: Maybe don't use global variables
 // TODO: Set after init for glfw and glew
 Program program = Program(1800, 1100, 24, 4);
@@ -111,29 +113,24 @@ void Draw()
 {
     std::vector<Vertex> allVertices = program.GetVertices();
 
-    int j = 0;
-    int ii = 0;
-    for (int i = 0; i + (MAX_SQAURES_TO_RENDER * 4) < allVertices.size(); i += MAX_SQAURES_TO_RENDER * 4)
-    {
-        std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + i, allVertices.begin() + i + (MAX_SQAURES_TO_RENDER * 4));
-        std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.begin() + j + (MAX_SQAURES_TO_RENDER * 6));
+    int numVerticesLeft = allVertices.size();
+    int startIndexV = 0;
+    int startIndexI = 0;
 
-        program.openGL.vertexBuffer.SetData(batchVertices);
-        program.openGL.indexBuffer.SetData(batchIndices);
 
-        glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
+    while (numVerticesLeft > 0) {
+        int numVerticesToRender = std::min(numVerticesLeft, MAX_SQAURES_TO_RENDER * 4);
+        int numIndicesToRender = numVerticesToRender / 4 * 6;
 
-        ii += MAX_SQAURES_TO_RENDER * 4;
-        j += MAX_SQAURES_TO_RENDER * 6;
+        program.openGL.vertexBuffer.SetData(&allVertices[0] + startIndexV, numVerticesToRender);
+        program.openGL.indexBuffer.SetData(&program.indices[0] + startIndexI, numIndicesToRender);
+
+        glDrawElements(GL_TRIANGLES, numIndicesToRender, GL_UNSIGNED_INT, nullptr);
+
+        numVerticesLeft -= numVerticesToRender;
+        startIndexV += numVerticesToRender;
+        startIndexI += numIndicesToRender;
     }
-    // TODO: Figure out why not working :(((
-    std::vector<Vertex> batchVertices = std::vector<Vertex>(allVertices.begin() + ii, allVertices.end());
-    std::vector<unsigned int> batchIndices = std::vector<unsigned int>(program.indices.begin() + j, program.indices.end());
-
-    program.openGL.vertexBuffer.SetData(batchVertices);
-    program.openGL.indexBuffer.SetData(batchIndices);
-
-    glDrawElements(GL_TRIANGLES, batchIndices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)

@@ -24,11 +24,6 @@ Vertex::Vertex(const float x, const float y, const float u, const float v, const
 	texCoords[1] = v;
 }
 
-void Vertex::Print()
-{
-	std::cout << "pos: " << reletivePosition[0] << " " << reletivePosition[1] << " row: " << row << " col: " << column << " type: " << type << std::endl;
-}
-
 /* ====== Vertex Buffer ====== */
 
 VertexBuffer::VertexBuffer() : handle(0)
@@ -48,10 +43,9 @@ VertexBuffer::~VertexBuffer()
 	glDeleteBuffers(1, &handle);
 }
 
-void VertexBuffer::SetData(std::vector<Vertex> vertices)
+void VertexBuffer::SetData(Vertex* vertices, const int amount)
 {
-	if (vertices.size() > 0)
-		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), &vertices[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, amount * sizeof(Vertex), vertices);
 }
 
 /* ====== Index Buffer ====== */
@@ -74,10 +68,9 @@ IndexBuffer::~IndexBuffer()
 	glDeleteBuffers(1, &handle);
 }
 
-void IndexBuffer::SetData(std::vector<unsigned int> indices)
+void IndexBuffer::SetData(unsigned int* indices, const int amount)
 {
-	if (indices.size() > 0)
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), &indices[0]);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, amount * sizeof(unsigned int), indices);
 }
 
 /* ====== Vertex Array ====== */
