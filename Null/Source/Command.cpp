@@ -51,6 +51,12 @@ void Command::Execute(const std::string input)
 		Open(args, input);
 	else if (command == "save")
 		Save(args, input);
+	else if (command == "copy")
+		Copy(args);
+	else if (command == "paste")
+		Paste(args);
+	else if (command == "cut")
+		Cut(args);
 	else if (command == "scroll")
 		Scroll(args);
 	else if (command == "refresh")
@@ -397,31 +403,61 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	program.RenderStatus("Command \"" + input + "\" is invalid");
 }
 
-// TODO: Implement 'copy' command
 void Command::Copy(const std::vector<std::string> args)
 {
 	/*
 	> copy
 	: copies line from cursor
 	*/
+
+	if (args.size() > 0)
+	{
+		program.RenderStatus("Command 'copy' does not take any arguments");
+		return;
+	}
+
+	glfwSetClipboardString(program.window, program.area->rows[program.textY].c_str());
+
+	program.RenderStatus("Copied line " + std::to_string(program.textY + 1));
 }
 
-// TODO: Implement 'paste' command
 void Command::Paste(const std::vector<std::string> args)
 {
 	/*
 	> pastes
 	: pastes text into new line
 	*/
+
+	program.area->rows.insert(program.area->rows.begin() + program.textY, glfwGetClipboardString(program.window));
+	Refresh(std::vector<std::string>());
+	program.area->AddLeftMargin();
+
+	program.RenderStatus("Pasted to line " + std::to_string(program.textY + 1));
 }
 
-// TODO: Implement 'cut' command
 void Command::Cut(const std::vector<std::string> args)
 {
 	/*
 	> cut
 	: cuts line from cursor
 	*/
+	
+	if (args.size() > 0)
+	{
+		program.RenderStatus("Command 'cut' does not take any arguments");
+		return;
+	}
+
+	Copy(args);
+	program.area->rows.erase(program.area->rows.begin() + program.textY);
+	Refresh(std::vector<std::string>());
+	program.area->RemoveLeftMargin();
+	if (program.textY >= program.area->rows.size())
+		program.textY--;
+	if (program.textX > program.area->rows[program.textY].size())
+		program.area->MoveEnd();
+
+	program.RenderStatus("Cut line " + std::to_string(program.textY + 1));
 }
 
 // TODO: Implement 'undo' command
