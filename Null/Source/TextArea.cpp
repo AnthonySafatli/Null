@@ -1,5 +1,6 @@
 #include "Headers/TextArea.h"
 
+#include <cmath>
 #include <vector>
 #include <string>
 
@@ -191,8 +192,7 @@ int TextArea::LongestRowSize()
 
 void TextArea::AddCharacterToMargin(const char ch, const int index, const float type)
 {
-	// TODO: FIX
-	int y = (program.marginVertices.size() / 4 / leftMargin) + 2;
+	int y = std::floor(program.marginVertices.size() / 4 / (leftMargin - 1)) + 1;
 
 	TexCoords texCoords = GetCoords(ch);
 

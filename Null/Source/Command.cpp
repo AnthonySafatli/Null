@@ -485,9 +485,12 @@ void Command::Undo(const std::vector<std::string> args)
 	program.textY = program.undoStack.top().textY;
 	program.undoStack.pop();
 	Refresh(std::vector<std::string>());
+
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+	if (editor != NULL)
+		editor->UpdateRowColVisual();
 }
 
-// TODO: Implement 'redo' command
 void Command::Redo(const std::vector<std::string> args)
 {
 	/*
@@ -509,6 +512,10 @@ void Command::Redo(const std::vector<std::string> args)
 	program.textY = program.redoStack.top().textY;
 	program.redoStack.pop();
 	Refresh(std::vector<std::string>());
+
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+	if (editor != NULL)
+		editor->UpdateRowColVisual();
 }
 
 void Command::Scroll(const std::vector<std::string> args)

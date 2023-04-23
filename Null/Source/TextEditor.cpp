@@ -203,8 +203,7 @@ void TextEditor::OnResize(int width, int height)
 
 void TextEditor::AddLeftMargin()
 {
-	// TODO: FIX
-	int rowNumber = std::ceil(program.marginVertices.size() / 4 / leftMargin);
+	int rowNumber = std::floor(program.marginVertices.size() / 4 / (leftMargin - 1)) + 1;
 
 	std::string rowNumberString = std::to_string(rowNumber);
 
