@@ -11,9 +11,11 @@
 
 void Draw();
 
-// Random todos
+// Random objectives
 // TODO: Redo font texture
 // TODO: Redo all status bar messages
+// TODO: Revamp input system
+// TODO: Cleanup update method
 
 // TODO: Maybe don't use global variables
 // TODO: Set after init for glfw and glew
@@ -105,6 +107,7 @@ int main(void)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
+    /* Terminate */
     NFD_Quit();
     glfwTerminate();
 

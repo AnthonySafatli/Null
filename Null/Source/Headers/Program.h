@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <stack>
 
 #define IDEAL_WIDTH 800
 #define IDEAL_HEIGHT 1400
@@ -101,6 +102,10 @@ public:
 	/* Text Properties */
 	bool showCursor;
 	int tabAmount;
+
+	/* Undo Stack */
+	//std::stack<UndoElement> back;
+	//std::stack<UndoElement> forwards;
 
 	/* Program Properties */
 	Page currentPage;
