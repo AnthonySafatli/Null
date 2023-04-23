@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "Headers/Program.h"
 #include "Headers/Character.h"
@@ -160,21 +161,25 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 
 	case GLFW_KEY_ENTER:
 		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!program.redoStack.empty()) program.redoStack.pop();
 		Return();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_BACKSPACE:
 		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!program.redoStack.empty()) program.redoStack.pop();
 		RemoveCharacterFromLeft();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_DELETE:
 		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!program.redoStack.empty()) program.redoStack.pop();
 		RemoveCharacterFromRight();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_TAB:
 		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!program.redoStack.empty()) program.redoStack.pop();
 		AddTab();
 		UpdateRowColVisual();
 		break;
@@ -187,6 +192,7 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 		return;
 	
 	program.undoStack.push(UndoObject(rows, program.textX, program.textY));
+	while (!program.redoStack.empty()) program.redoStack.pop();
 	AddCharacter((char)codepoint);
 	UpdateRowColVisual();
 }
@@ -195,10 +201,12 @@ void TextEditor::OnResize(int width, int height)
 {
 }
 
-// TODO: Remake, only use program.marginVertices
 void TextEditor::AddLeftMargin()
 {
-	std::string rowNumberString = std::to_string(rows.size());
+	// TODO: FIX
+	int rowNumber = std::ceil(program.marginVertices.size() / 4 / leftMargin);
+
+	std::string rowNumberString = std::to_string(rowNumber);
 
 	if (rowNumberString.size() > leftMargin - 1)
 	     IncreaseLeftMargin();

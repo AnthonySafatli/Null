@@ -494,6 +494,21 @@ void Command::Redo(const std::vector<std::string> args)
 	> redo
 	: redoes the last change
 	*/
+
+	if (args.size() > 0) {
+		program.RenderStatus("Command 'redo' does not take any arguments");
+		return;
+	}
+
+	if (program.redoStack.size() < 1)
+		return;
+
+	program.undoStack.push(UndoObject(program.area->rows, program.textX, program.textY));
+	program.area->rows = program.redoStack.top().text;
+	program.textX = program.redoStack.top().textX;
+	program.textY = program.redoStack.top().textY;
+	program.redoStack.pop();
+	Refresh(std::vector<std::string>());
 }
 
 void Command::Scroll(const std::vector<std::string> args)

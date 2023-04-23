@@ -191,12 +191,15 @@ int TextArea::LongestRowSize()
 
 void TextArea::AddCharacterToMargin(const char ch, const int index, const float type)
 {
+	// TODO: FIX
+	int y = (program.marginVertices.size() / 4 / leftMargin) + 2;
+
 	TexCoords texCoords = GetCoords(ch);
 
-	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , rows.size(), index, type));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , rows.size(), index, type));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), rows.size(), index, type));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), rows.size(), index, type));
+	program.marginVertices.push_back(Vertex(0.0, 0.0, texCoords.u               , texCoords.v               , y, index, type));
+	program.marginVertices.push_back(Vertex(1.0, 0.0, texCoords.u + (1.0 / 10.0), texCoords.v               , y, index, type));
+	program.marginVertices.push_back(Vertex(1.0, 1.0, texCoords.u + (1.0 / 10.0), texCoords.v + (1.0 / 10.0), y, index, type));
+	program.marginVertices.push_back(Vertex(0.0, 1.0, texCoords.u               , texCoords.v + (1.0 / 10.0), y, index, type));
 }
 
 /* ================= Movement Methods ================= */
