@@ -57,6 +57,10 @@ void Command::Execute(const std::string input)
 		Paste(args);
 	else if (command == "cut")
 		Cut(args);
+	else if (command == "undo")
+		Undo(args);
+	else if (command == "redo")
+		Redo(args);
 	else if (command == "scroll")
 		Scroll(args);
 	else if (command == "refresh")
@@ -460,13 +464,27 @@ void Command::Cut(const std::vector<std::string> args)
 	program.RenderStatus("Cut line " + std::to_string(program.textY + 1));
 }
 
-// TODO: Implement 'undo' command
 void Command::Undo(const std::vector<std::string> args)
 {
 	/*
 	> undo
 	: undoes the last change
 	*/
+
+	if (args.size() > 0) {
+		program.RenderStatus("Command 'undo' does not take any arguments");
+		return;
+	}
+
+	if (program.undoStack.size() < 1)
+		return;
+
+	program.redoStack.push(UndoObject(program.area->rows, program.textX, program.textY));
+	program.area->rows = program.undoStack.top().text;
+	program.textX = program.undoStack.top().textX;
+	program.textY = program.undoStack.top().textY;
+	program.undoStack.pop();
+	Refresh(std::vector<std::string>());
 }
 
 // TODO: Implement 'redo' command
@@ -537,7 +555,7 @@ void Command::Refresh(const std::vector<std::string> args)
 {
 	/* 
 	> refresh
-	: Recomputes the vertices for the file
+	: Recomputes the vertices and margin vertices for the file
 	*/
 
 	program.vertices.clear();
@@ -553,6 +571,11 @@ void Command::Refresh(const std::vector<std::string> args)
 			program.vertices.push_back(Vertex(0.0, 1.0, coord.u, coord.v + (1.0 / 10.0), i + 1, j + 1, NORMAL));
 		}
 	}
+
+	program.marginVertices.clear();
+
+	for (int i = 0; i < program.area->rows.size(); i++)
+		program.area->AddLeftMargin();
 
 	program.RenderStatus("Refresh completed");
 }

@@ -93,6 +93,7 @@
     <ClCompile Include="Source\FileViewer.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\Command.cpp" />
+    <ClCompile Include="Source\UndoObject.cpp" />
     <ClCompile Include="Source\Misc.cpp" />
     <ClCompile Include="Source\Shortcut.cpp" />
     <ClCompile Include="Source\TextArea.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Source\Headers\TextArea.h" />
     <ClInclude Include="Source\Headers\TextEditor.h" />
     <ClInclude Include="Source\Headers\TextViewer.h" />
+    <ClInclude Include="Source\Headers\UndoObject.h" />
     <ClInclude Include="Source\Headers\Uniforms.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

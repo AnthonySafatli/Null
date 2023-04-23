@@ -19,6 +19,7 @@
 #include "Headers/Command.h"
 #include "Headers/Misc.h"
 #include "Headers/Shortcut.h"
+#include "Headers/UndoObject.h"
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount)
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT), 

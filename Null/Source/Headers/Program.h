@@ -1,14 +1,16 @@
 #pragma once
 
-#include "TextArea.h"
-#include "GLObejct.h"
-#include "GLAbstraction.h"
-#include "Command.h"
 #include "GLFW/glfw3.h"
 
 #include <vector>
 #include <string>
 #include <stack>
+
+#include "TextArea.h"
+#include "GLObejct.h"
+#include "GLAbstraction.h"
+#include "Command.h"
+#include "UndoObject.h"
 
 #define IDEAL_WIDTH 800
 #define IDEAL_HEIGHT 1400
@@ -104,8 +106,8 @@ public:
 	int tabAmount;
 
 	/* Undo Stack */
-	//std::stack<UndoElement> back;
-	//std::stack<UndoElement> forwards;
+	std::stack<UndoObject> undoStack;
+	std::stack<UndoObject> redoStack;
 
 	/* Program Properties */
 	Page currentPage;

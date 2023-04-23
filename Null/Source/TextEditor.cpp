@@ -1,16 +1,17 @@
 #include "Headers/TextEditor.h"
 
+#include "GLFW/glfw3.h"
+
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include "GLFW/glfw3.h"
-
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Shortcut.h"
+#include "Headers/UndoObject.h"
 
 std::vector<std::string> Split(const std::string str, const char separator);
 
@@ -158,18 +159,22 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		break;
 
 	case GLFW_KEY_ENTER:
+		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
 		Return();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_BACKSPACE:
+		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
 		RemoveCharacterFromLeft();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_DELETE:
+		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
 		RemoveCharacterFromRight();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_TAB:
+		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
 		AddTab();
 		UpdateRowColVisual();
 		break;
@@ -181,6 +186,7 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 	if (!(codepoint > 31 && codepoint < 128))
 		return;
 	
+	program.undoStack.push(UndoObject(rows, program.textX, program.textY));
 	AddCharacter((char)codepoint);
 	UpdateRowColVisual();
 }
@@ -189,6 +195,7 @@ void TextEditor::OnResize(int width, int height)
 {
 }
 
+// TODO: Remake, only use program.marginVertices
 void TextEditor::AddLeftMargin()
 {
 	std::string rowNumberString = std::to_string(rows.size());
