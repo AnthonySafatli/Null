@@ -118,6 +118,7 @@ void Program::ProcessKey(int key, int action, int mods)
 	if (commandSelected)
 	{
 		ShowCursor();
+		Shortcut::CommandShortcuts(key, action, mods);
 		ProcessKeyCommand(key, action, mods);
 		return;
 	}

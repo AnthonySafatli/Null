@@ -41,26 +41,6 @@ FileViewer::FileViewer(const std::string path)
 	program.RenderStatus("Notes loaded Successfully");
 }
 
-void FileViewer::ProcessKey(int key, int action, int mods)
-{
-}
-
-void FileViewer::ProcessChar(unsigned int codepoint)
-{
-}
-
-void FileViewer::OnResize(int width, int height)
-{
-}
-
-void FileViewer::AddLeftMargin()
-{
-}
-
-void FileViewer::RemoveLeftMargin()
-{
-}
-
 std::vector<std::filesystem::path> FileViewer::GetAllPaths(const std::string initPath)
 {
 	if (!std::filesystem::is_directory(initPath))

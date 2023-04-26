@@ -7,13 +7,13 @@ class TextArea
 {
 public:
     /* Callback Methods */
-    virtual void ProcessKey(int key, int action, int mods) = 0;
-    virtual void ProcessChar(unsigned int codepoint) = 0;
-    virtual void OnResize(int width, int height) = 0;
+    virtual void ProcessKey(int key, int action, int mods);
+    virtual void ProcessChar(unsigned int codepoint);
+    virtual void OnResize(int width, int height);
 
     /* Virtual Methods */
-    virtual void AddLeftMargin() = 0;
-    virtual void RemoveLeftMargin() = 0;
+    virtual void AddLeftMargin();
+    virtual void RemoveLeftMargin();
 
     /* Text Data */
     std::vector<std::string> rows;

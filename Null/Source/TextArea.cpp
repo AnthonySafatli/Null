@@ -12,6 +12,20 @@ extern Program program;
 
 /* ================= Text Methods ================= */
 
+void TextArea::ProcessKey(int key, int action, int mods) {}
+void TextArea::ProcessChar(unsigned int codepoint) {}
+void TextArea::OnResize(int width, int height) {}
+
+void TextArea::AddLeftMargin() 
+{
+	AddCharacterToMargin('~', -1, MARGIN_SELECTED);
+}
+
+void TextArea::RemoveLeftMargin() 
+{
+	program.marginVertices.resize(program.marginVertices.size() - (4 * (leftMargin - 1)));
+}
+
 void TextArea::SetLeftMargin(const int margin)
 {
 	leftMargin = margin;
@@ -220,12 +234,22 @@ void TextArea::MoveRight()
 {
 	if (program.textX < rows[program.textY].size())
 		program.textX++;
+	else if (program.textY < rows.size() - 1)
+	{
+		program.textY++;
+		program.textX = 0;
+	}
 }
 
 void TextArea::MoveLeft()
 {
 	if (program.textX > 0)
 		program.textX--;
+	else if (program.textY > 0)
+	{
+		program.textY--;
+		program.textX = rows[program.textY].size();
+	}
 }
 
 void TextArea::MoveHome()

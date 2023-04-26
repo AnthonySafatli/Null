@@ -15,7 +15,7 @@
 #define IDEAL_WIDTH 800
 #define IDEAL_HEIGHT 1400
 
-enum Page { WELCOME, EDITOR, SETTINGS, HELP };
+// enum Page { WELCOME, EDITOR, SETTINGS, HELP };
 
 class Program
 {
@@ -110,7 +110,7 @@ public:
 	std::stack<UndoObject> redoStack;
 
 	/* Program Properties */
-	Page currentPage;
+	// Page currentPage;
 	unsigned int cursorSpeed;
 	float textSize;
 	Colour background;

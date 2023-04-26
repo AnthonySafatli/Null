@@ -110,7 +110,7 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 	program.RenderStatus(fileName + " Loaded Successfully");
 }
 
-void TextEditor::ProcessKey(int key, int action, int mods)
+void TextEditor::ProcessKey(int key, int action, int mods) 
 {
 	if (action == GLFW_RELEASE)
 		return;
@@ -118,6 +118,7 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 	Shortcut::TextEditorShortcuts(key, action, mods);
 
 	if ((mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL)
+		// TODO: Implement ctrl+left and ctrl+right
 		return;
 
 	bool numLock = (mods & GLFW_MOD_NUM_LOCK) == GLFW_MOD_NUM_LOCK;
@@ -129,6 +130,9 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_KP_7: 
+		// TODO: Numpad not working
+		if (glfwGetKey(program.window, GLFW_KEY_NUM_LOCK) != GLFW_PRESS)
+			break;
 		MoveHome();
 		UpdateRowColVisual();
 		break;
@@ -137,6 +141,9 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_KP_1:
+		// TODO: Numpad not working
+		if (glfwGetKey(program.window, GLFW_KEY_NUM_LOCK) != GLFW_PRESS)
+			break;
 		MoveEnd();
 		UpdateRowColVisual();
 		break;
@@ -197,10 +204,6 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 	UpdateRowColVisual();
 }
 
-void TextEditor::OnResize(int width, int height)
-{
-}
-
 void TextEditor::AddLeftMargin()
 {
 	int rowNumber = std::floor(program.marginVertices.size() / 4 / (leftMargin - 1)) + 1;
@@ -253,18 +256,12 @@ void TextEditor::IncreaseLeftMargin()
 	SetLeftMargin(leftMargin + 1);
 }
 
-/// <summary>
-/// If you move up or down to a shorter row, the cursor will move to the end of the shorter row rather than hang out in empty space 
-/// </summary>
 void TextEditor::UpdateCol()
 {
 	if (program.textX > rows[program.textY].size())
 		MoveEnd();
 }
 
-/// <summary>
-/// Make sure the cursor is visible by updating row / column Index
-/// </summary>
 void TextEditor::UpdateRowColVisual()
 {
 	int rows = ((1.0 / ((float)program.textSize * 0.001)) * ((float)program.height / (float)program.idealHeight)) - 4;
@@ -288,27 +285,6 @@ void TextEditor::UpdateRowColVisual()
 		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
 	}
 	else if ((int)program.columnIndex > (int)program.textX) // if cursor is left of the viewport
-	{
-		program.columnIndex = (int)program.textX;
-		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
-	}
-}
-
-/// <summary>
-/// Make sure the cursor is visible by updating row / column Index
-/// </summary>
-void TextEditor::UpdateColVisual()
-{
-	int cols = ((1.0 / ((float)program.textSize * 0.001)) * ((float)program.width / (float)program.idealWidth)) - 4;
-
-	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if under the viewport
-	{
-		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
-		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);
-		return;
-	}
-
-	if ((int)program.columnIndex > (int)program.textX) // if cursor is above the viewport
 	{
 		program.columnIndex = (int)program.textX;
 		UpdateUniform1i(program.openGL.u_columnIndex.location, (int)program.columnIndex);

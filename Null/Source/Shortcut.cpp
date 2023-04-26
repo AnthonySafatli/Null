@@ -130,12 +130,12 @@ void Shortcut::UniversalShortcuts(int key, int action, int mods)
 
 void Shortcut::CommandShortcuts(int key, int action, int mods)
 {
-	if (action != GLFW_PRESS)
+	if (action == GLFW_RELEASE)
 		return;
 }
 
 void Shortcut::TextEditorShortcuts(int key, int action, int mods)
 {
-	if (action != GLFW_PRESS)
+	if (action == GLFW_RELEASE)
 		return;
 }
