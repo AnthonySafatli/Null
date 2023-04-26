@@ -13,13 +13,13 @@ void GLObject::Init()
 
 	indexBuffer.Init();
 
-	// TODO: Fix paths - end
+	// TODO: Fix paths / resource management before deployment
 	shaderProgram.Init(
-		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\vertex.glsl",
-		"C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Shaders\\fragment.glsl"
+		"Resources\\Shaders\\vertex.glsl",
+		"Resources\\Shaders\\fragment.glsl"
 	);
 
-	texture.Init("C:\\Users\\Anthony\\source\\repos\\Null\\Null\\Resources\\Textures\\font texture.png");
+	texture.Init("Resources\\Textures\\font texture.png");
 
 	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
 	u_size.Init(shaderProgram.handle, "size");

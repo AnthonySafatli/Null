@@ -17,28 +17,7 @@ extern Program program;
 
 FileViewer::FileViewer(const std::string path)
 {
-	paths = GetAllPaths(path);
-
-	SetLeftMargin(1);
-	rows.push_back(std::string());
-
-	program.textX = 0;
-	program.textY = 0;
-
-	AddCharacter('N');
-	AddCharacter('o');
-	AddCharacter('t');
-	AddCharacter('e');
-	AddCharacter('s');
-	AddCharacter(':');
-	Return();
-
-	PrintDir();
-
-	program.HideCursor();
-	program.showCursor = false;
-
-	program.RenderStatus("Notes loaded Successfully");
+	
 }
 
 std::vector<std::filesystem::path> FileViewer::GetAllPaths(const std::string initPath)
@@ -60,33 +39,5 @@ std::vector<std::filesystem::path> FileViewer::GetAllPaths(const std::string ini
 	}
 
 	return paths;
-}
-
-void FileViewer::PrintDir()
-{
-	// TODO: Update
-	int partsBase = 8;
-
-	for (int i = paths.size() - 1; i >= 0; i--)
-	{
-		std::string fullPath = paths[i].string();
-		std::replace(fullPath.begin(), fullPath.end(), '\\', '/');
-
-		int parts = Split(fullPath, '/').size();
-
-		for (int i = partsBase; i < parts; i++) AddTab();
-		AddCharacter(127); AddCharacter(' ');
-
-		std::string pathStr = paths[i].filename().string();
-
-		for (char c : pathStr)
-		{
-			AddCharacter(c);
-		}
-
-		Return();
-	}
-
-	RemoveCharacterFromLeft();
 }
 
