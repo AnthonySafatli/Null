@@ -84,6 +84,16 @@ void Shortcut::SizeDown()
 	Command::Execute("size -");
 }
 
+void Shortcut::Help()
+{
+	Command::Execute("help");
+}
+
+void Shortcut::Settings()
+{
+	Command::Execute("settings");
+}
+
 void Shortcut::UniversalShortcuts(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
@@ -126,6 +136,10 @@ void Shortcut::UniversalShortcuts(int key, int action, int mods)
 		SizeUp();
 	else if (key == GLFW_KEY_MINUS)
 		SizeDown();
+	else if (key == GLFW_KEY_H)
+		Help();
+	else if (key == GLFW_KEY_I)
+		Settings();
 }
 
 void Shortcut::CommandShortcuts(int key, int action, int mods)

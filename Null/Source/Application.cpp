@@ -19,8 +19,6 @@ void Draw();
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
 // TODO: Revamp input system
 //          - Clean up TextEditor input methods
-// TODO: Cleanup update method
-//          - Move some stuff to universal input method
 
 // TODO: Maybe don't use global variables
 // TODO: Set after init for glfw and glew

@@ -110,6 +110,7 @@ void Program::ProcessKey(int key, int action, int mods)
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		commandSelected = !commandSelected;
+		for (int i = 0; i < 4; i++) cursorVertices[i].type = commandSelected ? CURSOR_COMMAND : (showCursor ? CURSOR : CURSOR_INVISIBLE);
 		return;
 	}
 
@@ -118,13 +119,12 @@ void Program::ProcessKey(int key, int action, int mods)
 	if (commandSelected)
 	{
 		ShowCursor();
+
 		Shortcut::CommandShortcuts(key, action, mods);
+
 		ProcessKeyCommand(key, action, mods);
 		return;
 	}
-
-	if (!showCursor)
-		HideCursor();
 
 	area->ProcessKey(key, action, mods);
 }
@@ -179,18 +179,7 @@ void Program::OnScroll(double xOffset, double yOffset)
 
 void Program::Update(const double deltaTime)
 {
-	// TODO: Maybe move from Update
-	// ============================
-	UpdateUniform1i(openGL.u_cursorRow.location, textY + 1);
-
-	if (commandSelected)
-		for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR_COMMAND;
-	else
-		for (int i = 0; i < 4; i++) cursorVertices[i].type = showCursor ? CURSOR : INVISIBLE;
-	// ============================
-
 	/* Cursor Animations */
-	// TODO: cursor can go offscreen when in text area
 	float targetRow = commandSelected ? (float)(((int)rowIndex) - 1) : textY + 1;
 	float targetColumn = commandSelected ? (float)(commandX + 4 - area->leftMargin + ((int)columnIndex)) : textX + 1;
 
@@ -312,12 +301,14 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 		MoveHomeCommand();
 		break;
 	case GLFW_KEY_KP_7:
+		// TODO: Numpad stuff here too
 		MoveHomeCommand();
 		break;
 	case GLFW_KEY_END:
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_KP_1:
+		// TODO: Numpad stuff here too
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_RIGHT:
@@ -552,10 +543,10 @@ void Program::ExploreFolder(const std::string path)
 
 void Program::ShowCursor()
 {
-	for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR;
+	for (int i = 0; i < 4; i++) cursorVertices[i].type = commandSelected ? CURSOR_COMMAND : CURSOR;
 }
 
 void Program::HideCursor()
 {
-	for (int i = 0; i < 4; i++) cursorVertices[i].type = INVISIBLE;
+	for (int i = 0; i < 4; i++) cursorVertices[i].type = CURSOR_INVISIBLE;
 }

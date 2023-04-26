@@ -1,15 +1,15 @@
 // VERTEX
 #version 330 core
 
-#define INVISIBLE        0.0
-#define NORMAL           1.0
-#define CURSOR           2.0
-#define CURSOR_COMMAND   3.0
-#define CURSOR_INVISIBLE 4.0
-#define STATUS           5.0
-#define COMMAND          6.0
-#define MARGIN           7.0
-#define MARGIN_SELECTED  8.0
+#define INVISIBLE        0.0 // Invisible text
+#define NORMAL           1.0 // Normal text
+#define CURSOR           2.0 // Normal cursor
+#define CURSOR_COMMAND   3.0 // Cursor in command-line
+#define CURSOR_INVISIBLE 4.0 // Invisible cursor
+#define STATUS           5.0 // Status bar text
+#define COMMAND          6.0 // Command line text
+#define MARGIN           7.0 // Margin text
+#define MARGIN_SELECTED  8.0 // Margin text selected
 
 uniform vec2 idealRatio; // idealSize / currentSize
 uniform float size;
@@ -34,7 +34,7 @@ void main() {
 	vRow = row;
 	vType = type;
 
-	if (type == INVISIBLE)
+	if (type == INVISIBLE || type == CURSOR_INVISIBLE)
 		return;
 
 	// Remove out of bounds letters

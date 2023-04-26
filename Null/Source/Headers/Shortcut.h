@@ -19,6 +19,8 @@ private:
 	static void ScrollDown();
 	static void SizeUp();
 	static void SizeDown();
+	static void Help();
+	static void Settings();
 
 public:
 	static void UniversalShortcuts(int key, int action , int mods);

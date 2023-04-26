@@ -191,6 +191,8 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	}
+
+	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
 }
 
 void TextEditor::ProcessChar(unsigned int codepoint)
