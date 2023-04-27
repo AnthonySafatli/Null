@@ -38,4 +38,9 @@ public:
 	/* Editor Data */
 	std::string fileDirectory;
 	std::string fileName;
+
+private:
+	inline bool isWhiteSpace(char c);
+	inline bool isText(char c);
+
 };

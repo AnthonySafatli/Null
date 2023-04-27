@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <ctype.h>
 
 #include "Headers/Program.h"
 #include "Headers/Character.h"
@@ -123,8 +124,10 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		{
 		case GLFW_KEY_LEFT:
 			MoveLeftCtrl();
+			break;
 		case GLFW_KEY_RIGHT:
 			MoveRightCtrl();
+			break;
 		}
 	
 		return;
@@ -329,17 +332,108 @@ void TextEditor::SetPath(std::string path)
 
 void TextEditor::MoveLeftCtrl()
 {
-	// if letter cursor left of cursor (not including whitespace) is text, look for whitespace or non-text, if non-text, look for whitespace or text.
-
 	bool isAtText;
 
-	for (int i = 0; true; i++)
+	if (program.textX == 0)
 	{
-		rows[program.textY][program.textX];
+		if (program.textY == 0)
+			return;
+
+		program.textY--;
+		MoveEnd();
+	}
+
+	while (true)
+	{
+		if (program.textX == 0)
+			return;
+
+		if (isWhiteSpace(rows[program.textY][(program.textX--) - 1]))
+			continue;
+
+		isAtText = isText(rows[program.textY][(++program.textX) - 1]);
+		break;
+	}
+
+	while (true)
+	{
+		if (program.textX == 0)
+			return;
+		
+		if (isWhiteSpace(rows[program.textY][program.textX - 1]))
+			return;
+
+		if (isAtText)
+		{
+			if (!isText(rows[program.textY][program.textX - 1]))
+				return;
+		}
+		else
+		{
+			if (isText(rows[program.textY][program.textX- 1]))
+				return;
+		}
+
+		program.textX--;
 	}
 }
 
 void TextEditor::MoveRightCtrl()
 {
+	bool isAtText;
+
+	if (program.textX == rows[program.textY].size())
+	{
+		if (program.textY == rows.size() - 1)
+			return;
+
+		program.textY++;
+		MoveHome();
+		return;
+	}
+
+	while (true)
+	{
+		if (program.textX == rows[program.textY].size())
+			return;
+
+		if (isWhiteSpace(rows[program.textY][program.textX++]))
+			continue;
+
+		isAtText = isText(rows[program.textY][--program.textX]);
+		break;
+	}
+
+	while (true)
+	{
+		if (program.textX == rows[program.textY].size())
+			return;
+
+		if (isWhiteSpace(rows[program.textY][program.textX]))
+			return;
+
+		if (isAtText)
+		{
+			if (!isText(rows[program.textY][program.textX]))
+				return;
+		}
+		else
+		{
+			if (isText(rows[program.textY][program.textX]))
+				return;
+		}
+
+		program.textX++;
+	}
+}
+
+inline bool TextEditor::isWhiteSpace(char c)
+{
+	return c == ' ';
+}
+
+inline bool TextEditor::isText(char c)
+{
+	return std::isalpha(c) != 0;
 }
 
