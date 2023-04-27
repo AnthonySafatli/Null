@@ -15,11 +15,10 @@ void Draw();
 // TODO: Redo all status bar messages
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
-// TODO: Revamp input system
-//          - Clean up TextEditor input methods
 // TODO: Revise some inputs for commands
 //          - colour commands need checking
 //          - negative or invalid numbers for some commands
+// TODO: Implement Alt+Up and Alt+Down
 
 // TODO: Maybe don't use global variables
 // TODO: Set after init for glfw and glew

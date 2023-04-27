@@ -65,6 +65,8 @@ void Command::Execute(const std::string input)
 		Scroll(args);
 	else if (command == "refresh")
 		Refresh(args);
+	else if (command == "note")
+		Note(args);
 	else if (command == "quit")
 		Quit(args);
 	else
@@ -523,8 +525,10 @@ void Command::Scroll(const std::vector<std::string> args)
 	/*
 	> scroll +
 	: scrolls up a line
+	:
 	> scroll -
 	: scrolls down a line
+	:
 	> scroll n
 	: scroll to line n
 	*/
@@ -602,37 +606,57 @@ void Command::Refresh(const std::vector<std::string> args)
 	program.RenderStatus("Refresh completed");
 }
 
-// TODO: Implement 'notebook' command
-void Command::Notebook(const std::vector<std::string> args)
+// TODO: Implement 'note' command
+void Command::Note(const std::vector<std::string> args)
 {
-	/*
-	> notebook
+	/* 
+	> note
 	: opens notebook file viewer
 	:
-	> notebook ..
-	: opens notebook file viewer at subfolder
+	> note open folder [...] folder
+	: opens notebook file viewer at folder
 	:
-	> notebook folder subfolder ... subfolder
-	: opens notebook file viewer at folder / subfolder
+	> note folder folderName [...] folderName
+	: creates folder with name in current folder
 	:
-	> notebook folder subfolder ... file
-	: opens file editor at file
+	> note new folder [...] noteName
+	: opens new note in folder
 	:
-	> notebook new
-	: opens new text editor in folder without name
-	:
-	> notebook new name
-	: opens new text editor in current folder with name
-	:
-	> notebook new subfolder ... subfolder name
-	: opens new text editor in subfolder with name
-	:
-	> notebook del name
-	: deletes note
-	:
-	> notebook del subfolder .. subfolder name
-	: deletes note in subfolder
+	> note del folder [...] name
+	: deletes folder or note
 	*/
+
+	if (args.size() == 0)
+	{
+		program.OpenNote();
+		return;
+	}
+
+	if (args[0] == "open")
+	{
+		std::stringstream ss;
+		for (std::string str : args) ss << str + " ";
+
+		program.OpenNote(ss.str());
+		return;
+	}
+	if (args[0] == "folder")
+	{
+		// create folder(s)
+		return;
+	}
+	if (args[0] == "new")
+	{
+		// creates new note
+		return;
+	}
+	if (args[0] == "del")
+	{
+		// deletes note or folder
+		return;
+	}
+
+	program.RenderStatus("Invalid argument(s) for command 'note'");
 }
 
 void Command::Quit(const std::vector<std::string> args)

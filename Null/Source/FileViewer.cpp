@@ -1,10 +1,8 @@
 #include "Headers/FileViewer.h"
 
-#include <iostream>
 #include <filesystem>
 #include <string>
 #include <vector>
-#include <fstream>
 
 #include "GLFW/glfw3.h"
 
@@ -17,7 +15,49 @@ extern Program program;
 
 FileViewer::FileViewer(const std::string path)
 {
-	
+	std::vector<std::filesystem::path> paths = GetAllPaths(""); // TODO: Where are notes stored
+
+	for (int i = 0; i < paths.size(); i++)
+	{
+		// print all notes
+	}
+
+	// select first row
+	// add notes cursor (arrow in margin)
+
+	// add paths to rows
+}
+
+void FileViewer::ProcessKey(int key, int action, int mods)
+{
+	if (action == GLFW_RELEASE)
+		return;
+
+	if ((mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL)
+		return;
+
+	switch (key)
+	{
+	case GLFW_KEY_UP:
+		// move cursor up
+		break;
+	case GLFW_KEY_DOWN:
+		// move cursor down
+		break;
+	case GLFW_KEY_ENTER:
+		// open file
+		break;
+	}
+}
+
+void FileViewer::AddLeftMargin()
+{
+	AddCharacterToMargin('~', -1, MARGIN);
+}
+
+void FileViewer::RemoveLeftMargin()
+{
+	program.marginVertices.resize(program.marginVertices.size() - (4 * (leftMargin - 1)));
 }
 
 std::vector<std::filesystem::path> FileViewer::GetAllPaths(const std::string initPath)

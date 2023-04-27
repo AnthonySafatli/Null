@@ -75,6 +75,7 @@ public:
 	void OpenEditor();
 	void OpenEditor(const std::string text, const std::string path);
 	void OpenFile(const std::string path);
+	void OpenNote();
 	void OpenNote(const std::string name);
 	void OpenViewer(const std::string str, const std::string pageName);
 	void LoadSettings();

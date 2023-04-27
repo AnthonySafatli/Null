@@ -483,6 +483,11 @@ void Program::OpenFile(const std::string path)
 	OpenEditor(str, path);
 }
 
+void Program::OpenNote()
+{
+	OpenFile(""); // TODO: Get path for notebook file
+}
+
 void Program::OpenNote(const std::string name)
 {
 	// TODO: Get path for notebook file

@@ -40,8 +40,8 @@ private:
 	/* Refresh */
 	static void Refresh(const std::vector<std::string> args);                 // recreates all the vertices based on the text
 
-	/* Notebook */
-	static void Notebook(const std::vector<std::string> args);                // deals with notebook
+	/* Note */
+	static void Note(const std::vector<std::string> args);                    // deals with notebook
 
 	/* Quit */
 	static void Quit(const std::vector<std::string> args);                    // closes application
