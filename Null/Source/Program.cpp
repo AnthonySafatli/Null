@@ -479,14 +479,13 @@ void Program::OpenFile(const std::string path)
 		return;
 	}
 
-	// TODO: Close file?
 	std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	OpenEditor(str, path);
 }
 
 void Program::OpenNote(const std::string name)
 {
-	// TODO: Get path for journal file
+	// TODO: Get path for notebook file
 	std::string path; 
 
 	OpenFile(path);

@@ -118,8 +118,17 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 	Shortcut::TextEditorShortcuts(key, action, mods);
 
 	if ((mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL)
-		// TODO: Implement ctrl+left and ctrl+right
+	{
+		switch (key)
+		{
+		case GLFW_KEY_LEFT:
+			MoveLeftCtrl();
+		case GLFW_KEY_RIGHT:
+			MoveRightCtrl();
+		}
+	
 		return;
+	}
 
 	bool numLock = (mods & GLFW_MOD_NUM_LOCK) == GLFW_MOD_NUM_LOCK;
 
@@ -280,7 +289,6 @@ void TextEditor::UpdateRowColVisual()
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
 
-	// TODO: Debug left (after vertex.glsl remake)
 	if ((int)program.columnIndex + cols - 1 < (int)program.textX) // if cursor if right of the viewport
 	{
 		program.columnIndex += program.textX - ((int)program.columnIndex + cols) + 1;
@@ -317,5 +325,21 @@ void TextEditor::SetPath(std::string path)
 	
 	std::string file = pathVec[pathVec.size() - 1];
 	fileName = file;
+}
+
+void TextEditor::MoveLeftCtrl()
+{
+	// if letter cursor left of cursor (not including whitespace) is text, look for whitespace or non-text, if non-text, look for whitespace or text.
+
+	bool isAtText;
+
+	for (int i = 0; true; i++)
+	{
+		rows[program.textY][program.textX];
+	}
+}
+
+void TextEditor::MoveRightCtrl()
+{
 }
 

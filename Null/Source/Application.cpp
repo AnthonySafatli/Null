@@ -11,9 +11,7 @@
 
 void Draw();
 
-// Random objectives
-// TODO: Redo font texture
-//          - Fix alignment issues
+// Random Objectives:
 // TODO: Redo all status bar messages
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
@@ -120,6 +118,7 @@ int main(void)
     return 0;
 }
 
+// TODO: Still unworking batch renderer
 void Draw()
 {
     std::vector<Vertex> allVertices = program.GetVertices();

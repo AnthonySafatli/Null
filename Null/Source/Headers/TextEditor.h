@@ -31,6 +31,10 @@ public:
 	std::string GetText();
 	void SetPath(std::string path);
 
+	/* Key Callback Methods */
+	void MoveLeftCtrl();
+	void MoveRightCtrl();
+
 	/* Editor Data */
 	std::string fileDirectory;
 	std::string fileName;
