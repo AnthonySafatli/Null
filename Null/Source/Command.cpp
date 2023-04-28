@@ -628,7 +628,7 @@ void Command::Note(const std::vector<std::string> args)
 
 	if (args.size() == 0)
 	{
-		program.OpenNote();
+		program.OpenNoteViewer();
 		return;
 	}
 

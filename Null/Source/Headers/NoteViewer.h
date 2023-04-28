@@ -5,10 +5,10 @@
 
 #include "TextArea.h"
 
-class FileViewer : public TextArea
+class NoteViewer : public TextArea
 {
 public:
-	FileViewer(const std::string path);
+	NoteViewer(std::filesystem::path documentPath);
 
 	/* Callback Methods */
 	virtual void ProcessKey(int key, int action, int mods);
@@ -17,8 +17,12 @@ public:
 	void AddLeftMargin() override;
 	void RemoveLeftMargin() override;
 
+	/* Static Methods */
+	static std::filesystem::path GetDocumentsFolder();
+ 
 	/* FileViewer Methods */
 	std::vector<std::filesystem::path> GetAllPaths(const std::string initPath);
+	void PrintPath(std::filesystem::path path);
 
 	/* FileViewer Data */
 	std::vector<std::filesystem::path> paths;

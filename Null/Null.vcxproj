@@ -90,7 +90,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CallBack.cpp" />
-    <ClCompile Include="Source\FileViewer.cpp" />
+    <ClCompile Include="Source\NoteViewer.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\Command.cpp" />
     <ClCompile Include="Source\UndoObject.cpp" />
@@ -127,7 +127,7 @@
     <ClInclude Include="Source\Headers\CallBack.h" />
     <ClInclude Include="Source\Headers\Character.h" />
     <ClInclude Include="Source\Headers\Command.h" />
-    <ClInclude Include="Source\Headers\FileViewer.h" />
+    <ClInclude Include="Source\Headers\NoteViewer.h" />
     <ClInclude Include="Source\Headers\GLObejct.h" />
     <ClInclude Include="Source\Headers\Misc.h" />
     <ClInclude Include="Source\Headers\Program.h" />

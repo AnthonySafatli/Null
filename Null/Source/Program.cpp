@@ -2,6 +2,7 @@
 
 #include "GLFW/glfw3.h"
 
+#include <filesystem>
 #include <cmath>
 #include <iostream>
 #include <fstream>
@@ -12,7 +13,7 @@
 #include "Headers/TextArea.h"
 #include "Headers/TextEditor.h"
 #include "Headers/TextViewer.h"
-#include "Headers/FileViewer.h"
+#include "Headers/NoteViewer.h"
 #include "Headers/GLAbstraction.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
@@ -483,11 +484,6 @@ void Program::OpenFile(const std::string path)
 	OpenEditor(str, path);
 }
 
-void Program::OpenNote()
-{
-	OpenFile(""); // TODO: Get path for notebook file
-}
-
 void Program::OpenNote(const std::string name)
 {
 	// TODO: Get path for notebook file
@@ -496,7 +492,7 @@ void Program::OpenNote(const std::string name)
 	OpenFile(path);
 }
 
-void Program::OpenViewer(const std::string str, const std::string pageName)
+void Program::OpenTextViewer(const std::string str, const std::string pageName)
 {
 	vertices.clear();
 	marginVertices.clear();
@@ -504,6 +500,33 @@ void Program::OpenViewer(const std::string str, const std::string pageName)
 	delete area;
 
 	area = new TextViewer(str, pageName);
+}
+
+void Program::OpenNoteViewer()
+{
+	vertices.clear();
+	marginVertices.clear();
+
+	std::filesystem::path documents = NoteViewer::GetDocumentsFolder();
+
+	if (documents.empty())
+	{
+		RenderStatus("Notebook is unavailable at the moment");
+		return;
+	}
+
+	delete area;
+
+#if _DEBUG
+	std::cout << documents.string() << std::endl;
+#endif
+
+	area = new NoteViewer(documents);
+}
+
+void Program::OpenNoteViewer(const std::string path)
+{
+	// TODO: Implement
 }
 
 void Program::LoadSettings()
@@ -519,7 +542,7 @@ void Program::LoadSettings()
 		"\n\n"
 		"Speed: " + std::to_string(cursorSpeed);
 
-	OpenViewer(settings, "Settings");
+	OpenTextViewer(settings, "Settings");
 }
 
 void Program::LoadHelp(const bool commands, const bool shortcuts)
@@ -530,17 +553,7 @@ void Program::LoadHelp(const bool commands, const bool shortcuts)
 		"Commands:\n\n\n"
 		"Shortcuts:\n";
 
-	OpenViewer(help, "Help");
-}
-
-void Program::ExploreFolder(const std::string path)
-{
-	vertices.clear();
-	marginVertices.clear();
-
-	delete area;
-
-	area = new FileViewer(path);
+	OpenTextViewer(help, "Help");
 }
 
 /* Cursor Methods */
