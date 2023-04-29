@@ -47,7 +47,13 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 		std::cout << paths[i].filename().string() << std::endl;
 #endif
 
-		PrintPath(paths[i]);
+		if (std::filesystem::is_directory(paths[i]))
+			PrintPath(paths[i], false);
+		else if (std::filesystem::is_regular_file(paths[i]))
+			PrintPath(paths[i], true);
+		else
+			continue;
+	
 		Return();
 	}
 	RemoveCharacterFromLeft();
@@ -152,11 +158,16 @@ std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string ini
 	return paths;
 }
 
-void NoteViewer::PrintPath(std::filesystem::path path)
+void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 {
 	std::string pathStr = path.filename().string();
 
-	// AddCharacter(file or folder icon);
+	// TODO: Fix Icons
+	if (isFile)
+		AddCharacter(FILE_ICON);
+	else
+		AddCharacter(FOLDER_ICON);
+	AddCharacter(SPACE);
 
 	for (int i = 0; i < pathStr.size(); i++)
 		AddCharacter(pathStr[i]);

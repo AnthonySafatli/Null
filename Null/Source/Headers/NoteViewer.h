@@ -22,7 +22,7 @@ public:
  
 	/* FileViewer Methods */
 	std::vector<std::filesystem::path> GetAllPaths(const std::string initPath);
-	void PrintPath(std::filesystem::path path);
+	void PrintPath(std::filesystem::path path, bool isFile);
 	void UpdateArrow();
 
 	/* FileViewer Data */

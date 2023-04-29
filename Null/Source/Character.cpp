@@ -1,13 +1,13 @@
-#include <iostream>
-
 #include "Headers/Character.h"
+
+#include <iostream>
 
 TexCoords::TexCoords(float u, float v) : u(u), v(v)
 {}
 
 TexCoords GetCoords(char ch)
 {
-    int index = TexIndex[ch - 30];
+    int index = TexIndex[ch - 28];
 
     int x = index % 10;
     int y = index / 10; 
