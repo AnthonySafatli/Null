@@ -11,6 +11,7 @@
 
 #include "Headers/Program.h"
 #include "Headers/Character.h"
+#include "Headers/Uniforms.h"
 
 std::vector<std::string> Split(const std::string str, const char separator);
 
@@ -21,6 +22,7 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
 
+	SetLeftMargin(3);
 	rows.push_back(std::string());
 	AddLeftMargin();
 
@@ -53,8 +55,14 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 	program.textX = 0;
 	program.textY = 0;
 
+	program.HideCursor();
+	program.showCursor = false;
+
+
 	// select first row
 	// add notes cursor (arrow in margin)
+
+	UpdateArrow();
 }
 
 void NoteViewer::ProcessKey(int key, int action, int mods)
@@ -68,20 +76,24 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 	switch (key)
 	{
 	case GLFW_KEY_UP:
-		// move cursor up
+		MoveUp();
 		break;
 	case GLFW_KEY_DOWN:
-		// move cursor down
+		MoveDown();
 		break;
 	case GLFW_KEY_ENTER:
 		// open file
 		break;
 	}
+
+	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
+	UpdateArrow();
 }
 
 void NoteViewer::AddLeftMargin()
 {
-	AddCharacterToMargin('~', -1, MARGIN);
+	AddCharacterToMargin(ARROW_START, -2, MARGIN);
+	AddCharacterToMargin(NOT_ARROW_END, -1, MARGIN);
 }
 
 void NoteViewer::RemoveLeftMargin()
@@ -148,5 +160,32 @@ void NoteViewer::PrintPath(std::filesystem::path path)
 
 	for (int i = 0; i < pathStr.size(); i++)
 		AddCharacter(pathStr[i]);
+}
+
+void NoteViewer::UpdateArrow()
+{
+	TexCoords spaceCoords = GetCoords(NOT_ARROW_END);
+	for (int i = 0; i < program.marginVertices.size() / 8; i++)
+	{
+		program.marginVertices[(i * 8) + 4].texCoords[0] = spaceCoords.u;
+		program.marginVertices[(i * 8) + 4].texCoords[1] = spaceCoords.v;
+		program.marginVertices[(i * 8) + 5].texCoords[0] = spaceCoords.u + (1.0 / 10.0);
+		program.marginVertices[(i * 8) + 5].texCoords[1] = spaceCoords.v;
+		program.marginVertices[(i * 8) + 6].texCoords[0] = spaceCoords.u + (1.0 / 10.0);
+		program.marginVertices[(i * 8) + 6].texCoords[1] = spaceCoords.v + (1.0 / 10.0);
+		program.marginVertices[(i * 8) + 7].texCoords[0] = spaceCoords.u;
+		program.marginVertices[(i * 8) + 7].texCoords[1] = spaceCoords.v + (1.0 / 10.0);
+	}
+
+	TexCoords arrowCoords = GetCoords(ARROW_END);
+	int arrowIndex = program.textY * 8;
+	program.marginVertices[arrowIndex + 4].texCoords[0] = arrowCoords.u;
+	program.marginVertices[arrowIndex + 4].texCoords[1] = arrowCoords.v;
+	program.marginVertices[arrowIndex + 5].texCoords[0] = arrowCoords.u + (1.0 / 10.0);
+	program.marginVertices[arrowIndex + 5].texCoords[1] = arrowCoords.v;
+	program.marginVertices[arrowIndex + 6].texCoords[0] = arrowCoords.u + (1.0 / 10.0);
+	program.marginVertices[arrowIndex + 6].texCoords[1] = arrowCoords.v + (1.0 / 10.0);
+	program.marginVertices[arrowIndex + 7].texCoords[0] = arrowCoords.u;
+	program.marginVertices[arrowIndex + 7].texCoords[1] = arrowCoords.v + (1.0 / 10.0);
 }
 

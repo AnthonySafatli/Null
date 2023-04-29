@@ -7,7 +7,7 @@ TexCoords::TexCoords(float u, float v) : u(u), v(v)
 
 TexCoords GetCoords(char ch)
 {
-    int index = TexIndex[ch - 32];
+    int index = TexIndex[ch - 30];
 
     int x = index % 10;
     int y = index / 10; 
