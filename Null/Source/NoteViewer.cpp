@@ -28,8 +28,11 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 
 	program.textX = 0;
 	program.textY = 0;
+	
+	program.HideCursor();
+	program.showCursor = false;
 
-	std::vector<std::filesystem::path> paths = GetAllPaths(documentPath.string() + "\\NullNotes");
+	paths = GetAllPaths(documentPath.string() + "\\NullNotes");
 
 #if _DEBUG
 	std::cout << "Note Files:" << std::endl;
@@ -37,7 +40,10 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 
 	if (paths.size() == 0)
 	{
-		// Display message for empty
+		const std::string message = "No Notes or Folders...";
+		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		program.textY = 1;
+		return;
 	}
 
 	for (int i = 0; i < paths.size(); i++)
@@ -49,24 +55,22 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 
 		if (std::filesystem::is_directory(paths[i]))
 			PrintPath(paths[i], false);
-		else if (std::filesystem::is_regular_file(paths[i]))
+	}
+	for (int i = 0; i < paths.size(); i++)
+	{
+
+#if _DEBUG
+		std::cout << paths[i].filename().string() << std::endl;
+#endif
+
+		if (std::filesystem::is_regular_file(paths[i]))
 			PrintPath(paths[i], true);
-		else
-			continue;
-	
-		Return();
 	}
 	RemoveCharacterFromLeft();
 
 	program.textX = 0;
 	program.textY = 0;
 
-	program.HideCursor();
-	program.showCursor = false;
-
-
-	// select first row
-	// add notes cursor (arrow in margin)
 
 	UpdateArrow();
 }
@@ -77,6 +81,9 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 		return;
 
 	if ((mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL)
+		return;
+
+	if (program.textY == (unsigned int)rows.size())
 		return;
 
 	switch (key)
@@ -161,16 +168,51 @@ std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string ini
 void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 {
 	std::string pathStr = path.filename().string();
+	std::string displayName;
+
+	if (!isFile)
+		displayName = pathStr;
+	else
+	{
+		std::string name;
+		int month, day, year;
+		int hour, min;
+
+		hour = pathStr[0] - 65;
+		if (hour > 23 || hour < 0) return;
+
+		min = ((pathStr[1] - 65) * 10) + (pathStr[2] - 65);
+		if (min < 0 || min > 59) return;
+
+		month = pathStr[pathStr.size() - 6] - 65;
+		if (month < 0 || month > 11) return;
+
+		day = pathStr[pathStr.size() - 5] - 48;
+		if (day > 9) day = pathStr[pathStr.size() - 5] - 55;
+		if (day < 0 || day > 30) return;
+
+		year = ((pathStr[pathStr.size() - 4] - 65) * 1000);
+		year += ((pathStr[pathStr.size() - 3] - 65) * 100);
+		year += ((pathStr[pathStr.size() - 2] - 65) * 10);
+		year += ((pathStr[pathStr.size() - 1] - 65));
+		if (year < 0) return;
+
+		name = pathStr.substr(3, pathStr.size() - 9);
+
+		displayName = name + "    | " + DateToString(month, day, year, hour, min);
+		// TODO: Determine length of textarea and base displayName on that
+	}
 
 	// TODO: Fix Icons
-	if (isFile)
+	/*if (isFile)
 		AddCharacter(FILE_ICON);
 	else
 		AddCharacter(FOLDER_ICON);
-	AddCharacter(SPACE);
+	AddCharacter(SPACE);*/
 
-	for (int i = 0; i < pathStr.size(); i++)
-		AddCharacter(pathStr[i]);
+	for (int i = 0; i < displayName.size(); i++)
+		AddCharacter(displayName[i]);
+	Return();
 }
 
 void NoteViewer::UpdateArrow()
@@ -198,5 +240,74 @@ void NoteViewer::UpdateArrow()
 	program.marginVertices[arrowIndex + 6].texCoords[1] = arrowCoords.v + (1.0 / 10.0);
 	program.marginVertices[arrowIndex + 7].texCoords[0] = arrowCoords.u;
 	program.marginVertices[arrowIndex + 7].texCoords[1] = arrowCoords.v + (1.0 / 10.0);
+}
+
+std::string NoteViewer::DateToString(int month, int day, int year, int hour, int min)
+{
+	std::stringstream dateStream;
+
+	// Day
+	dateStream << std::to_string(day + 1);
+
+	// Month
+	switch (month) {
+	case 0:
+		dateStream << " Jan ";
+		break;
+	case 1:
+		dateStream << " Feb ";
+		break;
+	case 2:
+		dateStream << " Mar ";
+		break;
+	case 3:
+		dateStream << " Apr ";
+		break;
+	case 4:
+		dateStream << " May ";
+		break;
+	case 5:
+		dateStream << " Jun ";
+		break;
+	case 6:
+		dateStream << " Jul ";
+		break;
+	case 7:
+		dateStream << " Aug ";
+		break;
+	case 8:
+		dateStream << " Sep ";
+		break;
+	case 9:
+		dateStream << " Oct ";
+		break;
+	case 10:
+		dateStream << " Nov ";
+		break;
+	case 11:
+		dateStream << " Dec ";
+		break;
+	}
+
+	// Year
+	dateStream << std::to_string(year);
+	dateStream << " ";
+
+	// Hours
+	if (hour == 0)
+		dateStream << "12";
+	else if (hour > 12)
+		dateStream << std::to_string(hour - 12);
+	else
+		dateStream << std::to_string(hour);
+	dateStream << ":";
+
+	// Min
+	if (min < 10) dateStream << "0";
+	dateStream << std::to_string(min);
+
+	dateStream << ((hour < 13) ? "AM" : "PM");
+
+	return dateStream.str();
 }
 

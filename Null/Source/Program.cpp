@@ -412,6 +412,9 @@ void Program::EnterCommand()
 	commandText.clear(); 
 	commandX = 0;
 	commandSelected = false;
+
+	if (!showCursor)
+		HideCursor();
 }
 
 void Program::RemoveCharacterFromLeftCommand()

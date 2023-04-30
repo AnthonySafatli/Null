@@ -71,6 +71,8 @@ void Command::Execute(const std::string input)
 		Quit(args);
 	else
 		program.RenderStatus("Error: Unknown Command " + command);
+
+	// TODO: Rename command
 }
 
 /* ===== Commands ====== */
