@@ -463,7 +463,7 @@ void Program::OpenEditor()
 	area = new TextEditor();
 }
 
-void Program::OpenEditor(const std::string text, const std::string path)
+void Program::OpenEditor(const std::string text, const std::string path, bool isNote)
 {
 	vertices.clear();
 	marginVertices.clear();
@@ -471,20 +471,31 @@ void Program::OpenEditor(const std::string text, const std::string path)
 	delete area;
 
 	std::filesystem::path pathObj(path);
-	area = new TextEditor(text, path, pathObj.filename().string());
+
+	std::string fileName = pathObj.filename().string();
+	if (isNote)
+		fileName = fileName.substr(3, fileName.size() - 9);
+
+	area = new TextEditor(text, path, fileName, isNote);
 }
 
 void Program::OpenFile(const std::string path)
 {
+	if (!std::filesystem::is_regular_file(std::filesystem::path(path)))
+	{
+		RenderStatus("Error occurred while opening " + path);
+		return;
+	}
+
 	std::ifstream file(path);
 	if (!file.is_open())
 	{
-		RenderStatus("Error occured while opening " + path);
+		RenderStatus("Error occurred while opening " + path);
 		return;
 	}
 
 	std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	OpenEditor(str, path);
+	OpenEditor(str, path, false);
 }
 
 void Program::OpenTextViewer(const std::string str, const std::string pageName)
@@ -546,6 +557,25 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 #endif
 
 	area = new NoteViewer(documents, folders);
+}
+
+void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
+{
+	if (!std::filesystem::is_regular_file(notePath))
+	{
+		RenderStatus("Error occurred while opening " + noteName);
+		return;
+	}
+
+	std::ifstream file(notePath);
+	if (!file.is_open())
+	{
+		RenderStatus("Error occurred while opening " + noteName);
+		return;
+	}
+
+	std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	OpenEditor(str, notePath.string(), true);
 }
 
 void Program::LoadSettings()

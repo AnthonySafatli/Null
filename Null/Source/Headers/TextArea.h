@@ -15,6 +15,10 @@ public:
     virtual void AddLeftMargin();
     virtual void RemoveLeftMargin();
 
+    /* Constructor Helper Methods */
+    void ConstructorStart(int leftMargin, bool showCursor);
+    void ConstructorEnd();
+
     /* Text Data */
     std::vector<std::string> rows;
 

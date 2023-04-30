@@ -19,75 +19,15 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
-TextEditor::TextEditor() : fileDirectory(""), fileName("")
+TextEditor::TextEditor() : fileDirectory(""), fileName(""), isNote(false)
 {
-	if (program.openGL.init)
-		SetLeftMargin(4);
-	else
-		leftMargin = 4;
-
-	program.textX = 0;
-	program.textY = 0;
-
-	rows.push_back(std::string());
-
-	// add ' '
-	TexCoords spaceTexCoords = GetCoords(' ');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
-				
-	// add ' '
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
-				
-	// add '1'
-	TexCoords oneTexCoords = GetCoords('1');
-	program.marginVertices.push_back(Vertex(0.0, 0.0,   oneTexCoords.u               ,   oneTexCoords.v               , 1, -1, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v               , 1, -1, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0,   oneTexCoords.u + (1.0 / 10.0),   oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0,   oneTexCoords.u               ,   oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
-
-	program.ShowCursor();
-	program.showCursor = true;
-
+	ConstructorStart(4, true);
 	program.RenderStatus("New Editor Loaded Successfully");
 }
 
-TextEditor::TextEditor(const std::string text, const std::string directory, const std::string fileName) : fileName(fileName), fileDirectory(directory)
+TextEditor::TextEditor(const std::string text, const std::string directory, const std::string fileName, bool isNote) : fileName(fileName), fileDirectory(directory), isNote(isNote)
 {
-	if (program.openGL.init)
-		SetLeftMargin(4);
-	else
-		leftMargin = 4;
-
-	program.textX = 0;
-	program.textY = 0;
-
-	rows.push_back(std::string());
-
-	// add ' '
-	TexCoords spaceTexCoords = GetCoords(' ');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -3, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -3, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -3, MARGIN));
-
-	// add ' '
-	program.marginVertices.push_back(Vertex(0.0, 0.0, spaceTexCoords.u               , spaceTexCoords.v               , 1, -2, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v               , 1, -2, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, spaceTexCoords.u + (1.0 / 10.0), spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, spaceTexCoords.u               , spaceTexCoords.v + (1.0 / 10.0), 1, -2, MARGIN));
-
-	// add '1'
-	TexCoords oneTexCoords = GetCoords('1');
-	program.marginVertices.push_back(Vertex(0.0, 0.0, oneTexCoords.u               , oneTexCoords.v               , 1, -1, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 0.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v               , 1, -1, MARGIN));
-	program.marginVertices.push_back(Vertex(1.0, 1.0, oneTexCoords.u + (1.0 / 10.0), oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
-	program.marginVertices.push_back(Vertex(0.0, 1.0, oneTexCoords.u               , oneTexCoords.v + (1.0 / 10.0), 1, -1, MARGIN));
+	ConstructorStart(4, true);
 
 	for (int i = 0; i < text.size(); i++)
 	{
@@ -106,8 +46,8 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 		AddCharacter(text[i]);
 	}
 
-	program.textX = 0;
-	program.textY = 0;
+	ConstructorEnd();
+
 	program.RenderStatus(fileName + " Loaded Successfully");
 }
 

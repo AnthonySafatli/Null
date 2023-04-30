@@ -8,7 +8,7 @@ class TextEditor : public TextArea
 {
 public:
 	TextEditor();
-	TextEditor(const std::string text, const std::string directory, const std::string fileName);
+	TextEditor(const std::string text, const std::string directory, const std::string fileName, bool isNote);
 
 	/* Callback Methods */
 	void ProcessKey(int key, int action, int mods) override;
@@ -38,6 +38,7 @@ public:
 	/* Editor Data */
 	std::string fileDirectory;
 	std::string fileName;
+	bool isNote;
 
 private:
 	inline bool isWhiteSpace(char c);

@@ -26,6 +26,34 @@ void TextArea::RemoveLeftMargin()
 	program.marginVertices.resize(program.marginVertices.size() - (4 * (leftMargin - 1)));
 }
 
+void TextArea::ConstructorStart(int leftMargin, bool showCursor)
+{
+	if (program.openGL.init)
+		SetLeftMargin(leftMargin);
+	else
+		this->leftMargin = leftMargin;
+
+	rows.push_back(std::string());
+	AddLeftMargin();
+
+	program.textX = 0;
+	program.textY = 0;
+
+	if (showCursor)
+		program.ShowCursor();
+	else
+		program.HideCursor();
+	program.showCursor = showCursor;
+
+	UpdateUniform1i(program.openGL.u_cursorRow.location, 1);
+}
+
+void TextArea::ConstructorEnd()
+{
+	program.textX = 0;
+	program.textY = 0;
+}
+
 void TextArea::SetLeftMargin(const int margin)
 {
 	leftMargin = margin;

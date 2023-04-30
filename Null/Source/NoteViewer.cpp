@@ -18,20 +18,14 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
+// TODO: Make sure to check if user deletes of changes files after validation
+
 NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folderPath()
 {
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
 
-	SetLeftMargin(3);
-	rows.push_back(std::string());
-	AddLeftMargin();
-
-	program.textX = 0;
-	program.textY = 0;
-	
-	program.HideCursor();
-	program.showCursor = false;
+	ConstructorStart(3, false);
 
 	itemPaths = GetAllPaths(documentPath.string() + "\\NullNotes");
 
@@ -63,8 +57,7 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folde
 	}
 	RemoveCharacterFromLeft();
 
-	program.textX = 0;
-	program.textY = 0;
+	ConstructorEnd();
 
 	UpdateArrow();
 }
@@ -148,7 +141,7 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 		break;
 	case GLFW_KEY_ENTER:
 		OpenItem();
-		break;
+		return;
 	}
 
 	UpdateArrow();
@@ -448,10 +441,8 @@ void NoteViewer::OpenItem()
 			std::cout << "Open Note: " << itemPaths[i].string() << std::endl;
 #endif
 
-			// TODO: Implement opening notes
-			// get path to note
-			// open note and retrieve note
-			// Open editor
+			program.OpenNote(itemPaths[i], itemPaths[i].filename().string().substr(3, itemPaths[i].filename().string().size() - 9));
+			
 			return;
 		}
 		counter++;
