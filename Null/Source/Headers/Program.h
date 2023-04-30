@@ -72,15 +72,14 @@ public:
 	void UpdateIndices();
 
 	/* TextArea Methods */
-	void OpenEditor();                                                        // Opens new Text Editor
-	void OpenEditor(const std::string text, const std::string path);          // Opens Text Editor with text
-	void OpenFile(const std::string path);                                    // Opens File into Text Editor
-	void OpenNote(const std::string name);                                    // Opens Note into Text Editor
-	void OpenTextViewer(const std::string str, const std::string pageName);   // Opens Text Viewer with text
-	void OpenNoteViewer();                                                        // Opens Note File View at root
-	void OpenNoteViewer(const std::string path);                                  // Opens Note File View at path
-	void LoadSettings();                                                      // Opens Text Viewer with Settings text
-	void LoadHelp(const bool commands, const bool shortcuts);                 // Opens Text Viewer with Help text
+	void OpenEditor();                                                      // Opens new Text Editor
+	void OpenEditor(const std::string text, const std::string path);        // Opens Text Editor with text
+	void OpenFile(const std::string path);                                  // Opens File into Text Editor
+	void OpenTextViewer(const std::string str, const std::string pageName); // Opens Text Viewer with text
+	void OpenNoteViewer();                                                  // Opens Note File View at root
+	void OpenNoteViewer(std::vector<std::string> folders);                  // Opens Note File View at path
+	void LoadSettings();                                                    // Opens Text Viewer with Settings text
+	void LoadHelp(const bool commands, const bool shortcuts);               // Opens Text Viewer with Help text
 
 	/* Cursor Methods */
 	void ShowCursor();

@@ -32,13 +32,13 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true)
 	program.HideCursor();
 	program.showCursor = false;
 
-	paths = GetAllPaths(documentPath.string() + "\\NullNotes");
+	itemPaths = GetAllPaths(documentPath.string() + "\\NullNotes");
 
 #if _DEBUG
 	std::cout << "Note Files:" << std::endl;
 #endif
 
-	if (paths.size() == 0)
+	if (itemPaths.size() == 0)
 	{
 		const std::string message = "No Notes or Folders...";
 		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
@@ -46,29 +46,29 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true)
 		return;
 	}
 
-	for (int i = 0; i < paths.size(); i++)
+	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (std::filesystem::is_directory(paths[i]))
+		if (std::filesystem::is_directory(itemPaths[i]))
 		{
 
 #if _DEBUG
-		std::cout << paths[i].filename().string() << std::endl;
+		std::cout << itemPaths[i].filename().string() << std::endl;
 #endif
 
-			PrintPath(paths[i], false);
+			PrintPath(itemPaths[i], false);
 		}
 	}
-	for (int i = 0; i < paths.size(); i++)
+	for (int i = 0; i < itemPaths.size(); i++)
 	{
 
-		if (std::filesystem::is_regular_file(paths[i]))
+		if (std::filesystem::is_regular_file(itemPaths[i]))
 		{
 
 #if _DEBUG
-			std::cout << paths[i].filename().string() << std::endl;
+			std::cout << itemPaths[i].filename().string() << std::endl;
 #endif
 
-			PrintPath(paths[i], true);
+			PrintPath(itemPaths[i], true);
 		}
 	}
 	RemoveCharacterFromLeft();
@@ -97,7 +97,7 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 
 	std::stringstream foldersStream("\\NullNotes");
 	for (std::string folder : folders) foldersStream << "\\" << folder;
-	paths = GetAllPaths(documentPath.string() + foldersStream.str());
+	itemPaths = GetAllPaths(documentPath.string() + foldersStream.str());
 
 #if _DEBUG
 	std::cout << "Note Files:" << std::endl;
@@ -107,36 +107,36 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	AddCharacter('.');
 	Return();
 
-	if (paths.size() == 0)
+	if (itemPaths.size() == 0)
 	{
 		const std::string message = "No Notes or Folders...";
 		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
 		return;
 	}
 
-	for (int i = 0; i < paths.size(); i++)
+	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (std::filesystem::is_directory(paths[i]))
+		if (std::filesystem::is_directory(itemPaths[i]))
 		{
 
 #if _DEBUG
-			std::cout << paths[i].filename().string() << std::endl;
+			std::cout << itemPaths[i].filename().string() << std::endl;
 #endif
 
-			PrintPath(paths[i], false);
+			PrintPath(itemPaths[i], false);
 		}
 	}
-	for (int i = 0; i < paths.size(); i++)
+	for (int i = 0; i < itemPaths.size(); i++)
 	{
 
-		if (std::filesystem::is_regular_file(paths[i]))
+		if (std::filesystem::is_regular_file(itemPaths[i]))
 		{
 
 #if _DEBUG
-			std::cout << paths[i].filename().string() << std::endl;
+			std::cout << itemPaths[i].filename().string() << std::endl;
 #endif
 
-			PrintPath(paths[i], true);
+			PrintPath(itemPaths[i], true);
 		}
 	}
 	RemoveCharacterFromLeft();
@@ -397,16 +397,16 @@ void NoteViewer::OpenItem()
 	}
 
 	int counter = 0;
-	for (int i = 0; i < paths.size(); i++)
+	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (!std::filesystem::is_directory(paths[i]))
+		if (!std::filesystem::is_directory(itemPaths[i]))
 			continue;
 		
 		if (counter == cursorIndex)
 		{
 
 #if _DEBUG
-		std::cout << "Open Folder: " << paths[i].string() << std::endl;
+		std::cout << "Open Folder: " << itemPaths[i].string() << std::endl;
 #endif
 	
 			// TODO: open path[i] (folder)
@@ -415,16 +415,16 @@ void NoteViewer::OpenItem()
 		counter++;
 	}
 
-	for (int i = 0; i < paths.size(); i++)
+	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (!std::filesystem::is_regular_file(paths[i]))
+		if (!std::filesystem::is_regular_file(itemPaths[i]))
 			continue;
 
 		if (counter = cursorIndex)
 		{
 
 #if _DEBUG
-		std::cout << "Open Note: " << paths[i].string() << std::endl;
+		std::cout << "Open Note: " << itemPaths[i].string() << std::endl;
 #endif
 
 			// open path[i] (note)

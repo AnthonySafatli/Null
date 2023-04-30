@@ -608,7 +608,6 @@ void Command::Refresh(const std::vector<std::string> args)
 	program.RenderStatus("Refresh completed");
 }
 
-// TODO: Implement 'note' command
 void Command::Note(const std::vector<std::string> args)
 {
 	/* 
@@ -618,13 +617,13 @@ void Command::Note(const std::vector<std::string> args)
 	> note open folder [...] folder
 	: opens notebook file viewer at folder
 	:
-	> note folder folderName [...] folderName
+	> note folder folder [...] folder
 	: creates folder with name in current folder
 	:
-	> note new folder [...] noteName
+	> note new noteName
 	: opens new note in folder
 	:
-	> note del folder [...] name
+	> note del name
 	: deletes folder or note
 	*/
 
@@ -636,25 +635,46 @@ void Command::Note(const std::vector<std::string> args)
 
 	if (args[0] == "open")
 	{
-		// TODO: A folder connot have spaces, so 
-		std::stringstream ss;
-		for (std::string str : args) ss << str + " ";
+		if (args.size() <= 1)
+		{
+			program.RenderStatus("Command arguments invalid");
+			return;
+		}
 
-		program.OpenNote(ss.str());
+		std::vector<std::string> folder(args.begin() + 1, args.end());
+		program.OpenNoteViewer(folder);
 		return;
 	}
 	if (args[0] == "folder")
 	{
+		if (args.size() <= 1)
+		{
+			program.RenderStatus("Command arguments invalid");
+			return;
+		}
+
 		// create folder(s)
 		return;
 	}
 	if (args[0] == "new")
 	{
+		if (args.size() <= 1)
+		{
+			program.RenderStatus("Command arguments invalid");
+			return;
+		}
+
 		// creates new note
 		return;
 	}
 	if (args[0] == "del")
 	{
+		if (args.size() <= 1)
+		{
+			program.RenderStatus("Command arguments invalid");
+			return;
+		}
+
 		// deletes note or folder
 		return;
 	}

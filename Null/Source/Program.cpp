@@ -487,14 +487,6 @@ void Program::OpenFile(const std::string path)
 	OpenEditor(str, path);
 }
 
-void Program::OpenNote(const std::string name)
-{
-	// TODO: Get path for notebook file
-	std::string path; 
-
-	OpenFile(path);
-}
-
 void Program::OpenTextViewer(const std::string str, const std::string pageName)
 {
 	vertices.clear();
@@ -527,9 +519,33 @@ void Program::OpenNoteViewer()
 	area = new NoteViewer(documents);
 }
 
-void Program::OpenNoteViewer(const std::string path)
+void Program::OpenNoteViewer(std::vector<std::string> folders)
 {
-	// TODO: Implement
+	vertices.clear();
+	marginVertices.clear();
+
+	std::filesystem::path documents = NoteViewer::GetDocumentsFolder();
+	if (documents.empty())
+	{
+		RenderStatus("Notebook is unavailable at the moment");
+		return;
+	}
+
+	std::filesystem::path noteFolder(documents / "NullNotes");
+	for (std::string folder : folders) noteFolder = noteFolder / folder;
+	if (!std::filesystem::is_directory(noteFolder))
+	{
+		RenderStatus("Note folder not found");
+		return;
+	}
+
+	delete area;
+
+#if _DEBUG
+	std::cout << documents.string() << std::endl;
+#endif
+
+	area = new NoteViewer(documents, folders);
 }
 
 void Program::LoadSettings()

@@ -30,6 +30,7 @@ public:
 	void OpenItem();
 
 	/* FileViewer Data */
-	std::vector<std::filesystem::path> paths;
+	std::vector<std::string> folderPath;
+	std::vector<std::filesystem::path> itemPaths;
 	bool isRoot;
 };
