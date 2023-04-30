@@ -17,7 +17,7 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
-NoteViewer::NoteViewer(std::filesystem::path documentPath)
+NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true)
 {
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
@@ -48,23 +48,96 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath)
 
 	for (int i = 0; i < paths.size(); i++)
 	{
+		if (std::filesystem::is_directory(paths[i]))
+		{
 
 #if _DEBUG
 		std::cout << paths[i].filename().string() << std::endl;
 #endif
 
-		if (std::filesystem::is_directory(paths[i]))
 			PrintPath(paths[i], false);
+		}
 	}
 	for (int i = 0; i < paths.size(); i++)
 	{
 
+		if (std::filesystem::is_regular_file(paths[i]))
+		{
+
 #if _DEBUG
-		std::cout << paths[i].filename().string() << std::endl;
+			std::cout << paths[i].filename().string() << std::endl;
 #endif
 
-		if (std::filesystem::is_regular_file(paths[i]))
 			PrintPath(paths[i], true);
+		}
+	}
+	RemoveCharacterFromLeft();
+
+	program.textX = 0;
+	program.textY = 0;
+
+	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
+	UpdateArrow();
+}
+
+NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::string> folders) : isRoot(false)
+{
+	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
+		std::filesystem::create_directory(documentPath / "NullNotes");
+
+	SetLeftMargin(3);
+	rows.push_back(std::string());
+	AddLeftMargin();
+
+	program.textX = 0;
+	program.textY = 0;
+
+	program.HideCursor();
+	program.showCursor = false;
+
+	std::stringstream foldersStream("\\NullNotes");
+	for (std::string folder : folders) foldersStream << "\\" << folder;
+	paths = GetAllPaths(documentPath.string() + foldersStream.str());
+
+#if _DEBUG
+	std::cout << "Note Files:" << std::endl;
+#endif
+
+	AddCharacter('.');
+	AddCharacter('.');
+	Return();
+
+	if (paths.size() == 0)
+	{
+		const std::string message = "No Notes or Folders...";
+		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		return;
+	}
+
+	for (int i = 0; i < paths.size(); i++)
+	{
+		if (std::filesystem::is_directory(paths[i]))
+		{
+
+#if _DEBUG
+			std::cout << paths[i].filename().string() << std::endl;
+#endif
+
+			PrintPath(paths[i], false);
+		}
+	}
+	for (int i = 0; i < paths.size(); i++)
+	{
+
+		if (std::filesystem::is_regular_file(paths[i]))
+		{
+
+#if _DEBUG
+			std::cout << paths[i].filename().string() << std::endl;
+#endif
+
+			PrintPath(paths[i], true);
+		}
 	}
 	RemoveCharacterFromLeft();
 
@@ -95,7 +168,7 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 		MoveDown();
 		break;
 	case GLFW_KEY_ENTER:
-		// open file
+		OpenItem();
 		break;
 	}
 
@@ -309,5 +382,55 @@ std::string NoteViewer::DateToString(int month, int day, int year, int hour, int
 	dateStream << ((hour < 13) ? "AM" : "PM");
 
 	return dateStream.str();
+}
+
+void NoteViewer::OpenItem()
+{
+	int cursorIndex = program.textY;
+	if (!isRoot)
+		cursorIndex--;
+
+	if (isRoot && cursorIndex == -1)
+	{
+		// TODO: Send us back (..)
+		return;
+	}
+
+	int counter = 0;
+	for (int i = 0; i < paths.size(); i++)
+	{
+		if (!std::filesystem::is_directory(paths[i]))
+			continue;
+		
+		if (counter == cursorIndex)
+		{
+
+#if _DEBUG
+		std::cout << "Open Folder: " << paths[i].string() << std::endl;
+#endif
+	
+			// TODO: open path[i] (folder)
+			return;
+		}
+		counter++;
+	}
+
+	for (int i = 0; i < paths.size(); i++)
+	{
+		if (!std::filesystem::is_regular_file(paths[i]))
+			continue;
+
+		if (counter = cursorIndex)
+		{
+
+#if _DEBUG
+		std::cout << "Open Note: " << paths[i].string() << std::endl;
+#endif
+
+			// open path[i] (note)
+			return;
+		}
+		counter++;
+	}
 }
 

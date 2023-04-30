@@ -375,7 +375,7 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	> save
 	: saves the text
 	:
-	> save as
+	> save as 
 	: saves with a new name
 	*/
 
@@ -636,6 +636,7 @@ void Command::Note(const std::vector<std::string> args)
 
 	if (args[0] == "open")
 	{
+		// TODO: A folder connot have spaces, so 
 		std::stringstream ss;
 		for (std::string str : args) ss << str + " ";
 

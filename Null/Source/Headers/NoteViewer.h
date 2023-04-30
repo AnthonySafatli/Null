@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <string>
+#include <vector>
 
 #include "TextArea.h"
 
@@ -9,6 +10,7 @@ class NoteViewer : public TextArea
 {
 public:
 	NoteViewer(std::filesystem::path documentPath);
+	NoteViewer(std::filesystem::path documentPath, std::vector<std::string> folders);
 
 	/* Callback Methods */
 	virtual void ProcessKey(int key, int action, int mods);
@@ -25,7 +27,9 @@ public:
 	void PrintPath(std::filesystem::path path, bool isFile);
 	void UpdateArrow();
 	std::string DateToString(int month, int day, int year, int hour, int min);
+	void OpenItem();
 
 	/* FileViewer Data */
 	std::vector<std::filesystem::path> paths;
+	bool isRoot;
 };
