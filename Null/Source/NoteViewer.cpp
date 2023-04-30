@@ -1,6 +1,7 @@
 #include "Headers/NoteViewer.h"
 
 #include <filesystem>
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -34,45 +35,31 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folde
 
 	itemPaths = GetAllPaths(documentPath.string() + "\\NullNotes");
 
-#if _DEBUG
-	std::cout << "Note Files:" << std::endl;
-#endif
-
-	if (itemPaths.size() == 0)
+	for (int i = itemPaths.size() - 1; i >= 0; --i)
 	{
-		const std::string message = "No Notes or Folders...";
-		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		if (!std::filesystem::is_regular_file(itemPaths[i]))
+			continue;
 
-		program.textX = 0;
-		program.textY = 0;
-		UpdateArrow();
-		return;
+		if (!FileNameValidation(itemPaths[i]))
+			itemPaths.erase(itemPaths.begin() + i);
 	}
 
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
 		if (std::filesystem::is_directory(itemPaths[i]))
-		{
-
-#if _DEBUG
-		std::cout << itemPaths[i].filename().string() << std::endl;
-#endif
-
 			PrintPath(itemPaths[i], false);
-		}
 	}
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
-
 		if (std::filesystem::is_regular_file(itemPaths[i]))
-		{
-
-#if _DEBUG
-			std::cout << itemPaths[i].filename().string() << std::endl;
-#endif
-
 			PrintPath(itemPaths[i], true);
-		}
+	}
+
+	if (itemPaths.size() == 0)
+	{
+		const std::string message = "No Notes or Folders...";
+		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		Return();
 	}
 	RemoveCharacterFromLeft();
 
@@ -97,53 +84,40 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	program.HideCursor();
 	program.showCursor = false;
 
-	std::stringstream foldersStream("\\NullNotes");
-	for (std::string folder : folders) foldersStream << "\\" << folder;
-	itemPaths = GetAllPaths(documentPath.string() + foldersStream.str());
-
-#if _DEBUG
-	std::cout << "Note Files:" << std::endl;
-#endif
+	std::stringstream folderNameStream = std::stringstream();
+	folderNameStream << "\\NullNotes";
+	for (std::string folder : folders) folderNameStream << "\\" << folder;
+	itemPaths = GetAllPaths(documentPath.string() + folderNameStream.str());
 
 	AddCharacter('.');
 	AddCharacter('.');
 	Return();
 
-	if (itemPaths.size() == 0)
+	for (int i = itemPaths.size() - 1; i >= 0; --i)
 	{
-		const std::string message = "No Notes or Folders...";
-		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		if (!std::filesystem::is_regular_file(itemPaths[i]))
+			continue;
 
-		program.textX = 0;
-		program.textY = 0;
-		UpdateArrow();
-		return;
+		if (!FileNameValidation(itemPaths[i]))
+			itemPaths.erase(itemPaths.begin() + i);
 	}
 
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
 		if (std::filesystem::is_directory(itemPaths[i]))
-		{
-
-#if _DEBUG
-			std::cout << itemPaths[i].filename().string() << std::endl;
-#endif
-
 			PrintPath(itemPaths[i], false);
-		}
 	}
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
-
 		if (std::filesystem::is_regular_file(itemPaths[i]))
-		{
-
-#if _DEBUG
-			std::cout << itemPaths[i].filename().string() << std::endl;
-#endif
-
 			PrintPath(itemPaths[i], true);
-		}
+	}
+
+	if (itemPaths.size() == 0)
+	{
+		const std::string message = "No Notes or Folders...";
+		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		Return();
 	}
 	RemoveCharacterFromLeft();
 
@@ -229,15 +203,7 @@ std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string ini
 	for (const auto& entry : std::filesystem::directory_iterator(initPath)) 
 	{
 		paths.push_back(entry.path());
-	}
-
-	/* Recursive:
-	for (int i = paths.size() - 1; i >= 0; i--)
-	{
-		std::vector<std::filesystem::path> dirPaths = GetAllPaths(paths[i].generic_string());
-		paths.insert(paths.begin() + i, dirPaths.begin(), dirPaths.end());
-	}
-	*/ 
+	} 
 
 	return paths;
 }
@@ -275,6 +241,7 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 		if (year < 0) return;
 
 		name = pathStr.substr(3, pathStr.size() - 9);
+		if (name.size() < 1) return;
 
 		displayName = name + "    | " + DateToString(month, day, year, hour, min);
 		// TODO: Determine length of textarea and base displayName on that
@@ -290,6 +257,40 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 	for (int i = 0; i < displayName.size(); i++)
 		AddCharacter(displayName[i]);
 	Return();
+	return;
+}
+
+bool NoteViewer::FileNameValidation(std::filesystem::path path)
+{
+	std::string pathStr = path.filename().string();
+
+	std::string name;
+	int month, day, year;
+	int hour, min;
+
+	hour = pathStr[0] - 65;
+	if (hour > 23 || hour < 0) return false;
+
+	min = ((pathStr[1] - 65) * 10) + (pathStr[2] - 65);
+	if (min < 0 || min > 59) return false;
+
+	month = pathStr[pathStr.size() - 6] - 65;
+	if (month < 0 || month > 11) return false;
+
+	day = pathStr[pathStr.size() - 5] - 48;
+	if (day > 9) day = pathStr[pathStr.size() - 5] - 55;
+	if (day < 0 || day > 30) return false;
+
+	year = ((pathStr[pathStr.size() - 4] - 65) * 1000);
+	year += ((pathStr[pathStr.size() - 3] - 65) * 100);
+	year += ((pathStr[pathStr.size() - 2] - 65) * 10);
+	year += ((pathStr[pathStr.size() - 1] - 65));
+	if (year < 0) return false;
+
+	name = pathStr.substr(3, pathStr.size() - 9);
+	if (name.size() < 1) return false;
+
+	return true;
 }
 
 void NoteViewer::UpdateArrow()
@@ -441,10 +442,13 @@ void NoteViewer::OpenItem()
 		{
 
 #if _DEBUG
-		std::cout << "Open Note: " << itemPaths[i].string() << std::endl;
+			std::cout << "Open Note: " << itemPaths[i].string() << std::endl;
 #endif
 
-			// open path[i] (note)
+			// TODO: Implement opening notes
+			// get path to note
+			// open note and retrieve note
+			// Open editor
 			return;
 		}
 		counter++;
