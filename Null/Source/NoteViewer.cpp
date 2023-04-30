@@ -17,7 +17,7 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
-NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true)
+NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folderPath()
 {
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
@@ -42,7 +42,10 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true)
 	{
 		const std::string message = "No Notes or Folders...";
 		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
-		program.textY = 1;
+
+		program.textX = 0;
+		program.textY = 0;
+		UpdateArrow();
 		return;
 	}
 
@@ -76,11 +79,10 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true)
 	program.textX = 0;
 	program.textY = 0;
 
-	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
 	UpdateArrow();
 }
 
-NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::string> folders) : isRoot(false)
+NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::string> folders) : isRoot(false), folderPath(folders)
 {
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
@@ -111,6 +113,10 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	{
 		const std::string message = "No Notes or Folders...";
 		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+
+		program.textX = 0;
+		program.textY = 0;
+		UpdateArrow();
 		return;
 	}
 
@@ -144,7 +150,6 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	program.textX = 0;
 	program.textY = 0;
 
-
 	UpdateArrow();
 }
 
@@ -172,7 +177,6 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 		break;
 	}
 
-	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
 	UpdateArrow();
 }
 
@@ -313,6 +317,8 @@ void NoteViewer::UpdateArrow()
 	program.marginVertices[arrowIndex + 6].texCoords[1] = arrowCoords.v + (1.0 / 10.0);
 	program.marginVertices[arrowIndex + 7].texCoords[0] = arrowCoords.u;
 	program.marginVertices[arrowIndex + 7].texCoords[1] = arrowCoords.v + (1.0 / 10.0);
+
+	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
 }
 
 std::string NoteViewer::DateToString(int month, int day, int year, int hour, int min)
@@ -390,9 +396,19 @@ void NoteViewer::OpenItem()
 	if (!isRoot)
 		cursorIndex--;
 
-	if (isRoot && cursorIndex == -1)
+	if (!isRoot && (cursorIndex < 0))
 	{
-		// TODO: Send us back (..)
+
+#if _DEBUG
+		std::cout << "Go back" << std::endl;
+#endif
+
+		folderPath.pop_back();
+		if (folderPath.size() == 0)
+			program.OpenNoteViewer();
+		else
+			program.OpenNoteViewer(folderPath);
+
 		return;
 	}
 
@@ -406,10 +422,11 @@ void NoteViewer::OpenItem()
 		{
 
 #if _DEBUG
-		std::cout << "Open Folder: " << itemPaths[i].string() << std::endl;
+			std::cout << "Open Folder: " << itemPaths[i].string() << std::endl;
 #endif
 	
-			// TODO: open path[i] (folder)
+			folderPath.push_back(itemPaths[i].filename().string());
+			program.OpenNoteViewer(folderPath);
 			return;
 		}
 		counter++;
