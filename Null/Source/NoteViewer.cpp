@@ -222,26 +222,22 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 		int hour, min;
 
 		hour = pathStr[0] - 65;
-		if (hour > 23 || hour < 0) return;
-
 		min = ((pathStr[1] - 65) * 10) + (pathStr[2] - 65);
-		if (min < 0 || min > 59) return;
 
 		month = pathStr[pathStr.size() - 6] - 65;
-		if (month < 0 || month > 11) return;
-
+		
 		day = pathStr[pathStr.size() - 5] - 48;
 		if (day > 9) day = pathStr[pathStr.size() - 5] - 55;
-		if (day < 0 || day > 30) return;
 
 		year = ((pathStr[pathStr.size() - 4] - 65) * 1000);
 		year += ((pathStr[pathStr.size() - 3] - 65) * 100);
 		year += ((pathStr[pathStr.size() - 2] - 65) * 10);
 		year += ((pathStr[pathStr.size() - 1] - 65));
-		if (year < 0) return;
 
 		name = pathStr.substr(3, pathStr.size() - 9);
-		if (name.size() < 1) return;
+
+		if (!FileNameValidation(path))
+			return;
 
 		displayName = name + "    | " + DateToString(month, day, year, hour, min);
 		// TODO: Determine length of textarea and base displayName on that
@@ -253,6 +249,13 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 	else
 		AddCharacter(FOLDER_ICON);
 	AddCharacter(SPACE);*/
+
+	if (!isFile)
+	{
+		AddCharacter(FOLDER_ICON_START);
+		AddCharacter(FOLDER_ICON_END);
+	}
+
 
 	for (int i = 0; i < displayName.size(); i++)
 		AddCharacter(displayName[i]);
@@ -285,7 +288,7 @@ bool NoteViewer::FileNameValidation(std::filesystem::path path)
 	year += ((pathStr[pathStr.size() - 3] - 65) * 100);
 	year += ((pathStr[pathStr.size() - 2] - 65) * 10);
 	year += ((pathStr[pathStr.size() - 1] - 65));
-	if (year < 0) return false;
+	if (year < 1000) return false;
 
 	name = pathStr.substr(3, pathStr.size() - 9);
 	if (name.size() < 1) return false;

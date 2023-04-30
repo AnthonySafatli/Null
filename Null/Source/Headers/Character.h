@@ -4,8 +4,8 @@
 #define ARROW_START 31
 #define ARROW_END 127
 #define NOT_ARROW_END 30
-#define FILE_ICON 29
-#define FOLDER_ICON 28
+#define FOLDER_ICON_START 29
+#define FOLDER_ICON_END 28
 
 struct TexCoords
 {
