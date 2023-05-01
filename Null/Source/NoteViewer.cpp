@@ -7,6 +7,8 @@
 #include <vector>
 #include <windows.h>
 #include <shlobj.h>
+#include <chrono>
+#include <ctime>
 
 #include "GLFW/glfw3.h"
 
@@ -184,6 +186,30 @@ std::filesystem::path NoteViewer::GetDocumentsFolder()
 
 #endif
 
+}
+
+std::string NoteViewer::GetNoteName(std::string name)
+{
+	auto current_time = std::chrono::system_clock::now();
+	std::time_t time_t_now = std::chrono::system_clock::to_time_t(current_time);
+	std::tm time_now;
+	localtime_s(&time_now, &time_t_now);
+
+	int year = time_now.tm_year + 1900; 
+	int month = time_now.tm_mon;        
+	int day = time_now.tm_mday - 1;         
+	int hour = time_now.tm_hour;        
+	int minute = time_now.tm_min;       
+
+	std::stringstream nameStream;
+	nameStream << (char)(hour + 65);
+	nameStream << (char)((int)((minute / 10) % 10) + 65) << (char)((minute % 10) + 65);
+	nameStream << name;
+	nameStream << (char)(month + 65);
+	nameStream << ((day > 9) ? ((char)(day + 55)) : ((char)(day + 48)));
+	nameStream << (char)((int)((year / 1000) % 10) + 65) << (char)((int)((year / 100) % 10) + 65) << (char)((int)((year / 10) % 10) + 65) << (char)((year % 10) + 65);
+
+	return nameStream.str();
 }
 
 std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string initPath)

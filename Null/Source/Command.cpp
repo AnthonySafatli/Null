@@ -380,6 +380,8 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 	: saves with a new name
 	*/
 
+	// TODO: Update so saving changes the date and time for note name
+
 	auto editor = dynamic_cast<TextEditor*>(program.area);
 	if (editor == NULL)
 		return;
@@ -643,6 +645,8 @@ void Command::Note(const std::vector<std::string> args)
 		return;
 	}
 
+	auto noteViewer = dynamic_cast<NoteViewer*>(program.area);
+
 	if (args.size() == 0)
 	{
 		program.OpenNoteViewer();
@@ -675,8 +679,6 @@ void Command::Note(const std::vector<std::string> args)
 		std::filesystem::path folderPath = documentsPath;
 		folderPath = folderPath / "NullNotes";
 
-		auto noteViewer = dynamic_cast<NoteViewer*>(program.area);
-
 		if (noteViewer != NULL)
 		{
 			for (int i = 0; i < noteViewer->folderPath.size(); i++)
@@ -684,11 +686,13 @@ void Command::Note(const std::vector<std::string> args)
 		}
 
 		for (int i = 1; i < args.size(); i++)
+		{
 			folderPath = folderPath / args[i];
+			std::filesystem::create_directory(folderPath);
+		}
 
-		std::filesystem::create_directory(folderPath);
-
-		if (noteViewer != NULL) Refresh(std::vector<std::string>());
+		if (noteViewer != NULL) 
+			Refresh(std::vector<std::string>());
 		return;
 	}
 	if (args[0] == "new")
@@ -699,7 +703,35 @@ void Command::Note(const std::vector<std::string> args)
 			return;
 		}
 
-		// creates new note
+		std::stringstream argsStr;
+		for (int i = 1; i < args.size(); i++)
+		{
+			if (i != 1) 
+				argsStr << " ";
+			argsStr << args[i];
+		}
+
+		std::string noteName = NoteViewer::GetNoteName(argsStr.str());
+
+
+		std::filesystem::path currentNotePath = documentsPath / "NullNotes";
+		if (noteViewer != NULL)
+		{
+			for (int i = 0; i < noteViewer->folderPath.size(); i++)
+				currentNotePath = currentNotePath / noteViewer->folderPath[i];
+		}
+
+		std::ofstream file(currentNotePath / noteName); 
+		if (file.is_open()) 
+		{ 
+			file.close(); 
+			Refresh(std::vector<std::string>());
+
+			program.RenderStatus("Created note successfully");
+		}
+		else 
+			program.RenderStatus("Unable to create note");
+		
 		return;
 	}
 	if (args[0] == "del")
@@ -710,7 +742,7 @@ void Command::Note(const std::vector<std::string> args)
 			return;
 		}
 
-		// deletes note or folder
+		// TODO: Implement deleting
 		return;
 	}
 
