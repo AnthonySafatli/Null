@@ -14,6 +14,7 @@
 #include "Headers/Uniforms.h"
 #include "Headers/Character.h"
 #include "Headers/Misc.h"
+#include "Headers/NoteViewer.h"
 
 extern Program program;
 
@@ -404,6 +405,11 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 
 	if (args.size() == 1 && args[0] == "as")
 	{
+		if (editor->isNote)
+		{
+			SaveNote(&editor);
+		}
+
 		SaveFile(&editor);
 		return;
 	}
@@ -586,6 +592,8 @@ void Command::Refresh(const std::vector<std::string> args)
 	: Recomputes the vertices and margin vertices for the file
 	*/
 
+	// TODO: Update based on NoteViewer
+
 	program.vertices.clear();
 
 	for (int i = 0; i < program.area->rows.size(); i++)
@@ -627,6 +635,14 @@ void Command::Note(const std::vector<std::string> args)
 	: deletes folder or note
 	*/
 
+	std::filesystem::path documentsPath = NoteViewer::GetDocumentsFolder();
+	if (documentsPath.empty())
+	{
+		// No document folder found, note command unavailable
+		program.RenderStatus("Notebook is unavailable at the moment");
+		return;
+	}
+
 	if (args.size() == 0)
 	{
 		program.OpenNoteViewer();
@@ -653,7 +669,26 @@ void Command::Note(const std::vector<std::string> args)
 			return;
 		}
 
-		// create folder(s)
+		if (!std::filesystem::is_directory(documentsPath / "NullNotes"))
+			std::filesystem::create_directory(documentsPath / "NullNotes");
+
+		std::filesystem::path folderPath = documentsPath;
+		folderPath = folderPath / "NullNotes";
+
+		auto noteViewer = dynamic_cast<NoteViewer*>(program.area);
+
+		if (noteViewer != NULL)
+		{
+			for (int i = 0; i < noteViewer->folderPath.size(); i++)
+				folderPath = folderPath / noteViewer->folderPath[i];
+		}
+
+		for (int i = 1; i < args.size(); i++)
+			folderPath = folderPath / args[i];
+
+		std::filesystem::create_directory(folderPath);
+
+		if (noteViewer != NULL) Refresh(std::vector<std::string>());
 		return;
 	}
 	if (args[0] == "new")

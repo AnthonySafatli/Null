@@ -29,7 +29,10 @@ void TextArea::RemoveLeftMargin()
 void TextArea::ConstructorStart(int leftMargin, bool showCursor)
 {
 	if (program.openGL.init)
+	{
 		SetLeftMargin(leftMargin);
+		UpdateUniform1i(program.openGL.u_cursorRow.location, 1);
+	}
 	else
 		this->leftMargin = leftMargin;
 
@@ -44,8 +47,6 @@ void TextArea::ConstructorStart(int leftMargin, bool showCursor)
 	else
 		program.HideCursor();
 	program.showCursor = showCursor;
-
-	UpdateUniform1i(program.openGL.u_cursorRow.location, 1);
 }
 
 void TextArea::ConstructorEnd()

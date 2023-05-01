@@ -321,6 +321,11 @@ void SaveFile(TextEditor** editor)
 	NFD_FreePath(path);
 }
 
+void SaveNote(TextEditor** editor) 
+{
+	// TODO: implement save new notes
+}
+
 bool SavedSuccessfully(const std::string path)
 {
 	std::ofstream outfile(path);
