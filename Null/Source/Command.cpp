@@ -742,7 +742,50 @@ void Command::Note(const std::vector<std::string> args)
 			return;
 		}
 
-		// TODO: Implement deleting
+		if (noteViewer == NULL)
+		{
+			program.RenderStatus("Command not available");
+			return;
+		}
+
+		std::stringstream argsStr;
+		for (int i = 1; i < args.size(); i++)
+		{
+			if (i != 1)
+				argsStr << " ";
+			argsStr << args[i];
+		}
+
+		for (int i = 0; i < noteViewer->itemPaths.size(); i++)
+		{
+			if (noteViewer->itemPaths[i].filename().string() != argsStr.str())
+				continue;
+
+			try 
+			{
+				if (std::filesystem::is_regular_file(noteViewer->itemPaths[i]))
+				{
+					std::filesystem::remove(noteViewer->itemPaths[i]);
+				}
+				else if (std::filesystem::is_directory(noteViewer->itemPaths[i]))
+				{
+					std::filesystem::remove_all(noteViewer->itemPaths[i]);
+				}
+				else
+					throw std::exception();
+
+				Refresh(std::vector<std::string>());
+				program.RenderStatus(argsStr.str() + " deleted Successfully");
+				return;
+			}
+			catch (const std::exception& ex) 
+			{
+				program.RenderStatus("Error deleting " + argsStr.str());
+				return;
+			}
+		}
+
+		program.RenderStatus(argsStr.str() + " not found");
 		return;
 	}
 
@@ -758,7 +801,7 @@ void Command::Quit(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
-		program.RenderStatus("Command 'quit' can not take any arguments");
+		program.RenderStatus("Command 'quit' does not take any arguments");
 		return;
 	}
 
