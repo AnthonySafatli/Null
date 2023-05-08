@@ -31,33 +31,8 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folde
 
 	itemPaths = GetAllPaths(documentPath.string() + "\\NullNotes");
 
-	for (int i = itemPaths.size() - 1; i >= 0; --i)
-	{
-		if (!std::filesystem::is_regular_file(itemPaths[i]))
-			continue;
-
-		if (!FileNameValidation(itemPaths[i]))
-			itemPaths.erase(itemPaths.begin() + i);
-	}
-
-	for (int i = 0; i < itemPaths.size(); i++)
-	{
-		if (std::filesystem::is_directory(itemPaths[i]))
-			PrintPath(itemPaths[i], false);
-	}
-	for (int i = 0; i < itemPaths.size(); i++)
-	{
-		if (std::filesystem::is_regular_file(itemPaths[i]))
-			PrintPath(itemPaths[i], true);
-	}
-
-	if (itemPaths.size() == 0)
-	{
-		const std::string message = "No Notes or Folders...";
-		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
-		Return();
-	}
-	RemoveCharacterFromLeft();
+	ValidatePaths();
+	PrintPaths();
 
 	ConstructorEnd();
 
@@ -69,15 +44,7 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
 
-	SetLeftMargin(3);
-	rows.push_back(std::string());
-	AddLeftMargin();
-
-	program.textX = 0;
-	program.textY = 0;
-
-	program.HideCursor();
-	program.showCursor = false;
+	ConstructorStart(3, false);
 
 	std::stringstream folderNameStream = std::stringstream();
 	folderNameStream << "\\NullNotes";
@@ -88,36 +55,10 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	AddCharacter('.');
 	Return();
 
-	for (int i = itemPaths.size() - 1; i >= 0; --i)
-	{
-		if (!std::filesystem::is_regular_file(itemPaths[i]))
-			continue;
+	ValidatePaths();
+	PrintPaths();
 
-		if (!FileNameValidation(itemPaths[i]))
-			itemPaths.erase(itemPaths.begin() + i);
-	}
-
-	for (int i = 0; i < itemPaths.size(); i++)
-	{
-		if (std::filesystem::is_directory(itemPaths[i]))
-			PrintPath(itemPaths[i], false);
-	}
-	for (int i = 0; i < itemPaths.size(); i++)
-	{
-		if (std::filesystem::is_regular_file(itemPaths[i]))
-			PrintPath(itemPaths[i], true);
-	}
-
-	if (itemPaths.size() == 0)
-	{
-		const std::string message = "No Notes or Folders...";
-		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
-		Return();
-	}
-	RemoveCharacterFromLeft();
-
-	program.textX = 0;
-	program.textY = 0;
+	ConstructorEnd();
 
 	UpdateArrow();
 }
@@ -313,6 +254,40 @@ bool NoteViewer::FileNameValidation(std::filesystem::path path)
 	if (name.size() < 1) return false;
 
 	return true;
+}
+
+void NoteViewer::ValidatePaths()
+{
+	for (int i = itemPaths.size() - 1; i >= 0; --i)
+	{
+		if (!std::filesystem::is_regular_file(itemPaths[i]))
+			continue;
+
+		if (!FileNameValidation(itemPaths[i]))
+			itemPaths.erase(itemPaths.begin() + i);
+	}
+}
+
+void NoteViewer::PrintPaths()
+{
+	for (int i = 0; i < itemPaths.size(); i++)
+	{
+		if (std::filesystem::is_directory(itemPaths[i]))
+			PrintPath(itemPaths[i], false);
+	}
+	for (int i = 0; i < itemPaths.size(); i++)
+	{
+		if (std::filesystem::is_regular_file(itemPaths[i]))
+			PrintPath(itemPaths[i], true);
+	}
+
+	if (itemPaths.size() == 0)
+	{
+		const std::string message = "No Notes or Folders...";
+		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);
+		Return();
+	}
+	RemoveCharacterFromLeft();
 }
 
 void NoteViewer::UpdateArrow()

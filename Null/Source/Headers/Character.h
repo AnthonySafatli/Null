@@ -17,9 +17,9 @@ struct TexCoords
 
 TexCoords GetCoords(char ch);
 
-static const int TexIndex[] =
+inline const int TexIndex[] =
 {
-    99, 98, 97, 96, 95,                                                                                                // [NOT_ARROW_END] [ARROW_START] [SPACE]
+    99, 98, 97, 96, 95,                                                                                        // [FOLDER_ICON] [FOLDER_ICON] [NOT_ARROW_END] [ARROW_START] [SPACE]
     62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,                                                // ! " # $ % & ' ( ) * + , - . / 
     52, 53, 54, 55, 56, 57, 58, 59, 60, 61,                                                                    // 0 1 2 3 4 5 6 7 8 9 0
     77, 78, 79, 80, 81, 82, 83,                                                                                // : ; < = > ? @

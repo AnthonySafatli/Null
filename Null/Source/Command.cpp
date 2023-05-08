@@ -49,9 +49,11 @@ void Command::Execute(const std::string input)
 	else if (command == "help")
 		Help(args);
 	else if (command == "open")
-		Open(args, input);
+		Open(args);
 	else if (command == "save")
-		Save(args, input);
+		Save(args);
+	else if (command == "rename")
+		Rename(args);
 	else if (command == "copy")
 		Copy(args);
 	else if (command == "paste")
@@ -72,8 +74,6 @@ void Command::Execute(const std::string input)
 		Quit(args);
 	else
 		program.RenderStatus("Error: Unknown Command " + command);
-
-	// TODO: Rename command
 }
 
 /* ===== Commands ====== */
@@ -330,7 +330,7 @@ void Command::Settings(const std::vector<std::string> args)
 	program.RenderStatus("Settings page loaded");
 }
 
-void Command::Open(const std::vector<std::string> args, std::string input)
+void Command::Open(const std::vector<std::string> args)
 {
 	/* 
 	> open
@@ -367,10 +367,10 @@ void Command::Open(const std::vector<std::string> args, std::string input)
 		return;
 	}
 
-	program.RenderStatus("Command \"" + input + "\" is invalid");
+	program.RenderStatus("Argument(s) invalid");
 }
 
-void Command::Save(const std::vector<std::string> args, std::string input)
+void Command::Save(const std::vector<std::string> args)
 {
 	/*
 	> save
@@ -416,7 +416,19 @@ void Command::Save(const std::vector<std::string> args, std::string input)
 		return;
 	}
 
-	program.RenderStatus("Command \"" + input + "\" is invalid");
+	program.RenderStatus("Argument(s) invalid");
+}
+
+void Command::Rename(const std::vector<std::string> args)
+{
+	/*
+	> rename name
+	: renames the opened file to name
+	*/
+
+	// TODO: Implement rename command
+	// delete original
+	// save as new
 }
 
 void Command::Copy(const std::vector<std::string> args)
@@ -594,7 +606,16 @@ void Command::Refresh(const std::vector<std::string> args)
 	: Recomputes the vertices and margin vertices for the file
 	*/
 
-	// TODO: Update based on NoteViewer
+	auto noteViewer = dynamic_cast<NoteViewer*>(program.area);
+	if (noteViewer != NULL)
+	{
+		// TODO: implement refresh for NoteViewer
+		// check if note dir exists
+		// if not go back, repeat step one until documents
+		// retrieve all items at path
+		// display
+		return;
+	}
 
 	program.vertices.clear();
 
@@ -615,6 +636,8 @@ void Command::Refresh(const std::vector<std::string> args)
 	for (int i = 0; i < program.area->rows.size(); i++)
 		program.area->AddLeftMargin();
 
+	// TODO: Check if cursor is no longer on text and update
+
 	program.RenderStatus("Refresh completed");
 }
 
@@ -630,7 +653,7 @@ void Command::Note(const std::vector<std::string> args)
 	> note folder folder [...] folder
 	: creates folder with name in current folder
 	:
-	> note new noteName
+	> note new name
 	: opens new note in folder
 	:
 	> note del name
