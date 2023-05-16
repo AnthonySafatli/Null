@@ -385,3 +385,25 @@ std::string Trim(const std::string& str, const std::string& whitespace)
 
 	return str.substr(strBegin, strRange);
 }
+
+std::string FloatToString(float value) 
+{
+	std::stringstream stream;
+	stream << std::fixed << value;
+	std::string result = stream.str();
+
+	unsigned int dotPos = result.find('.');
+	if (dotPos != std::string::npos) 
+	{
+		unsigned int lastNonZero = result.find_last_not_of('0');
+		if (lastNonZero != std::string::npos && lastNonZero > dotPos)
+			result.erase(lastNonZero + 1);
+		else if (lastNonZero != std::string::npos)
+			result.erase(result.find('.'));
+	}
+
+	if (result.back() == '.') 
+		result.pop_back();
+
+	return result;
+}

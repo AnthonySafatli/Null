@@ -45,7 +45,7 @@ private:
 	static void Note(const std::vector<std::string> args);             // deals with notebook
 
 	/* Quit */
-	static void Quit(const std::vector<std::string> args);                    // closes application
+	static void Quit(const std::vector<std::string> args);             // closes application
 
 
 public:

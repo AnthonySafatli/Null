@@ -170,6 +170,8 @@ std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string ini
 
 void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 {
+	// TODO: Change note file names
+
 	std::string pathStr = path.filename().string();
 	std::string displayName;
 
@@ -200,22 +202,13 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 			return;
 
 		displayName = name + "    | " + DateToString(month, day, year, hour, min);
-		// TODO: Determine length of textarea and base displayName on that
 	}
-
-	// TODO: Fix Icons
-	/*if (isFile)
-		AddCharacter(FILE_ICON);
-	else
-		AddCharacter(FOLDER_ICON);
-	AddCharacter(SPACE);*/
 
 	if (!isFile)
 	{
 		AddCharacter(FOLDER_ICON_START);
 		AddCharacter(FOLDER_ICON_END);
 	}
-
 
 	for (int i = 0; i < displayName.size(); i++)
 		AddCharacter(displayName[i]);

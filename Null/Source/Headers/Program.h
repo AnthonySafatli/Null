@@ -107,6 +107,7 @@ public:
 	bool showCursor;
 	int tabAmount;
 
+	// TODO: Move to text editor
 	/* Undo Stack */
 	std::stack<UndoObject> undoStack;
 	std::stack<UndoObject> redoStack;

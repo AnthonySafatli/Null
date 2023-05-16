@@ -18,9 +18,7 @@ void Draw();
 // TODO: Revise some inputs for commands
 //          - colour commands need checking
 //          - negative or invalid numbers for some commands
-// TODO: Implement Alt+Up and Alt+Down
 
-// TODO: Maybe don't use global variables
 // TODO: Set after init for glfw and glew
 Program program = Program(1800, 1100, 24, 4);
 

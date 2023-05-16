@@ -580,16 +580,15 @@ void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
 
 void Program::LoadSettings()
 {
-	// TODO: Create custom tostring method that crops 0s
 	const std::string settings = "Settings:"
 		"\n\n"
-		"Size: " + std::to_string(textSize) +
+		"Size: " + FloatToString(textSize) +
 		"\n\n"
-		"Background: " + std::to_string(background.r) + " " + std::to_string(background.g) + " " + std::to_string(background.b) + " " + std::to_string(background.a) +
+		"Background: " + FloatToString(background.r) + " " + FloatToString(background.g) + " " + FloatToString(background.b) + " " + FloatToString(background.a) +
 		"\n\n"
-		"Foreground: " + std::to_string(background.r) + " " + std::to_string(background.g) + " " + std::to_string(background.b) + " " + std::to_string(background.a) +
+		"Foreground: " + FloatToString(background.r) + " " + FloatToString(background.g) + " " + FloatToString(background.b) + " " + FloatToString(background.a) +
 		"\n\n"
-		"Speed: " + std::to_string(cursorSpeed);
+		"Speed: " + FloatToString(cursorSpeed);
 
 	OpenTextViewer(settings, "Settings");
 }
