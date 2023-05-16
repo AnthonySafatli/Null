@@ -83,6 +83,7 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 		MoveDown();
 		break;
 	case GLFW_KEY_ENTER:
+		// TODO: Bug fix, cannot open test.note
 		OpenItem();
 		return;
 	}
@@ -170,14 +171,10 @@ std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string ini
 
 void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 {
-	// TODO: Change note file names
-
 	std::string pathStr = path.filename().string();
-	std::string displayName;
+	std::string displayName = pathStr;
 
-	if (!isFile)
-		displayName = pathStr;
-	else
+	if (isFile && program.showDate)
 	{
 		std::string name;
 		int month, day, year;
@@ -203,8 +200,11 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 
 		displayName = name + "    | " + DateToString(month, day, year, hour, min);
 	}
-
-	if (!isFile)
+	else if (isFile)
+	{
+		displayName = pathStr.substr(3, pathStr.size() - 9);
+	}
+	else 
 	{
 		AddCharacter(FOLDER_ICON_START);
 		AddCharacter(FOLDER_ICON_END);

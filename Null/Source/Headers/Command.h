@@ -16,6 +16,7 @@ private:
 	static void CursorSpeed(const std::vector<std::string> args);      // changes cursor speed
 	static void BackgroundColour(const std::vector<std::string> args); // changes background colour
 	static void ForegroundColour(const std::vector<std::string> args); // changes foreground colour
+	static void ShowDate(const std::vector<std::string> args);         // changes whether dates are shown in notes viewer
 																	   
 	/* Pages */														   
 	static void Help(const std::vector<std::string> args);             // opens help page

@@ -15,8 +15,6 @@
 #define IDEAL_WIDTH 800
 #define IDEAL_HEIGHT 1400
 
-// enum Page { WELCOME, EDITOR, SETTINGS, HELP };
-
 class Program
 {
 public:
@@ -106,12 +104,12 @@ public:
 	bool showCursor;
 	int tabAmount;
 
-	/* Program Properties */
-	// Page currentPage;
-	unsigned int cursorSpeed;
+	/* Settings */
 	float textSize;
 	Colour background;
 	Colour foreground;
+	unsigned int cursorSpeed;
+	bool showDate;
 
 	/* Window Properties */
 	int width;
