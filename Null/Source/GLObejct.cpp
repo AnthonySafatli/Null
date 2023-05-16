@@ -13,7 +13,7 @@ void GLObject::Init()
 
 	indexBuffer.Init();
 
-	// TODO: Fix paths / resource management before deployment
+	// TODO: [END] Fix paths / resource management before deployment
 	shaderProgram.Init(
 		"Resources\\Shaders\\vertex.glsl",
 		"Resources\\Shaders\\fragment.glsl"

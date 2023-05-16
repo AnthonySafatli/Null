@@ -16,7 +16,6 @@ void Draw();
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
 
-// TODO: Set after init for glfw and glew
 Program program = Program(1800, 1100, 24, 4);
 
 int main(void)
@@ -45,6 +44,7 @@ int main(void)
     program.window = window;
 
     glfwMakeContextCurrent(window);
+    glfwSetWindowTitle(window, "New File - Null");
 
     /* Setup Callbacks */
     glfwSetKeyCallback(window, CallBack::KeyCallBack);

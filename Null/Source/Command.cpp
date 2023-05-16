@@ -385,8 +385,6 @@ void Command::Save(const std::vector<std::string> args)
 	: saves with a new name
 	*/
 
-	// TODO: Update so saving changes the date and time for note name
-
 	auto editor = dynamic_cast<TextEditor*>(program.area);
 	if (editor == NULL)
 		return;
@@ -505,19 +503,21 @@ void Command::Undo(const std::vector<std::string> args)
 		return;
 	}
 
-	if (program.undoStack.size() < 1)
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+	if (editor == NULL)
 		return;
 
-	program.redoStack.push(UndoObject(program.area->rows, program.textX, program.textY));
-	program.area->rows = program.undoStack.top().text;
-	program.textX = program.undoStack.top().textX;
-	program.textY = program.undoStack.top().textY;
-	program.undoStack.pop();
-	Refresh(std::vector<std::string>());
+	if (editor->undoStack.size() < 1)
+		return;
 
-	auto editor = dynamic_cast<TextEditor*>(program.area);
-	if (editor != NULL)
-		editor->UpdateRowColVisual();
+	editor->redoStack.push(UndoObject(program.area->rows, program.textX, program.textY));
+	program.area->rows = editor->undoStack.top().text;
+	program.textX = editor->undoStack.top().textX;
+	program.textY = editor->undoStack.top().textY;
+	editor->undoStack.pop();
+
+	Refresh(std::vector<std::string>());
+	editor->UpdateRowColVisual();
 }
 
 void Command::Redo(const std::vector<std::string> args)
@@ -531,20 +531,22 @@ void Command::Redo(const std::vector<std::string> args)
 		program.RenderStatus("Command 'redo' does not take any arguments");
 		return;
 	}
-
-	if (program.redoStack.size() < 1)
+	
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+	if (editor == NULL)
 		return;
 
-	program.undoStack.push(UndoObject(program.area->rows, program.textX, program.textY));
-	program.area->rows = program.redoStack.top().text;
-	program.textX = program.redoStack.top().textX;
-	program.textY = program.redoStack.top().textY;
-	program.redoStack.pop();
-	Refresh(std::vector<std::string>());
+	if (editor->redoStack.size() < 1)
+		return;
 
-	auto editor = dynamic_cast<TextEditor*>(program.area);
-	if (editor != NULL)
-		editor->UpdateRowColVisual();
+	editor->undoStack.push(UndoObject(program.area->rows, program.textX, program.textY));
+	program.area->rows = editor->redoStack.top().text;
+	program.textX = editor->redoStack.top().textX;
+	program.textY = editor->redoStack.top().textY;
+	editor->redoStack.pop();
+
+	Refresh(std::vector<std::string>());
+	editor->UpdateRowColVisual();
 }
 
 void Command::Scroll(const std::vector<std::string> args)

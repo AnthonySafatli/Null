@@ -8,6 +8,9 @@
 
 #include "Headers/GLAbstraction.h"
 #include "Headers/Character.h"
+#include "Headers/Program.h"
+
+extern Program program;
 
 /* ====== Vertex Struct ====== */
 
@@ -39,6 +42,9 @@ void VertexBuffer::Init()
 
 VertexBuffer::~VertexBuffer()
 {
+	if (!program.openGL.init)
+		return;
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &handle);
 }
@@ -64,6 +70,9 @@ void IndexBuffer::Init()
 
 IndexBuffer::~IndexBuffer()
 {
+	if (!program.openGL.init)
+		return;
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &handle);
 }
@@ -106,6 +115,9 @@ void VertexArray::EnableAttributes()
 
 VertexArray::~VertexArray()
 {
+	if (!program.openGL.init)
+		return;
+
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &handle);
 }
@@ -135,6 +147,9 @@ void ShaderProgram::Init(const char* vertexPath, const char* fragmentPath)
 
 ShaderProgram::~ShaderProgram() 
 {
+	if (!program.openGL.init)
+		return;
+
 	glUseProgram(0);
 	glDeleteProgram(handle);
 }
@@ -179,6 +194,9 @@ void Texture::SetTextureSettings()
 
 Texture::~Texture()
 {
+	if (!program.openGL.init)
+		return;
+
 	glDeleteTextures(1, &handle);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -263,6 +281,9 @@ void Shaders::CompileFragment(const char* fragmentPath)
 
 Shaders::~Shaders()
 {
+	if (!program.openGL.init)
+		return;
+
 	glDeleteShader(vertexHandle);
 	glDeleteShader(fragmentHandle);
 }

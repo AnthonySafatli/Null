@@ -119,26 +119,26 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		break;
 
 	case GLFW_KEY_ENTER:
-		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
-		while (!program.redoStack.empty()) program.redoStack.pop();
+		undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!redoStack.empty()) redoStack.pop();
 		Return();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_BACKSPACE:
-		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
-		while (!program.redoStack.empty()) program.redoStack.pop();
+		undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!redoStack.empty()) redoStack.pop();
 		RemoveCharacterFromLeft();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_DELETE:
-		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
-		while (!program.redoStack.empty()) program.redoStack.pop();
+		undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!redoStack.empty()) redoStack.pop();
 		RemoveCharacterFromRight();
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_TAB:
-		program.undoStack.push(UndoObject(rows, program.textX, program.textY));
-		while (!program.redoStack.empty()) program.redoStack.pop();
+		undoStack.push(UndoObject(rows, program.textX, program.textY));
+		while (!redoStack.empty()) redoStack.pop();
 		AddTab();
 		UpdateRowColVisual();
 		break;
@@ -152,8 +152,8 @@ void TextEditor::ProcessChar(unsigned int codepoint)
 	if (!(codepoint > 31 && codepoint < 128))
 		return;
 	
-	program.undoStack.push(UndoObject(rows, program.textX, program.textY));
-	while (!program.redoStack.empty()) program.redoStack.pop();
+	undoStack.push(UndoObject(rows, program.textX, program.textY));
+	while (!redoStack.empty()) redoStack.pop();
 	AddCharacter((char)codepoint);
 	UpdateRowColVisual();
 }
@@ -376,4 +376,3 @@ inline bool TextEditor::isText(char c)
 {
 	return std::isalpha(c) != 0;
 }
-

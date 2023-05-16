@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
+#include <stack>
 
 #include "TextArea.h"
+#include "UndoObject.h"
 
 class TextEditor : public TextArea
 {
@@ -39,6 +41,10 @@ public:
 	std::string fileDirectory;
 	std::string fileName;
 	bool isNote;
+
+	/* Undo Stack */
+	std::stack<UndoObject> undoStack;
+	std::stack<UndoObject> redoStack;
 
 private:
 	inline bool isWhiteSpace(char c);

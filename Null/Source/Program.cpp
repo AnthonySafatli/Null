@@ -461,6 +461,7 @@ void Program::OpenEditor()
 	delete area;
 
 	area = new TextEditor();
+	glfwSetWindowTitle(window, "New File - Null");
 }
 
 void Program::OpenEditor(const std::string text, const std::string path, bool isNote)
@@ -477,6 +478,7 @@ void Program::OpenEditor(const std::string text, const std::string path, bool is
 		fileName = fileName.substr(3, fileName.size() - 9);
 
 	area = new TextEditor(text, path, fileName, isNote);
+	glfwSetWindowTitle(window, (fileName + " - Null").c_str());
 }
 
 void Program::OpenFile(const std::string path)
@@ -506,6 +508,7 @@ void Program::OpenTextViewer(const std::string str, const std::string pageName)
 	delete area;
 
 	area = new TextViewer(str, pageName);
+	glfwSetWindowTitle(window, (pageName + " - Null").c_str());
 }
 
 void Program::OpenNoteViewer()
@@ -528,6 +531,7 @@ void Program::OpenNoteViewer()
 #endif
 
 	area = new NoteViewer(documents);
+	glfwSetWindowTitle(window, "Notes - Null");
 }
 
 void Program::OpenNoteViewer(std::vector<std::string> folders)
@@ -557,6 +561,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 #endif
 
 	area = new NoteViewer(documents, folders);
+	glfwSetWindowTitle(window, "Notes - Null");
 }
 
 void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
@@ -600,6 +605,8 @@ void Program::LoadHelp(const bool commands, const bool shortcuts)
 		"Help:\n"
 		"Commands:\n\n\n"
 		"Shortcuts:\n";
+
+	// TODO: Make help command and shortcut strings
 
 	OpenTextViewer(help, "Help");
 }
