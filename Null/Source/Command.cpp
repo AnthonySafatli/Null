@@ -126,26 +126,28 @@ void Command::TextSize(const std::vector<std::string> args)
 	else if (sizeStr == "+")
 	{
 		UpdateUniform1f(program.openGL.u_size.location, ++program.textSize * 0.001);
-		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
+		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
 		UpdateMaxHeightWidth();
 		return;
 	}
 	else if (sizeStr == "-")
 	{
+		if (program.textSize <= 1)
+			return;
+
 		UpdateUniform1f(program.openGL.u_size.location, --program.textSize * 0.001);
 		UpdateMaxHeightWidth();
-		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
+		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
 		return;
 	}
 
 	try
 	{
 		float size = std::stof(sizeStr);
-		// TODO: check negative nums
-		program.textSize = size;
+		program.textSize = std::abs(size);
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 		UpdateMaxHeightWidth();
-		program.RenderStatus("Text Size set to " + std::to_string(program.textSize));
+		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
 	}
 	catch (const std::exception& e)
 	{
@@ -185,20 +187,23 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	}
 	else if (speedStr == "+")
 	{
-		program.RenderStatus("Cursor Speed set to " + std::to_string(++program.cursorSpeed));
+		program.RenderStatus("Cursor Speed set to " + FloatToString(++program.cursorSpeed));
 		return;
 	}
 	else if (speedStr == "-")
 	{
-		program.RenderStatus("Cursor Speed set to " + std::to_string(--program.cursorSpeed));
+		if (program.cursorSpeed <= 1)
+			return;
+
+		program.RenderStatus("Cursor Speed set to " + FloatToString(--program.cursorSpeed));
 		return;
 	}
 
 	try
 	{
 		float speed = std::stof(speedStr);
-		program.cursorSpeed = speed;
-		program.RenderStatus("Cursor Speed set to " + std::to_string(program.cursorSpeed));
+		program.cursorSpeed = std::abs(speed);
+		program.RenderStatus("Cursor Speed set to " + FloatToString(program.cursorSpeed));
 	}
 	catch (const std::exception& e)
 	{

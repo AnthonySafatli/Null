@@ -12,12 +12,9 @@
 void Draw();
 
 // Random Objectives:
-// TODO: Redo all status bar messages
+// TODO: [END] Redo all status bar messages 
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
-// TODO: Revise some inputs for commands
-//          - colour commands need checking
-//          - negative or invalid numbers for some commands
 
 // TODO: Set after init for glfw and glew
 Program program = Program(1800, 1100, 24, 4);

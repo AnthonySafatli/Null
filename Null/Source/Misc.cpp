@@ -64,24 +64,43 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 	{
 		if (args.size() == 1)      // x
 		{
+			float x = std::stof(args[0]);
+			if (x > 1)
+				x = 1;
+
 			colour.error = false;
-			colour.r = std::stof(args[0]);
-			colour.g = std::stof(args[0]);
-			colour.b = std::stof(args[0]);
+			colour.r = x;
+			colour.g = x;
+			colour.b = x;
 			colour.a = 1.0f;
 		}
 		else if (args.size() >= 3) // r g b
 		{
+			float r = std::stof(args[0]);
+			if (r > 1)
+				r = 1;
+			float g = std::stof(args[1]);
+			if (g > 1)
+				g = 1;
+			float b = std::stof(args[2]);
+			if (b > 1)
+				g = 1;
+			
+
 			colour.error = false;
-			colour.r = std::stof(args[0]);
-			colour.g = std::stof(args[1]);
-			colour.b = std::stof(args[2]);
+			colour.r = r;
+			colour.g = g;
+			colour.b = b;
 			colour.a = 1.0f;
 		}
 
 		if (args.size() == 4)      // r g b a
 		{
-			colour.a = std::stof(args[3]);
+			float a = std::stof(args[3]);
+			if (a > 1)
+				a = 1;
+
+			colour.a = a;
 		}
 
 		if (colour.error)
