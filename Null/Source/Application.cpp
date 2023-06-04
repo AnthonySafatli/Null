@@ -16,8 +16,6 @@ void Draw();
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
 
-// TODO: Start using std::filesystem::is_text_file() to only open text files
-
 Program program = Program(1800, 1100, 24, 4);
 
 int main(void)

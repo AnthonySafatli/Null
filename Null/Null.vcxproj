@@ -176,7 +176,6 @@
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="commands.md" />
     <None Include="Resources\Shaders\fragment.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>

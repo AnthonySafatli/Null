@@ -46,7 +46,11 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 		AddCharacter(text[i]);
 	}
 
-	ConstructorEnd();
+	program.textY = rows.size() - 1;
+	MoveEnd();
+
+	if (program.openGL.init)
+		UpdateUniform1i(program.openGL.u_cursorRow.location, rows.size());
 
 	program.RenderStatus(fileName + " Loaded Successfully");
 }

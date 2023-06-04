@@ -285,7 +285,7 @@ void Command::ShowDate(const std::vector<std::string> args)
 	> showdate true
 	: shows the date in the notes viewer
 	> showdate false
-	: doesnt shows the date in the notes viewer
+	: doesn't shows the date in the notes viewer
 	*/
 
 	if (args.size() == 0)
@@ -400,7 +400,7 @@ void Command::Open(const std::vector<std::string> args)
 		if (result != NFD_OKAY)
 		{
 			if (result != NFD_CANCEL)
-				program.RenderStatus("An error occured opening the file dialog");
+				program.RenderStatus("An error occurred opening the file dialog");
 
 			return;
 		}
@@ -450,7 +450,7 @@ void Command::Save(const std::vector<std::string> args)
 		if (SavedSuccessfully(editor->fileDirectory))
 			program.RenderStatus(editor->fileName + " saved successfully");
 		else
-			program.RenderStatus("Error occured while saving " + editor->fileName);
+			program.RenderStatus("Error occurred while saving " + editor->fileName);
 
 		return;
 	}
@@ -476,9 +476,34 @@ void Command::Rename(const std::vector<std::string> args)
 	: renames the opened file to name
 	*/
 
-	// TODO: Implement rename command
-	// delete original
-	// save as new
+	auto editor = dynamic_cast<TextEditor*>(program.area);
+	if (editor == NULL)
+		return;
+
+	if (args.size() == 0)
+	{
+		program.RenderStatus("Command 'rename' needs at least one argument");
+		return;
+	}
+
+	std::stringstream argStr;
+	for (std::string str : args) argStr << str + " ";
+
+	try 
+	{
+		std::filesystem::path fileDir(editor->fileDirectory);
+		std::filesystem::rename(fileDir, fileDir.parent_path() / Trim(argStr.str()));
+		fileDir.replace_filename(Trim(argStr.str()));
+
+		editor->fileDirectory = fileDir.string();
+		editor->fileName = fileDir.filename().string();
+
+		program.RenderStatus("File renamed to: " + argStr.str());
+	}
+	catch (const std::filesystem::filesystem_error& error)
+	{
+		program.RenderStatus("Error renaming file: " + editor->fileName);
+	}
 }
 
 void Command::Copy(const std::vector<std::string> args)
@@ -690,7 +715,13 @@ void Command::Refresh(const std::vector<std::string> args)
 	for (int i = 0; i < program.area->rows.size(); i++)
 		program.area->AddLeftMargin();
 
-	// TODO: Check if cursor is no longer on text and update
+	if (program.textY >= program.area->rows.size())
+	{
+		program.textY = program.area->rows.size() - 1;
+		program.area->MoveEnd();
+	}
+	else if (program.textX >= program.area->rows[program.textY].size())
+		program.area->MoveEnd();
 
 	program.RenderStatus("Refresh completed");
 }
