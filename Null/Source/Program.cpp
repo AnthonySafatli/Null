@@ -26,7 +26,7 @@ Program::Program(const int width, const int height, const float textSize, const 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT), 
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(50),
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false),
-	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1), window(0), showDate(true)
+	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1), window(0)
 {
 	// Add > to Command Line
 	AddCommandSymbol();
@@ -534,7 +534,7 @@ void Program::OpenNoteViewer()
 	glfwSetWindowTitle(window, "Notes - Null");
 }
 
-void Program::OpenNoteViewer(std::vector<std::string> folders)
+bool Program::OpenNoteViewer(std::vector<std::string> folders)
 {
 	vertices.clear();
 	marginVertices.clear();
@@ -543,7 +543,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 	if (documents.empty())
 	{
 		RenderStatus("Notebook is unavailable at the moment");
-		return;
+		return true;
 	}
 
 	std::filesystem::path noteFolder(documents / "NullNotes");
@@ -551,7 +551,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 	if (!std::filesystem::is_directory(noteFolder))
 	{
 		RenderStatus("Note folder not found");
-		return;
+		return false;
 	}
 
 	delete area;
@@ -562,6 +562,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 
 	area = new NoteViewer(documents, folders);
 	glfwSetWindowTitle(window, "Notes - Null");
+	return true;
 }
 
 void Program::OpenNote(std::filesystem::path notePath, std::string noteName)

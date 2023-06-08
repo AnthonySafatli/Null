@@ -75,7 +75,7 @@ public:
 	void OpenFile(const std::string path);                                        // Opens File into Text Editor
 	void OpenTextViewer(const std::string str, const std::string pageName);       // Opens Text Viewer with text
 	void OpenNoteViewer();                                                        // Opens Note File View at root
-	void OpenNoteViewer(std::vector<std::string> folders);                        // Opens Note File View at path
+	bool OpenNoteViewer(std::vector<std::string> folders);                        // Opens Note File View at path
 	void OpenNote(std::filesystem::path notePath, std::string noteName);          // Opens Note in Text Editor
 	void LoadSettings();                                                          // Opens Text Viewer with Settings text
 	void LoadHelp(const bool commands, const bool shortcuts);                     // Opens Text Viewer with Help text
@@ -109,7 +109,6 @@ public:
 	Colour background;
 	Colour foreground;
 	unsigned int cursorSpeed;
-	bool showDate;
 
 	/* Window Properties */
 	int width;

@@ -31,7 +31,6 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folde
 
 	itemPaths = GetAllPaths(documentPath.string() + "\\NullNotes");
 
-	ValidatePaths();
 	PrintPaths();
 
 	ConstructorEnd();
@@ -55,7 +54,6 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	AddCharacter('.');
 	Return();
 
-	ValidatePaths();
 	PrintPaths();
 
 	ConstructorEnd();
@@ -174,33 +172,7 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 	std::string pathStr = path.filename().string();
 	std::string displayName = pathStr;
 
-	if (isFile && program.showDate)
-	{
-		std::string name;
-		int month, day, year;
-		int hour, min;
-
-		hour = pathStr[0] - 65;
-		min = ((pathStr[1] - 65) * 10) + (pathStr[2] - 65);
-
-		month = pathStr[pathStr.size() - 6] - 65;
-		
-		day = pathStr[pathStr.size() - 5] - 48;
-		if (day > 9) day = pathStr[pathStr.size() - 5] - 55;
-
-		year = ((pathStr[pathStr.size() - 4] - 65) * 1000);
-		year += ((pathStr[pathStr.size() - 3] - 65) * 100);
-		year += ((pathStr[pathStr.size() - 2] - 65) * 10);
-		year += ((pathStr[pathStr.size() - 1] - 65));
-
-		name = pathStr.substr(3, pathStr.size() - 9);
-
-		if (!FileNameValidation(path))
-			return;
-
-		displayName = name + "    | " + DateToString(month, day, year, hour, min);
-	}
-	else if (isFile)
+	if (isFile)
 	{
 		displayName = pathStr.substr(3, pathStr.size() - 9);
 	}
@@ -214,51 +186,6 @@ void NoteViewer::PrintPath(std::filesystem::path path, bool isFile)
 		AddCharacter(displayName[i]);
 	Return();
 	return;
-}
-
-bool NoteViewer::FileNameValidation(std::filesystem::path path)
-{
-	std::string pathStr = path.filename().string();
-
-	std::string name;
-	int month, day, year;
-	int hour, min;
-
-	hour = pathStr[0] - 65;
-	if (hour > 23 || hour < 0) return false;
-
-	min = ((pathStr[1] - 65) * 10) + (pathStr[2] - 65);
-	if (min < 0 || min > 59) return false;
-
-	month = pathStr[pathStr.size() - 6] - 65;
-	if (month < 0 || month > 11) return false;
-
-	day = pathStr[pathStr.size() - 5] - 48;
-	if (day > 9) day = pathStr[pathStr.size() - 5] - 55;
-	if (day < 0 || day > 30) return false;
-
-	year = ((pathStr[pathStr.size() - 4] - 65) * 1000);
-	year += ((pathStr[pathStr.size() - 3] - 65) * 100);
-	year += ((pathStr[pathStr.size() - 2] - 65) * 10);
-	year += ((pathStr[pathStr.size() - 1] - 65));
-	if (year < 1000) return false;
-
-	name = pathStr.substr(3, pathStr.size() - 9);
-	if (name.size() < 1) return false;
-
-	return true;
-}
-
-void NoteViewer::ValidatePaths()
-{
-	for (int i = itemPaths.size() - 1; i >= 0; --i)
-	{
-		if (!std::filesystem::is_regular_file(itemPaths[i]))
-			continue;
-
-		if (!FileNameValidation(itemPaths[i]))
-			itemPaths.erase(itemPaths.begin() + i);
-	}
 }
 
 void NoteViewer::PrintPaths()
@@ -312,134 +239,7 @@ void NoteViewer::UpdateArrow()
 	UpdateUniform1i(program.openGL.u_cursorRow.location, program.textY + 1);
 }
 
-std::string NoteViewer::DateToString(int month, int day, int year, int hour, int min)
-{
-	std::stringstream dateStream;
-
-	// Day
-	dateStream << std::to_string(day + 1);
-
-	// Month
-	switch (month) {
-	case 0:
-		dateStream << " Jan ";
-		break;
-	case 1:
-		dateStream << " Feb ";
-		break;
-	case 2:
-		dateStream << " Mar ";
-		break;
-	case 3:
-		dateStream << " Apr ";
-		break;
-	case 4:
-		dateStream << " May ";
-		break;
-	case 5:
-		dateStream << " Jun ";
-		break;
-	case 6:
-		dateStream << " Jul ";
-		break;
-	case 7:
-		dateStream << " Aug ";
-		break;
-	case 8:
-		dateStream << " Sep ";
-		break;
-	case 9:
-		dateStream << " Oct ";
-		break;
-	case 10:
-		dateStream << " Nov ";
-		break;
-	case 11:
-		dateStream << " Dec ";
-		break;
-	}
-
-	// Year
-	dateStream << std::to_string(year);
-	dateStream << " ";
-
-	// Hours
-	if (hour == 0)
-		dateStream << "12";
-	else if (hour > 12)
-		dateStream << std::to_string(hour - 12);
-	else
-		dateStream << std::to_string(hour);
-	dateStream << ":";
-
-	// Min
-	if (min < 10) dateStream << "0";
-	dateStream << std::to_string(min);
-
-	dateStream << ((hour < 13) ? "AM" : "PM");
-
-	return dateStream.str();
-}
-
 void NoteViewer::OpenItem()
 {
-	int cursorIndex = program.textY;
-	if (!isRoot)
-		cursorIndex--;
-
-	if (!isRoot && (cursorIndex < 0))
-	{
-
-#if _DEBUG
-		std::cout << "Go back" << std::endl;
-#endif
-
-		folderPath.pop_back();
-		if (folderPath.size() == 0)
-			program.OpenNoteViewer();
-		else
-			program.OpenNoteViewer(folderPath);
-
-		return;
-	}
-
-	int counter = 0;
-	for (int i = 0; i < itemPaths.size(); i++)
-	{
-		if (!std::filesystem::is_directory(itemPaths[i]))
-			continue;
-		
-		if (counter == cursorIndex)
-		{
-
-#if _DEBUG
-			std::cout << "Open Folder: " << itemPaths[i].string() << std::endl;
-#endif
-	
-			folderPath.push_back(itemPaths[i].filename().string());
-			program.OpenNoteViewer(folderPath);
-			return;
-		}
-		counter++;
-	}
-
-	for (int i = 0; i < itemPaths.size(); i++)
-	{
-		if (!std::filesystem::is_regular_file(itemPaths[i]))
-			continue;
-
-		if (counter = cursorIndex)
-		{
-
-#if _DEBUG
-			std::cout << "Open Note: " << itemPaths[i].string() << std::endl;
-#endif
-
-			program.OpenNote(itemPaths[i], itemPaths[i].filename().string().substr(3, itemPaths[i].filename().string().size() - 9));
-			
-			return;
-		}
-		counter++;
-	}
+	// TODO: Implement opening a note
 }
-

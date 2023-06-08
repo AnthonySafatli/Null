@@ -26,11 +26,8 @@ public:
 	/* FileViewer Methods */
 	std::vector<std::filesystem::path> GetAllPaths(const std::string initPath);
 	void PrintPath(std::filesystem::path path, bool isFile);
-	bool FileNameValidation(std::filesystem::path path);
-	void ValidatePaths();
 	void PrintPaths();
 	void UpdateArrow();
-	std::string DateToString(int month, int day, int year, int hour, int min);
 	void OpenItem();
 
 	/* FileViewer Data */

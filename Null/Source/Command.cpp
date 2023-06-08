@@ -44,8 +44,6 @@ void Command::Execute(const std::string input)
 		ForegroundColour(args);
 	else if (command == "speed")
 		CursorSpeed(args);
-	else if (command == "showdate")
-		ShowDate(args);
 	else if (command == "settings")
 		Settings(args);
 	else if (command == "help")
@@ -275,51 +273,6 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 		program.foreground = colour;
 		UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
 	}
-}
-
-void Command::ShowDate(const std::vector<std::string> args)
-{
-	/*
-	> showdate
-	: toggles showdate in note viewer
-	> showdate true
-	: shows the date in the notes viewer
-	> showdate false
-	: doesn't shows the date in the notes viewer
-	*/
-
-	if (args.size() == 0)
-	{
-		program.showDate = !program.showDate;
-		Refresh(std::vector<std::string>());
-		std::string boolStr = program.showDate ? "true" : "false";
-		program.RenderStatus("Showdate set to " + boolStr);
-		return;
-	}
-
-	if (args.size() == 1)
-	{
-		if (args[0] == "true")
-		{
-			program.showDate = true;
-			Refresh(std::vector<std::string>());
-			std::string boolStr = program.showDate ? "true" : "false";
-			program.RenderStatus("Showdate set to " + boolStr);
-		}
-		else if (args[0] == "false")
-		{
-			program.showDate = false;
-			Refresh(std::vector<std::string>());
-			std::string boolStr = program.showDate ? "true" : "false";
-			program.RenderStatus("Showdate set to " + boolStr);
-		}
-		else 
-			program.RenderStatus("Invalid argument");
-
-		return;
-	}
-
-	program.RenderStatus("Invalid amount of arguments");
 }
 
 void Command::Help(const std::vector<std::string> args) 
@@ -688,11 +641,25 @@ void Command::Refresh(const std::vector<std::string> args)
 	auto noteViewer = dynamic_cast<NoteViewer*>(program.area);
 	if (noteViewer != NULL)
 	{
-		// TODO: implement refresh for NoteViewer
-		// check if note dir exists
-		// if not go back, repeat step one until documents
-		// retrieve all items at path
-		// display
+		std::filesystem::path documentPath = NoteViewer::GetDocumentsFolder();
+		if (documentPath.empty())
+		{
+			// No document folder found, note command unavailable
+			program.RenderStatus("Notebook is unavailable at the moment");
+			return;
+		}
+
+		while (!program.OpenNoteViewer(noteViewer->folderPath)) 
+		{
+			noteViewer->folderPath.pop_back();
+
+			if (noteViewer->folderPath.size() == 0)
+			{
+				program.OpenNoteViewer();
+				break;
+			}
+		}
+
 		return;
 	}
 
@@ -844,6 +811,8 @@ void Command::Note(const std::vector<std::string> args)
 	}
 	if (args[0] == "del")
 	{
+		// TODO: Bugs?
+
 		if (args.size() <= 1)
 		{
 			program.RenderStatus("Command arguments invalid");
