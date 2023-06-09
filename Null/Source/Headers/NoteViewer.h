@@ -21,7 +21,6 @@ public:
 
 	/* Static Methods */
 	static std::filesystem::path GetDocumentsFolder();
-	static std::string GetNoteName(std::string name);
  
 	/* FileViewer Methods */
 	std::vector<std::filesystem::path> GetAllPaths(const std::string initPath);
@@ -34,4 +33,5 @@ public:
 	std::vector<std::string> folderPath;
 	std::vector<std::filesystem::path> itemPaths;
 	bool isRoot;
+	bool locatingError;
 };

@@ -649,16 +649,7 @@ void Command::Refresh(const std::vector<std::string> args)
 			return;
 		}
 
-		while (!program.OpenNoteViewer(noteViewer->folderPath)) 
-		{
-			noteViewer->folderPath.pop_back();
-
-			if (noteViewer->folderPath.size() == 0)
-			{
-				program.OpenNoteViewer();
-				break;
-			}
-		}
+		program.OpenNoteViewer(noteViewer->folderPath);
 
 		return;
 	}
@@ -742,6 +733,8 @@ void Command::Note(const std::vector<std::string> args)
 	}
 	if (args[0] == "folder")
 	{
+		// TODO: Bug where when create folder in root '..' shows up
+
 		if (args.size() <= 1)
 		{
 			program.RenderStatus("Command arguments invalid");
@@ -786,8 +779,7 @@ void Command::Note(const std::vector<std::string> args)
 			argsStr << args[i];
 		}
 
-		std::string noteName = NoteViewer::GetNoteName(argsStr.str());
-
+		std::string noteName = argsStr.str();
 
 		std::filesystem::path currentNotePath = documentsPath / "NullNotes";
 		if (noteViewer != NULL)

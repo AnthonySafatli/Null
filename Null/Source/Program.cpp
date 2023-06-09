@@ -534,7 +534,7 @@ void Program::OpenNoteViewer()
 	glfwSetWindowTitle(window, "Notes - Null");
 }
 
-bool Program::OpenNoteViewer(std::vector<std::string> folders)
+void Program::OpenNoteViewer(std::vector<std::string> folders)
 {
 	vertices.clear();
 	marginVertices.clear();
@@ -543,16 +543,11 @@ bool Program::OpenNoteViewer(std::vector<std::string> folders)
 	if (documents.empty())
 	{
 		RenderStatus("Notebook is unavailable at the moment");
-		return true;
+		return;
 	}
 
 	std::filesystem::path noteFolder(documents / "NullNotes");
 	for (std::string folder : folders) noteFolder = noteFolder / folder;
-	if (!std::filesystem::is_directory(noteFolder))
-	{
-		RenderStatus("Note folder not found");
-		return false;
-	}
 
 	delete area;
 
@@ -562,7 +557,7 @@ bool Program::OpenNoteViewer(std::vector<std::string> folders)
 
 	area = new NoteViewer(documents, folders);
 	glfwSetWindowTitle(window, "Notes - Null");
-	return true;
+	return;
 }
 
 void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
