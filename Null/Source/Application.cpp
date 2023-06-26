@@ -110,7 +110,7 @@ int main(void)
     return 0;
 }
 
-// TODO: Batch renderer still not working
+// TODO: [END] Batch renderer still not working
 void Draw()
 {
     std::vector<Vertex> allVertices = program.GetVertices();

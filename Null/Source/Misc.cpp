@@ -346,7 +346,7 @@ void SaveNote(TextEditor** editor)
 
 	std::filesystem::path defaultPath = (*(*editor)).fileDirectory;
 	defaultPath.remove_filename();
-	// TODO: Set default path
+	// TODO: [END] Set default path
 	nfdresult_t result = NFD_SaveDialog(&path, NULL, 0, NULL, "Null");
 
 	if (result != NFD_OKAY)

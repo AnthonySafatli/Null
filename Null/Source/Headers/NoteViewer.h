@@ -6,6 +6,14 @@
 
 #include "TextArea.h"
 
+struct NoteItem
+{
+	bool isFile;
+	std::filesystem::path path;
+
+	NoteItem(bool isFile, std::filesystem::path path);
+};
+
 class NoteViewer : public TextArea
 {
 public:
@@ -23,7 +31,7 @@ public:
 	static std::filesystem::path GetDocumentsFolder();
  
 	/* FileViewer Methods */
-	std::vector<std::filesystem::path> GetAllPaths(const std::string initPath);
+	std::vector<NoteItem> GetAllPaths(const std::string initPath);
 	void PrintPath(std::filesystem::path path, bool isFile);
 	void PrintPaths();
 	void UpdateArrow();
@@ -31,7 +39,7 @@ public:
 
 	/* FileViewer Data */
 	std::vector<std::string> folderPath;
-	std::vector<std::filesystem::path> itemPaths;
+	std::vector<NoteItem> itemPaths;
 	bool isRoot;
 	bool locatingError;
 };

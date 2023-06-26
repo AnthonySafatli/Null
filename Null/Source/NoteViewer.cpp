@@ -20,7 +20,8 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
-// TODO: Make sure to check if user deletes or changes files after validation
+NoteItem::NoteItem(bool isFile, std::filesystem::path path) : isFile(isFile), path(path) { }
+
 // TODO: Add path visualizer
 
 NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folderPath(), locatingError(false)
@@ -153,16 +154,19 @@ std::filesystem::path NoteViewer::GetDocumentsFolder()
 
 }
 
-std::vector<std::filesystem::path> NoteViewer::GetAllPaths(const std::string initPath)
+std::vector<NoteItem> NoteViewer::GetAllPaths(const std::string initPath)
 {
 	if (!std::filesystem::is_directory(initPath))
-		return std::vector<std::filesystem::path>();
+		return std::vector<NoteItem>();
 
-	std::vector<std::filesystem::path> paths;
+	std::vector<NoteItem> paths;
 
 	for (const auto& entry : std::filesystem::directory_iterator(initPath)) 
 	{
-		paths.push_back(entry.path());
+		if (std::filesystem::is_regular_file(entry.path()))
+			paths.push_back(NoteItem(true, entry.path()));
+		else if (std::filesystem::is_directory(entry.path()))
+			paths.push_back(NoteItem(false, entry.path()));
 	} 
 
 	return paths;
@@ -188,13 +192,13 @@ void NoteViewer::PrintPaths()
 {
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (std::filesystem::is_directory(itemPaths[i]))
-			PrintPath(itemPaths[i], false);
+		if (!itemPaths[i].isFile)
+			PrintPath(itemPaths[i].path, false);
 	}
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (std::filesystem::is_regular_file(itemPaths[i]))
-			PrintPath(itemPaths[i], true);
+		if (itemPaths[i].isFile)
+			PrintPath(itemPaths[i].path, true);
 	}
 
 	if (itemPaths.size() == 0)
@@ -262,17 +266,24 @@ void NoteViewer::OpenItem()
 	int counter = 0;
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (!std::filesystem::is_directory(itemPaths[i]))
+		if (itemPaths[i].isFile)
 			continue;
+
+		if (!std::filesystem::is_directory(itemPaths[i].path))
+		{
+			Command::Execute("refresh");
+			program.RenderStatus("File not found Error");
+			return;
+		}
 
 		if (counter == cursorIndex)
 		{
 
 #if _DEBUG
-			std::cout << "Open Folder: " << itemPaths[i].string() << std::endl;
+			std::cout << "Open Folder: " << itemPaths[i].path.string() << std::endl;
 #endif
 
-			folderPath.push_back(itemPaths[i].filename().string());
+			folderPath.push_back(itemPaths[i].path.filename().string());
 			program.OpenNoteViewer(folderPath);
 			return;
 		}
@@ -281,17 +292,24 @@ void NoteViewer::OpenItem()
 
 	for (int i = 0; i < itemPaths.size(); i++)
 	{
-		if (!std::filesystem::is_regular_file(itemPaths[i]))
+		if (!itemPaths[i].isFile)
 			continue;
+
+		if (!std::filesystem::is_regular_file(itemPaths[i].path))
+		{
+			Command::Execute("refresh");
+			program.RenderStatus("File not found Error");
+			return;
+		}
 
 		if (counter == cursorIndex)
 		{
 
 #if _DEBUG
-			std::cout << "Open Note: " << itemPaths[i].string() << std::endl;
+			std::cout << "Open Note: " << itemPaths[i].path.string() << std::endl;
 #endif
 
-			program.OpenNote(itemPaths[i], itemPaths[i].filename().string());
+			program.OpenNote(itemPaths[i].path, itemPaths[i].path.filename().string());
 
 			return;
 		}

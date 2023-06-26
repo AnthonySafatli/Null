@@ -802,7 +802,7 @@ void Command::Note(const std::vector<std::string> args)
 	}
 	if (args[0] == "del")
 	{
-		// TODO: Bugs? sometimes cannot find file
+		// DEBUG: sometimes cannot find file?
 
 		if (args.size() <= 1)
 		{
@@ -826,18 +826,18 @@ void Command::Note(const std::vector<std::string> args)
 
 		for (int i = 0; i < noteViewer->itemPaths.size(); i++)
 		{
-			if (noteViewer->itemPaths[i].filename().string() != argsStr.str())
+			if (noteViewer->itemPaths[i].path.filename().string() != argsStr.str())
 				continue;
 
 			try 
 			{
-				if (std::filesystem::is_regular_file(noteViewer->itemPaths[i]))
+				if (std::filesystem::is_regular_file(noteViewer->itemPaths[i].path))
 				{
-					std::filesystem::remove(noteViewer->itemPaths[i]);
+					std::filesystem::remove(noteViewer->itemPaths[i].path);
 				}
-				else if (std::filesystem::is_directory(noteViewer->itemPaths[i]))
+				else if (std::filesystem::is_directory(noteViewer->itemPaths[i].path))
 				{
-					std::filesystem::remove_all(noteViewer->itemPaths[i]);
+					std::filesystem::remove_all(noteViewer->itemPaths[i].path);
 				}
 				else
 					throw std::exception();
