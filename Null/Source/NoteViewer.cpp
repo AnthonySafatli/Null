@@ -20,7 +20,7 @@ std::vector<std::string> Split(const std::string str, const char separator);
 
 extern Program program;
 
-// TODO: Make sure to check if user deletes of changes files after validation
+// TODO: Make sure to check if user deletes or changes files after validation
 // TODO: Add path visualizer
 
 NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folderPath(), locatingError(false)
@@ -38,10 +38,12 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folde
 	UpdateArrow();
 }
 
-NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::string> folders) : isRoot(false), folderPath(folders), locatingError(false)
+NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::string> folders) : folderPath(folders), locatingError(false)
 {
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
+
+	isRoot = folders.size() == 0;
 
 	ConstructorStart(3, false);
 
@@ -56,17 +58,23 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 		for (std::string folder : folders) folderNameStream << "\\" << folder;
 		itemPaths = GetAllPaths(documentPath.string() + folderNameStream.str());
 
-		AddCharacter('.');
-		AddCharacter('.');
-		Return();
+		if (!isRoot)
+		{
+			AddCharacter('.');
+			AddCharacter('.');
+			Return();
+		}
 		
 		PrintPaths();
 	}
 	else
 	{
-		AddCharacter('.');
-		AddCharacter('.');
-		Return();
+		if (!isRoot)
+		{
+			AddCharacter('.');
+			AddCharacter('.');
+			Return();
+		}
 
 		const std::string message = "Error Locating Folder...";
 		for (int i = 0; i < message.size(); i++) AddCharacter(message[i]);

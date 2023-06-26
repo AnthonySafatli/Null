@@ -413,6 +413,7 @@ void Command::Save(const std::vector<std::string> args)
 		if (editor->isNote)
 		{
 			SaveNote(&editor);
+			return;
 		}
 
 		SaveFile(&editor);
@@ -733,8 +734,6 @@ void Command::Note(const std::vector<std::string> args)
 	}
 	if (args[0] == "folder")
 	{
-		// TODO: Bug where when create folder in root '..' shows up
-
 		if (args.size() <= 1)
 		{
 			program.RenderStatus("Command arguments invalid");
@@ -803,7 +802,7 @@ void Command::Note(const std::vector<std::string> args)
 	}
 	if (args[0] == "del")
 	{
-		// TODO: Bugs?
+		// TODO: Bugs? sometimes cannot find file
 
 		if (args.size() <= 1)
 		{

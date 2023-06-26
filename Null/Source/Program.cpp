@@ -474,9 +474,6 @@ void Program::OpenEditor(const std::string text, const std::string path, bool is
 	std::filesystem::path pathObj(path);
 
 	std::string fileName = pathObj.filename().string();
-	if (isNote)
-		fileName = fileName.substr(3, fileName.size() - 9);
-
 	area = new TextEditor(text, path, fileName, isNote);
 	glfwSetWindowTitle(window, (fileName + " - Null").c_str());
 }

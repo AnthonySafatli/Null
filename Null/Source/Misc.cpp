@@ -327,7 +327,7 @@ void SaveFile(TextEditor** editor)
 
 	if (!SavedSuccessfully(path))
 	{
-		program.RenderStatus("Error occured while saving " + fileName);
+		program.RenderStatus("Error occurred while saving " + fileName);
 		NFD_FreePath(path);
 		return;
 	}
@@ -342,7 +342,41 @@ void SaveFile(TextEditor** editor)
 
 void SaveNote(TextEditor** editor) 
 {
-	// TODO: implement save new notes
+	nfdchar_t* path;
+
+	std::filesystem::path defaultPath = (*(*editor)).fileDirectory;
+	defaultPath.remove_filename();
+	// TODO: Set default path
+	nfdresult_t result = NFD_SaveDialog(&path, NULL, 0, NULL, "Null");
+
+	if (result != NFD_OKAY)
+	{
+		if (result != NFD_CANCEL)
+			program.RenderStatus("An error occurred opening the file dialog");
+
+		return;
+	}
+
+	std::ofstream file(path);
+	file << (*(*editor)).GetText();
+
+	std::stringstream ss;
+	ss << path;
+	std::string fileName = std::filesystem::path(path).filename().string();
+
+	if (!SavedSuccessfully(path))
+	{
+		program.RenderStatus("Error occurred while saving " + fileName);
+		NFD_FreePath(path);
+		return;
+	}
+
+	program.RenderStatus(fileName + " saved successfully");
+
+	(*(*editor)).fileName = fileName;
+	(*(*editor)).fileDirectory = ss.str();
+
+	NFD_FreePath(path);
 }
 
 bool SavedSuccessfully(const std::string path)
