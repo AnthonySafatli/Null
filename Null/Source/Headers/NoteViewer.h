@@ -36,6 +36,7 @@ public:
 	void PrintPaths();
 	void UpdateArrow();
 	void OpenItem();
+	void RemoveDirectoryArrows();
 
 	/* FileViewer Data */
 	std::vector<std::string> folderPath;

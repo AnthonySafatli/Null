@@ -755,7 +755,15 @@ void Command::Note(const std::vector<std::string> args)
 		for (int i = 1; i < args.size(); i++)
 		{
 			folderPath = folderPath / args[i];
-			std::filesystem::create_directory(folderPath);
+			try 
+			{
+				std::filesystem::create_directory(folderPath);
+			}
+			catch (std::exception)
+			{
+				program.RenderStatus("Unable to create folder");
+				return;
+			}
 		}
 
 		if (noteViewer != NULL) 

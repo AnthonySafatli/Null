@@ -31,11 +31,19 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folde
 
 	ConstructorStart(3, false);
 
-	itemPaths = GetAllPaths(documentPath.string() + "\\NullNotes");
+	std::string path = documentPath.string() + "\\NullNotes";
+	itemPaths = GetAllPaths(path);
+
+	for (char c : path) AddCharacter(c);
+	Return(); Return();
 
 	PrintPaths();
 
 	ConstructorEnd();
+	
+	program.textY = 2;
+	RemoveDirectoryArrows();
+
 	UpdateArrow();
 }
 
@@ -57,19 +65,27 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 		std::stringstream folderNameStream = std::stringstream();
 		folderNameStream << "\\NullNotes";
 		for (std::string folder : folders) folderNameStream << "\\" << folder;
-		itemPaths = GetAllPaths(documentPath.string() + folderNameStream.str());
+		std::string path = documentPath.string() + folderNameStream.str();
+		itemPaths = GetAllPaths(path);
 
+		for (char c : path) AddCharacter(c);
+		Return(); Return();
+		
 		if (!isRoot)
 		{
 			AddCharacter('.');
 			AddCharacter('.');
 			Return();
 		}
-		
+
 		PrintPaths();
 	}
 	else
 	{
+		for (char c : documentPath.string()) AddCharacter(c);
+		AddCharacter('~');
+		Return(); Return();
+
 		if (!isRoot)
 		{
 			AddCharacter('.');
@@ -83,7 +99,11 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 		locatingError = true;
 	}
 
-	ConstructorEnd();
+	ConstructorEnd();	
+
+	program.textY = 2;
+	RemoveDirectoryArrows();
+	
 	UpdateArrow();
 }
 
@@ -101,6 +121,9 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 	switch (key)
 	{
 	case GLFW_KEY_UP:
+		if (program.textY == 2) 
+			break;
+		
 		MoveUp();
 		break;
 	case GLFW_KEY_DOWN:
@@ -213,7 +236,7 @@ void NoteViewer::PrintPaths()
 void NoteViewer::UpdateArrow()
 {
 	TexCoords spaceCoords = GetCoords(NOT_ARROW_END);
-	for (int i = 0; i < program.marginVertices.size() / 8; i++)
+	for (int i = 2; i < program.marginVertices.size() / 8; i++)
 	{
 		program.marginVertices[(i * 8) + 4].texCoords[0] = spaceCoords.u;
 		program.marginVertices[(i * 8) + 4].texCoords[1] = spaceCoords.v;
@@ -241,7 +264,7 @@ void NoteViewer::UpdateArrow()
 
 void NoteViewer::OpenItem()
 {
-	int cursorIndex = program.textY;
+	int cursorIndex = program.textY - 2;
 	if (!isRoot)
 		cursorIndex--;
 
@@ -314,5 +337,15 @@ void NoteViewer::OpenItem()
 			return;
 		}
 		counter++;
+	}
+}
+
+void NoteViewer::RemoveDirectoryArrows()
+{
+	TexCoords space = GetCoords(' ');
+	for (int i = 0; i < 16; i++)
+	{
+		program.marginVertices[i].texCoords[0] = space.u;
+		program.marginVertices[i].texCoords[1] = space.v;
 	}
 }
