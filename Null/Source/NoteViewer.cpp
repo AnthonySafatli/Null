@@ -12,6 +12,7 @@
 
 #include "GLFW/glfw3.h"
 
+#include "Headers/TextArea.h"
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 #include "Headers/Uniforms.h"
@@ -24,6 +25,8 @@ NoteItem::NoteItem(bool isFile, std::filesystem::path path) : isFile(isFile), pa
 
 NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folderPath(), locatingError(false)
 {
+	type = NOTE;
+
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
 		std::filesystem::create_directory(documentPath / "NullNotes");
 

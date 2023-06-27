@@ -407,22 +407,8 @@ bool isFloat(const std::string number)
 
 void PrintColour(const std::string commandName, const Colour colour)
 {
-	std::vector<std::string> nums = { std::to_string(colour.r), std::to_string(colour.g), std::to_string(colour.b), std::to_string(colour.a) };
 	std::stringstream ss;
-	ss << commandName << " has been changed to ";
-
-	for (std::string s : nums)
-	{
-		int lastZeroIndex = s.find_last_not_of("0");
-		if (lastZeroIndex != std::string::npos) {
-			s.erase(lastZeroIndex + 1);
-		}
-		else {
-			s.clear();
-		}
-
-		ss << (s.size() == 0 ? "0" : s) << " ";
-	}
+	ss << commandName << " has been changed to " << FloatToString(colour.r) << " " << FloatToString(colour.g) << " " << FloatToString(colour.b) << " " << FloatToString(colour.a);
 
 	program.RenderStatus(ss.str());
 }
@@ -441,6 +427,9 @@ std::string Trim(const std::string& str, const std::string& whitespace)
 
 std::string FloatToString(float value) 
 {
+	if (value == (int)value)
+		return std::to_string((int)value);
+
 	std::stringstream stream;
 	stream << std::fixed << value;
 	std::string result = stream.str();

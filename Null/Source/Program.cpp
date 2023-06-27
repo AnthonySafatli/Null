@@ -497,14 +497,14 @@ void Program::OpenFile(const std::string path)
 	OpenEditor(str, path, false);
 }
 
-void Program::OpenTextViewer(const std::string str, const std::string pageName)
+void Program::OpenTextViewer(const std::string str, const std::string pageName, AreaType type)
 {
 	vertices.clear();
 	marginVertices.clear();
 
 	delete area;
 
-	area = new TextViewer(str, pageName);
+	area = new TextViewer(str, pageName, type);
 	glfwSetWindowTitle(window, (pageName + " - Null").c_str());
 }
 
@@ -588,7 +588,7 @@ void Program::LoadSettings()
 		"\n\n"
 		"Speed: " + FloatToString(cursorSpeed);
 
-	OpenTextViewer(settings, "Settings");
+	OpenTextViewer(settings, "Settings", SETTINGS);
 }
 
 /* Cursor Methods */

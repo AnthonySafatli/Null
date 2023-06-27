@@ -7,8 +7,10 @@
 
 extern Program program;
 
-TextViewer::TextViewer(const std::string text, const std::string pageName)
+TextViewer::TextViewer(const std::string text, const std::string pageName, AreaType type)
 {
+	this->type = type;
+
 	ConstructorStart(2, false);
 
 	UpdateText(text);

@@ -16,6 +16,7 @@ void Draw();
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
 // TODO: Create welcome page
+
 Program program = Program(1800, 1100, 24, 4);
 
 int main(void)

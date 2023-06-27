@@ -315,7 +315,7 @@ Enter 'help [command name]' to see more details for each command
 'scroll'     | Scrolls to a certain line
 'refresh'    | Refreshes the page
 'note'       | Opens note menu
-'quit'       | Quits the application)"""", "Help");
+'quit'       | Quits the application)"""", "Help", HELP);
 	}
 	else if (args.size() == 1)
 	{
@@ -556,7 +556,7 @@ quit
 			return;
 		}
 
-		program.OpenTextViewer(help, "Help");
+		program.OpenTextViewer(help, "Help", HELP);
 	}
 	else
 	{
@@ -904,6 +904,9 @@ void Command::Refresh(const std::vector<std::string> args)
 		program.RenderStatus("Refresh completed");
 		return;
 	}
+
+	if (program.area->type == SETTINGS)
+		program.LoadSettings();
 
 	program.vertices.clear();
 

@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+enum AreaType { WELCOME, EDITOR, SETTINGS, NOTE, HELP, TEXT };
+
 class TextArea
 {
 public:
@@ -48,4 +50,5 @@ public:
 
     /* Read-only */
     int leftMargin;
+    AreaType type;
 };

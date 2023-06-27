@@ -9,6 +9,7 @@
 #include <cmath>
 #include <ctype.h>
 
+#include "Headers/TextArea.h"
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 #include "Headers/Uniforms.h"
@@ -21,12 +22,16 @@ extern Program program;
 
 TextEditor::TextEditor() : fileDirectory(""), fileName(""), isNote(false)
 {
+	type = EDITOR;
+
 	ConstructorStart(4, true);
 	program.RenderStatus("New Editor Loaded Successfully");
 }
 
 TextEditor::TextEditor(const std::string text, const std::string directory, const std::string fileName, bool isNote) : fileName(fileName), fileDirectory(directory), isNote(isNote)
 {
+	type = EDITOR;
+
 	ConstructorStart(4, true);
 
 	for (int i = 0; i < text.size(); i++)
