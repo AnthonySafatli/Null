@@ -302,14 +302,14 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 		MoveHomeCommand();
 		break;
 	case GLFW_KEY_KP_7:
-		// TODO: Numpad stuff here too
+		// TODO: [END] Numpad stuff here too
 		MoveHomeCommand();
 		break;
 	case GLFW_KEY_END:
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_KP_1:
-		// TODO: Numpad stuff here too
+		// TODO: [END] Numpad stuff here too
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_RIGHT:
@@ -591,15 +591,187 @@ void Program::LoadSettings()
 	OpenTextViewer(settings, "Settings");
 }
 
-void Program::LoadHelp(const bool commands, const bool shortcuts)
+void Program::LoadHelp(const std::string command)
 {
-	// TODO: Write out help string
-	const std::string help = 
-		"Help:\n"
-		"Commands:\n\n\n"
-		"Shortcuts:\n";
+	std::string help;
 
-	// TODO: Make help command and shortcut strings
+	// TODO: [PRIORITY] finish strings
+
+	if (command.empty())
+	{
+		help = R""""(Welcome to Null
+Here is a list of all commands possible
+Enter 'help [command name]' to see more details for each command
+
+'echo'       | Prints a line of text to the status bar
+'size'       | Changes the size of the text
+'background' | Changes the background colour
+'foreground' | Changes the foreground colour
+'speed'      | Changes the speed of the cursor animation
+'settings'   | Shows all the customizable settings
+'help'       | Shows a description of a command
+'open'       | Opens a file in the editor
+'save'       | Saves a file to disk
+'rename'     | Renames a file
+'copy'       | Copies the line the cursor is at
+'paste'      | Pastes contents of clipboard into the editor
+'cut'        | Removes the line the cursor is at
+'undo'       | Undos the last change made in the editor
+'redo'       | Redos the last undoed change
+'scroll'     | Scrolls to a certain line
+'refresh'    | Refreshes the page
+'note'       | Opens note menu
+'quit'       | Quits the application)"""";
+	}
+	else if (command == "echo")
+	{
+		help = R""""(echo:
+Prints a line of text to the status bar
+
+echo [text]
+-> Prints text to status bar)"""";
+	}
+	else if (command == "size")
+	{
+		help = R""""(size:
+Changes the size of the text
+
+size +
+-> increases the text size by one
+
+size -
+-> decreases the text size by one
+
+size [n]
+-> sets the text size to n
+
+size default
+-> sets the text size to the default value)"""";
+	}
+	else if (command == "background")
+	{
+		help = R""""(background:
+Changes the background colour
+
+background [n]
+-> sets red, green, blue channels of background to n and alpha channel to 1
+
+background [r] [g] [b]
+-> sets the red, green, blue channels of the background to r g b and alpha channel to 1
+
+background [r] [g] [b] [a]
+-> sets the red, green, blue, alpha channels of the background to r g b a
+
+background default
+-> sets the background to the default value
+
+background [colour]
+-> sets the background to the css colour, the alpha channel remains unchanged
+
+background [colour] [a]
+-> sets the background to the css colour and the alpha channel to a)"""";
+	}
+	else if (command == "foreground")
+	{
+		help = R""""(foreground:
+Changes the foreground colour
+
+foreground [n]
+-> sets red, green, blue channels of foreground to n and alpha channel to 1
+
+foreground [r] [g] [b]
+-> sets the red, green, blue channels of the foreground to r g b and alpha channel to 1
+
+foreground [r] [g] [b] [a]
+-> sets the red, green, blue, alpha channels of the foreground to r g b a
+
+foreground default
+-> sets the foreground to the default value
+
+foreground [colour]
+-> sets the foreground to the css colour, the alpha channel remains unchanged
+
+foreground [colour] [a]
+-> sets the foreground to the css colour and the alpha channel to a)"""";
+	}
+	else if (command == "speed")
+	{
+		help = R""""(speed:
+Changes the speed of the cursor animation
+
+speed +
+-> increases the cursor speed by one
+
+speed -
+-> decreases the cursor speed by one
+
+speed [n]
+-> sets the cursor speed to n
+
+speed default
+-> sets the cursor speed to the default value)"""";
+	}
+	else if (command == "settings")
+	{
+		help = R""""(settings:
+Shows all the customizable settings
+
+setting
+
+)""""; // TODO: finish
+	}
+	else if (command == "help")
+	{
+
+	}
+	else if (command == "open")
+	{
+
+	}
+	else if (command == "save")
+	{
+
+	}
+	else if (command == "rename")
+	{
+
+	}
+	else if (command == "copy")
+	{
+
+	}
+	else if (command == "paste")
+	{
+
+	}
+	else if (command == "cut")
+	{
+
+	}
+	else if (command == "undo")
+	{
+
+	}
+	else if (command == "redo")
+	{
+
+	}
+	else if (command == "scroll")
+	{
+
+	}
+	else if (command == "refresh")
+	{
+
+	}
+	else if (command == "note")
+	{
+
+	}
+	else if (command == "quit")
+	{
+
+	}
 
 	OpenTextViewer(help, "Help");
 }

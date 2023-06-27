@@ -86,7 +86,7 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_KP_7: 
-		// TODO: Numpad not working
+		// TODO: [END] Numpad not working
 		if (glfwGetKey(program.window, GLFW_KEY_NUM_LOCK) != GLFW_PRESS)
 			break;
 		MoveHome();
@@ -97,7 +97,7 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_KP_1:
-		// TODO: Numpad not working
+		// TODO: [END] Numpad not working
 		if (glfwGetKey(program.window, GLFW_KEY_NUM_LOCK) != GLFW_PRESS)
 			break;
 		MoveEnd();

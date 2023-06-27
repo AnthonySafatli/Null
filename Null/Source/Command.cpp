@@ -281,11 +281,8 @@ void Command::Help(const std::vector<std::string> args)
 	> help
 	: opens help page
 	:
-	> help command
-	: opens help page with command filter
-	: 
-	> help shortcut
-	: opens help page with shortcuts filter
+	> help [command]
+	: opens help page for command
 	*/
 
 	if (args.size() > 1)
@@ -294,27 +291,15 @@ void Command::Help(const std::vector<std::string> args)
 		return;
 	}
 	
-	if (args.size() == 1)
+	if (args.size() == 0)
 	{
-		if (args[0] == "command")
-		{
-			program.LoadHelp(true, false);
-			program.RenderStatus("Help page loaded");
-			return;
-		}
-
-		if (args[0] == "shortcut")
-		{
-			program.LoadHelp(false, true);
-			program.RenderStatus("Help page loaded");
-			return;
-		}
-
-		program.RenderStatus("Command 'help' can only take 'command' or 'shortcut' as arguments");
-		return;
+		program.LoadHelp("");
+	}
+	else
+	{
+		program.LoadHelp("background");
 	}
 
-	program.LoadHelp(true, true);
 	program.RenderStatus("Help page loaded");
 }
 
@@ -652,6 +637,7 @@ void Command::Refresh(const std::vector<std::string> args)
 
 		program.OpenNoteViewer(noteViewer->folderPath);
 
+		program.RenderStatus("Refresh completed");
 		return;
 	}
 

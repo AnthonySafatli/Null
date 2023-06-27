@@ -22,8 +22,6 @@ extern Program program;
 
 NoteItem::NoteItem(bool isFile, std::filesystem::path path) : isFile(isFile), path(path) { }
 
-// TODO: Add path visualizer
-
 NoteViewer::NoteViewer(std::filesystem::path documentPath) : isRoot(true), folderPath(), locatingError(false)
 {
 	if (!std::filesystem::is_directory(documentPath / "NullNotes"))
@@ -83,7 +81,7 @@ NoteViewer::NoteViewer(std::filesystem::path documentPath, std::vector<std::stri
 	else
 	{
 		for (char c : documentPath.string()) AddCharacter(c);
-		AddCharacter('~');
+		AddCharacter('\\'); AddCharacter('~');
 		Return(); Return();
 
 		if (!isRoot)
@@ -130,7 +128,7 @@ void NoteViewer::ProcessKey(int key, int action, int mods)
 		MoveDown();
 		break;
 	case GLFW_KEY_ENTER:
-		// TODO: Bug fix, cannot open test.note
+		// DEBUG: Bug fix, cannot open test.note
 		OpenItem();
 		return;
 	}
