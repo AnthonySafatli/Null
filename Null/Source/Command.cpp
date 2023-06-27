@@ -293,11 +293,275 @@ void Command::Help(const std::vector<std::string> args)
 	
 	if (args.size() == 0)
 	{
-		program.LoadHelp("");
+		program.OpenTextViewer(R""""(Welcome to Null
+Here is a list of all commands possible
+Enter 'help [command name]' to see more details for each command
+
+'echo'       | Prints a line of text to the status bar
+'size'       | Changes the size of the text
+'background' | Changes the background colour
+'foreground' | Changes the foreground colour
+'speed'      | Changes the speed of the cursor animation
+'settings'   | Shows all the customizable settings
+'help'       | Shows a description of a command
+'open'       | Opens a file in the editor
+'save'       | Saves a file to disk
+'rename'     | Renames a file
+'copy'       | Copies the line the cursor is at
+'paste'      | Pastes contents of clipboard into the editor
+'cut'        | Removes the line the cursor is at
+'undo'       | Undos the last change made in the editor
+'redo'       | Redos the last undoed change
+'scroll'     | Scrolls to a certain line
+'refresh'    | Refreshes the page
+'note'       | Opens note menu
+'quit'       | Quits the application)"""", "Help");
+	}
+	else if (args.size() == 1)
+	{
+		std::string help;
+
+		if (args[0] == "echo")
+		{
+			help = R""""(echo:
+Prints a line of text to the status bar
+
+echo [text]
+-> Prints text to status bar)"""";
+		}
+		else if (args[0] == "size")
+		{
+			help = R""""(size:
+Changes the size of the text
+
+size +
+-> increases the text size by one
+
+size -
+-> decreases the text size by one
+
+size [n]
+-> sets the text size to n
+
+size default
+-> sets the text size to the default value)"""";
+		}
+		else if (args[0] == "background")
+		{
+			help = R""""(background:
+Changes the background colour
+
+background [n]
+-> sets red, green, blue channels of background to n and alpha channel to 1
+
+background [r] [g] [b]
+-> sets the red, green, blue channels of the background to r g b and alpha channel to 1
+
+background [r] [g] [b] [a]
+-> sets the red, green, blue, alpha channels of the background to r g b a
+
+background default
+-> sets the background to the default value
+
+background [colour]
+-> sets the background to the css colour, the alpha channel remains unchanged
+
+background [colour] [a]
+-> sets the background to the css colour and the alpha channel to a)"""";
+		}
+		else if (args[0] == "foreground")
+		{
+			help = R""""(foreground:
+Changes the foreground colour
+
+foreground [n]
+-> sets red, green, blue channels of foreground to n and alpha channel to 1
+
+foreground [r] [g] [b]
+-> sets the red, green, blue channels of the foreground to r g b and alpha channel to 1
+
+foreground [r] [g] [b] [a]
+-> sets the red, green, blue, alpha channels of the foreground to r g b a
+
+foreground default
+-> sets the foreground to the default value
+
+foreground [colour]
+-> sets the foreground to the css colour, the alpha channel remains unchanged
+
+foreground [colour] [a]
+-> sets the foreground to the css colour and the alpha channel to a)"""";
+		}
+		else if (args[0] == "speed")
+		{
+			help = R""""(speed:
+Changes the speed of the cursor animation
+
+speed +
+-> increases the cursor speed by one
+
+speed -
+-> decreases the cursor speed by one
+
+speed [n]
+-> sets the cursor speed to n
+
+speed default
+-> sets the cursor speed to the default value)"""";
+		}
+		else if (args[0] == "settings")
+		{
+			help = R""""(settings:
+Shows all the customizable settings
+
+settings
+-> opens settings page)"""";
+		}
+		else if (args[0] == "help")
+		{
+			help = R""""(help:
+Shows a description of a command
+
+help
+-> opens help page
+
+help [command]
+-> opens help page for command)"""";
+		}
+		else if (args[0] == "open")
+		{
+			help = R""""(open:
+Opens a file in the editor
+
+open
+-> opens file dialog to select file
+
+open new
+-> opens blank page in the editor)"""";
+		}
+		else if (args[0] == "save")
+		{
+			help = R""""(save:
+Saves a file to disk
+
+save
+-> saves the file
+
+save as
+-> saves the file with a new name)"""";
+		}
+		else if (args[0] == "rename")
+		{
+			help = R""""(rename:
+Renames a file
+
+rename [name]
+-> renames the file to name)"""";
+		}
+		else if (args[0] == "copy")
+		{
+			help = R""""(copy:
+Copies the line the cursor is at
+
+copy
+-> copies the line from cursor)"""";
+		}
+		else if (args[0] == "paste")
+		{
+			help = R""""(paste:
+Pastes contents of clipboard into the editor
+
+paste
+-> pastes text into new line)"""";
+		}
+		else if (args[0] == "cut")
+		{
+			help = R""""(cut:
+Removes the line the cursor is at
+
+cut
+-> cuts line from cursor
+)"""";
+		}
+		else if (args[0] == "undo")
+		{
+			help = R""""(undo:
+Undos the last change made in the editor
+
+undo
+-> undos the last change)"""";
+		}
+		else if (args[0] == "redo")
+		{
+			help = R""""(redo:
+Redos the last undoed change
+
+redo
+-> redos the last change)"""";
+		}
+		else if (args[0] == "scroll")
+		{
+			help = R""""(scroll:
+Scrolls to a certain line
+
+scroll +
+-> scrolls up a line
+
+scroll -
+-> scrolls down a line
+
+scroll [n]
+-> scrolls to line n)"""";
+		}
+		else if (args[0] == "refresh")
+		{
+			help = R""""(refresh:
+Refreshes the page
+
+refresh
+-> refreshes the page currently being shown)"""";
+		}
+		else if (args[0] == "note")
+		{
+			help = R""""(note:
+Opens note menu
+
+note
+-> opens notebook to view notes and folders
+
+note open [folder]
+-> opens notebook to view notes and folders at folder (multiple folders to view nested folders)
+
+note folder [name]
+-> creates folder with name in the current open folder (multiple folders to view nested folders)
+* folder names cannot contain spaces
+
+note new [name]
+-> creates a new note in current folder with name
+
+note del [name]
+-> deletes folder or note with name)"""";
+		}
+		else if (args[0] == "quit")
+		{
+			help = R""""(quit:
+Quits the application
+
+quit
+-> quits the application)"""";
+		}
+		else
+		{
+			program.RenderStatus("Command not found");
+			return;
+		}
+
+		program.OpenTextViewer(help, "Help");
 	}
 	else
 	{
-		program.LoadHelp("background");
+		program.RenderStatus("Invalid arguments");
+		return;
 	}
 
 	program.RenderStatus("Help page loaded");
@@ -506,7 +770,7 @@ void Command::Undo(const std::vector<std::string> args)
 {
 	/*
 	> undo
-	: undoes the last change
+	: undos the last change
 	*/
 
 	if (args.size() > 0) {
@@ -535,7 +799,7 @@ void Command::Redo(const std::vector<std::string> args)
 {
 	/*
 	> redo
-	: redoes the last change
+	: redos the last change
 	*/
 
 	if (args.size() > 0) {

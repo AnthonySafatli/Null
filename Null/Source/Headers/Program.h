@@ -78,7 +78,6 @@ public:
 	void OpenNoteViewer(std::vector<std::string> folders);                        // Opens Note File View at path
 	void OpenNote(std::filesystem::path notePath, std::string noteName);          // Opens Note in Text Editor
 	void LoadSettings();                                                          // Opens Text Viewer with Settings text
-	void LoadHelp(const std::string command);                                     // Opens Text Viewer with Help text
 
 	/* Cursor Methods */
 	void ShowCursor();
