@@ -49,7 +49,7 @@ Program::Program(const int width, const int height, const float textSize, const 
 	cursorVertices.push_back(Vertex(0.1, 1.0, texCoordsStatus.u + (1.0 / 10.0), texCoordsStatus.v + (1.0 / 10.0), 1, 1, CURSOR));
 	cursorVertices.push_back(Vertex(0.0, 1.0, texCoordsStatus.u               , texCoordsStatus.v + (1.0 / 10.0), 1, 1, CURSOR));
 
-	area = new TextEditor();
+	LoadWelcome();
 }
 
 Program::~Program()
@@ -589,6 +589,27 @@ void Program::LoadSettings()
 		"Speed: " + FloatToString(cursorSpeed);
 
 	OpenTextViewer(settings, "Settings", SETTINGS);
+}
+
+void Program::LoadWelcome()
+{
+	const std::string settings = 
+		"Welcome To Null Text Editor"
+		"\n\n"
+		"\n\n"
+		"Press 'esc' to access the command prompt"
+		"\n\n"
+		"To start you can:"
+		"\nType 'open new' into the command prompt to open a new page"
+		"\nType 'open' to open an existing file"
+		"\nType 'note' to access the notes menu"
+		"\n"
+		"\nOr type 'help' to view a more conclusive list"
+		"\n\n"
+		"\n\n"
+		"Enjoy!";
+
+	OpenTextViewer(settings, "Welcome", WELCOME);
 }
 
 /* Cursor Methods */

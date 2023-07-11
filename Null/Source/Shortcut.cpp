@@ -100,32 +100,14 @@ void Shortcut::UniversalShortcuts(int key, int action, int mods)
 		return;
 
 	bool ctrlPressed = (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL;
-	bool shftPressed = (mods & GLFW_MOD_SHIFT) == GLFW_MOD_SHIFT;
 
 	if (!ctrlPressed)
 		return;
 
-	// TODO: Filter universal shortcuts from command and text editor shortcuts
-	if (shftPressed && key == GLFW_KEY_S)
-		SaveAs();
-	else if (key == GLFW_KEY_S)
-		Save();
-	else if (key == GLFW_KEY_O)
+	if (key == GLFW_KEY_O)
 		Open();
 	else if (key == GLFW_KEY_N)
 		OpenNew();
-	else if (key == GLFW_KEY_C)
-		Copy();
-	else if (key == GLFW_KEY_V)
-		Paste();
-	else if (key == GLFW_KEY_X)
-		Cut();
-	else if (key == GLFW_KEY_Z)
-		Undo();
-	else if (key == GLFW_KEY_Y)
-		Redo();
-	else if (key == GLFW_KEY_D)
-		Duplicate();
 	else if (key == GLFW_KEY_R)
 		Refresh();
 	else if (key == GLFW_KEY_UP)
@@ -152,4 +134,27 @@ void Shortcut::TextEditorShortcuts(int key, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
+
+	bool ctrlPressed = (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL;
+	bool shftPressed = (mods & GLFW_MOD_SHIFT) == GLFW_MOD_SHIFT;
+
+	if (!ctrlPressed)
+		return;
+
+	if (shftPressed && key == GLFW_KEY_S)
+		SaveAs();
+	else if (key == GLFW_KEY_S)
+		Save();
+	else if (key == GLFW_KEY_C)
+		Copy();
+	else if (key == GLFW_KEY_V)
+		Paste();
+	else if (key == GLFW_KEY_X)
+		Cut();
+	else if (key == GLFW_KEY_Z)
+		Undo();
+	else if (key == GLFW_KEY_Y)
+		Redo();
+	else if (key == GLFW_KEY_D)
+		Duplicate();
 }

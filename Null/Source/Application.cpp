@@ -15,7 +15,6 @@ void Draw();
 // TODO: [END] Redo all status bar messages 
 //          - Change use of it
 //              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
-// TODO: Create welcome page
 
 Program program = Program(1800, 1100, 24, 4);
 
@@ -97,6 +96,8 @@ int main(void)
         glfwPollEvents();
 
         #if _DEBUG
+            std::cout << "Col: " << program.columnIndex << " " << program.cursorVertices[0].column << std::endl;
+
             GetErrors();
         #endif
 
