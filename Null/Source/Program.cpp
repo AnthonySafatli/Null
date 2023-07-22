@@ -553,7 +553,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 #endif
 
 	area = new NoteViewer(documents, folders);
-	glfwSetWindowTitle(window, "Notes - Null");
+	glfwSetWindowTitle(window, ("Notes: " + folders[folders.size() - 1] + " - Null").c_str());
 	return;
 }
 

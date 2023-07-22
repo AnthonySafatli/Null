@@ -13,8 +13,8 @@ void Draw();
 
 // Random Objectives:
 // TODO: [END] Redo all status bar messages 
-//          - Change use of it
-//              - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
+//  - Change use of it
+//   - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
 
 Program program = Program(1800, 1100, 24, 4);
 
@@ -34,7 +34,7 @@ int main(void)
 
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-    window = glfwCreateWindow(program.width, program.height, "Null", NULL, NULL);
+    window = glfwCreateWindow(program.width, program.height, "Welcome - Null", NULL, NULL);
     if (!window)
     {
         NFD_Quit();
@@ -44,7 +44,6 @@ int main(void)
     program.window = window;
 
     glfwMakeContextCurrent(window);
-    glfwSetWindowTitle(window, "New File - Null");
 
     /* Setup Callbacks */
     glfwSetKeyCallback(window, CallBack::KeyCallBack);
@@ -96,8 +95,6 @@ int main(void)
         glfwPollEvents();
 
         #if _DEBUG
-            std::cout << "Col: " << program.columnIndex << " " << program.cursorVertices[0].column << std::endl;
-
             GetErrors();
         #endif
 
@@ -112,29 +109,15 @@ int main(void)
     return 0;
 }
 
-// TODO: [END] Batch renderer still not working
+// TODO: Add max amount of vertices so computer dont explode
 void Draw()
 {
-    std::vector<Vertex> allVertices = program.GetVertices();
+    std::vector<Vertex> vertices = program.GetVertices();
 
-    int numVerticesLeft = allVertices.size();
-    int startIndexV = 0;
-    int startIndexI = 0;
+    program.openGL.vertexBuffer.SetData(&vertices[0], vertices.size());
+    program.openGL.indexBuffer.SetData(&program.indices[0], program.indices.size());
 
-
-    while (numVerticesLeft > 0) {
-        int numVerticesToRender = std::min(numVerticesLeft, MAX_SQAURES_TO_RENDER * 4);
-        int numIndicesToRender = numVerticesToRender / 4 * 6;
-
-        program.openGL.vertexBuffer.SetData(&allVertices[0] + startIndexV, numVerticesToRender);
-        program.openGL.indexBuffer.SetData(&program.indices[0] + startIndexI, numIndicesToRender);
-
-        glDrawElements(GL_TRIANGLES, numIndicesToRender, GL_UNSIGNED_INT, nullptr);
-
-        numVerticesLeft -= numVerticesToRender;
-        startIndexV += numVerticesToRender;
-        startIndexI += numIndicesToRender;
-    }
+    glDrawElements(GL_TRIANGLES, program.indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)
