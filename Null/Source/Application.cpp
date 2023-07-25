@@ -12,9 +12,13 @@
 void Draw();
 
 // Random Objectives:
-// TODO: [END] Redo all status bar messages 
+// END: Redo all status bar messages 
 //  - Change use of it
 //   - Ideas: Show cursor positions, actual info such as file opening and saving (temporary), etc
+
+// TODO: Read over help texts, make sure [this in brackets] are clearly explained
+
+// TODO: Make sure speed and size (and other commands) have proper bounds (>= 1 and float checking)
 
 Program program = Program(1800, 1100, 24, 4);
 

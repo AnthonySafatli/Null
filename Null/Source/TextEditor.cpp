@@ -25,7 +25,7 @@ TextEditor::TextEditor() : fileDirectory(""), fileName(""), isNote(false)
 	type = EDITOR;
 
 	ConstructorStart(4, true);
-	// RS: New editor loaded successfully
+	// RS: 8
 	program.RenderStatus("New Editor Loaded Successfully");
 }
 
@@ -58,7 +58,7 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 	if (program.openGL.init)
 		UpdateUniform1i(program.openGL.u_cursorRow.location, rows.size());
 
-	// RS: [filename] loaded successfully
+	// RS: 8
 	program.RenderStatus(fileName + " Loaded Successfully");
 }
 
@@ -93,7 +93,7 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_KP_7: 
-		// TODO: [END] Numpad not working
+		// END:  Numpad not working
 		if (glfwGetKey(program.window, GLFW_KEY_NUM_LOCK) != GLFW_PRESS)
 			break;
 		MoveHome();
@@ -104,7 +104,7 @@ void TextEditor::ProcessKey(int key, int action, int mods)
 		UpdateRowColVisual();
 		break;
 	case GLFW_KEY_KP_1:
-		// TODO: [END] Numpad not working
+		// END:  Numpad not working
 		if (glfwGetKey(program.window, GLFW_KEY_NUM_LOCK) != GLFW_PRESS)
 			break;
 		MoveEnd();

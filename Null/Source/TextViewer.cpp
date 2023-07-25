@@ -17,7 +17,7 @@ TextViewer::TextViewer(const std::string text, const std::string pageName, AreaT
 
 	ConstructorEnd();
 
-	// RS: [pagename] loaded successfully
+	// RS: 8
 	program.RenderStatus(pageName + " Loaded Successfully");
 }
 

@@ -302,14 +302,14 @@ void Program::ProcessKeyCommand(int key, int action, int mods)
 		MoveHomeCommand();
 		break;
 	case GLFW_KEY_KP_7:
-		// TODO: [END] Numpad stuff here too
+		// END: Numpad stuff here too
 		MoveHomeCommand();
 		break;
 	case GLFW_KEY_END:
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_KP_1:
-		// TODO: [END] Numpad stuff here too
+		// END: Numpad stuff here too
 		MoveEndCommand();
 		break;
 	case GLFW_KEY_RIGHT:
@@ -482,7 +482,7 @@ void Program::OpenFile(const std::string path)
 {
 	if (!std::filesystem::is_regular_file(std::filesystem::path(path)))
 	{
-		// RS: Error occured while opeing [path]
+		// RS: 10
 		RenderStatus("Error occurred while opening " + path);
 		return;
 	}
@@ -490,7 +490,7 @@ void Program::OpenFile(const std::string path)
 	std::ifstream file(path);
 	if (!file.is_open())
 	{
-		// RS: Error occured while opeing [path]
+		// RS: 10
 		RenderStatus("Error occurred while opening " + path);
 		return;
 	}
@@ -519,7 +519,7 @@ void Program::OpenNoteViewer()
 
 	if (documents.empty())
 	{
-		// RS: Notebook is unavailable at the moment
+		// RS: 16
 		RenderStatus("Notebook is unavailable at the moment");
 		return;
 	}
@@ -542,7 +542,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 	std::filesystem::path documents = NoteViewer::GetDocumentsFolder();
 	if (documents.empty())
 	{
-		// RS: NOtebook is unavailable at the moemnt
+		// RS: 16
 		RenderStatus("Notebook is unavailable at the moment");
 		return;
 	}
@@ -565,7 +565,7 @@ void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
 {
 	if (!std::filesystem::is_regular_file(notePath))
 	{
-		// RS: Error occurred while opeing [note]
+		// RS: 10
 		RenderStatus("Error occurred while opening " + noteName);
 		return;
 	}
@@ -573,7 +573,7 @@ void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
 	std::ifstream file(notePath);
 	if (!file.is_open())
 	{
-		// RS: Error occurred while opeing [note]
+		// RS: 10
 		RenderStatus("Error occurred while opening " + noteName);
 		return;
 	}
