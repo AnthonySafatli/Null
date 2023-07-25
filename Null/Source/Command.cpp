@@ -73,6 +73,7 @@ void Command::Execute(const std::string input)
 	else if (command == "quit")
 		Quit(args);
 	else
+		// RS: Error unknown command
 		program.RenderStatus("Error: Unknown Command " + command);
 }
 
@@ -88,6 +89,7 @@ void Command::Echo(const std::vector<std::string> args)
 	std::stringstream ss;
 	for (std::string str : args) ss << str + " ";
 
+	// RS: [echo]
 	program.RenderStatus(ss.str());
 }
 
@@ -109,6 +111,7 @@ void Command::TextSize(const std::vector<std::string> args)
 
 	if (args.size() != 1)
 	{
+		// RS: Command size only takes one arguemtn
 		program.RenderStatus("Command 'size' only takes one argument");
 		return;
 	}
@@ -120,12 +123,14 @@ void Command::TextSize(const std::vector<std::string> args)
 		program.textSize = 24;
 		UpdateUniform1f(program.openGL.u_size.location, program.textSize * 0.001);
 		UpdateMaxHeightWidth();
+		// RS: Text size was set to 24
 		program.RenderStatus("Text Size set to 24");
 		return;
 	}
 	else if (sizeStr == "+")
 	{
 		UpdateUniform1f(program.openGL.u_size.location, ++program.textSize * 0.001);
+		// RS: Text size was set to [size]
 		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
 		UpdateMaxHeightWidth();
 		return;
@@ -137,6 +142,7 @@ void Command::TextSize(const std::vector<std::string> args)
 
 		UpdateUniform1f(program.openGL.u_size.location, --program.textSize * 0.001);
 		UpdateMaxHeightWidth();
+		// RS: Text size was set to [size]
 		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
 		return;
 	}
@@ -147,10 +153,12 @@ void Command::TextSize(const std::vector<std::string> args)
 		program.textSize = std::abs(size);
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 		UpdateMaxHeightWidth();
+		// RS: Text size was set to [size]
 		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
 	}
 	catch (const std::exception& e)
 	{
+		// RS: Invalid Argument: must be a number
 		program.RenderStatus("Invalid Argument: must be a number");
 	}
 }
@@ -173,6 +181,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 
 	if (args.size() != 1)
 	{
+		// RS: Command speed only takes one arguemtn
 		program.RenderStatus("Command 'speed' only takes one argument");
 		return;
 	}
@@ -182,11 +191,13 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	if (speedStr == "default")
 	{
 		program.cursorSpeed = 50;
+		// RS: Cursor speed set to 50
 		program.RenderStatus("Cursor Speed set to 50");
 		return;
 	}
 	else if (speedStr == "+")
 	{
+		// RS: Cursor speed set to [speed]
 		program.RenderStatus("Cursor Speed set to " + FloatToString(++program.cursorSpeed));
 		return;
 	}
@@ -195,6 +206,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 		if (program.cursorSpeed <= 1)
 			return;
 
+		// RS: Cursor speed set to [speed]
 		program.RenderStatus("Cursor Speed set to " + FloatToString(--program.cursorSpeed));
 		return;
 	}
@@ -203,10 +215,12 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	{
 		float speed = std::stof(speedStr);
 		program.cursorSpeed = std::abs(speed);
+		// RS: Cursor speed set to [speed]
 		program.RenderStatus("Cursor Speed set to " + FloatToString(program.cursorSpeed));
 	}
 	catch (const std::exception& e)
 	{
+		// RS: Invalid Argument: must be a unsigned integer
 		program.RenderStatus("Invalid Argument: must be a unsigned integer");
 	}
 }
@@ -287,7 +301,8 @@ void Command::Help(const std::vector<std::string> args)
 
 	if (args.size() > 1)
 	{
-		program.RenderStatus("Command 'status' cannot take more than one arguement");
+		// RS: Command status connot take more than one arguemtn
+		program.RenderStatus("Command 'status' cannot take more than one argument");
 		return;
 	}
 	
@@ -552,6 +567,7 @@ quit
 		}
 		else
 		{
+			// RS: command not found
 			program.RenderStatus("Command not found");
 			return;
 		}
@@ -560,10 +576,12 @@ quit
 	}
 	else
 	{
+		// RS: invlaid arguemt
 		program.RenderStatus("Invalid arguments");
 		return;
 	}
 
+	// RS: help page loaded
 	program.RenderStatus("Help page loaded");
 }
 
@@ -576,11 +594,13 @@ void Command::Settings(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
+		// RS: Command settings does not take any arguemtns
 		program.RenderStatus("Command 'settings' does not take any arguments");
 		return;
 	}
 
 	program.LoadSettings();
+	// RS: Settings page loaded
 	program.RenderStatus("Settings page loaded");
 }
 
@@ -602,6 +622,7 @@ void Command::Open(const std::vector<std::string> args)
 		if (result != NFD_OKAY)
 		{
 			if (result != NFD_CANCEL)
+				// RS: An error occured opeing the file dialog
 				program.RenderStatus("An error occurred opening the file dialog");
 
 			return;
@@ -621,6 +642,7 @@ void Command::Open(const std::vector<std::string> args)
 		return;
 	}
 
+	// RS: Arguments invlaid
 	program.RenderStatus("Argument(s) invalid");
 }
 
@@ -650,8 +672,10 @@ void Command::Save(const std::vector<std::string> args)
 		file << editor->GetText();
 
 		if (SavedSuccessfully(editor->fileDirectory))
+			// RS: [filename] saved successfully
 			program.RenderStatus(editor->fileName + " saved successfully");
 		else
+			// RS: Error occured while saving [filename]
 			program.RenderStatus("Error occurred while saving " + editor->fileName);
 
 		return;
@@ -669,6 +693,7 @@ void Command::Save(const std::vector<std::string> args)
 		return;
 	}
 
+	// RS: Arguemnts invalid
 	program.RenderStatus("Argument(s) invalid");
 }
 
@@ -685,6 +710,7 @@ void Command::Rename(const std::vector<std::string> args)
 
 	if (args.size() == 0)
 	{
+		// RS: Command rename needs at least one argument
 		program.RenderStatus("Command 'rename' needs at least one argument");
 		return;
 	}
@@ -701,10 +727,12 @@ void Command::Rename(const std::vector<std::string> args)
 		editor->fileDirectory = fileDir.string();
 		editor->fileName = fileDir.filename().string();
 
+		// RS: File renamed to [filename]
 		program.RenderStatus("File renamed to: " + argStr.str());
 	}
 	catch (const std::filesystem::filesystem_error& error)
 	{
+		// RS: Error renaming file [filename]
 		program.RenderStatus("Error renaming file: " + editor->fileName);
 	}
 }
@@ -718,12 +746,14 @@ void Command::Copy(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
+		// RS: Command copy does not take any arguments
 		program.RenderStatus("Command 'copy' does not take any arguments");
 		return;
 	}
 
 	glfwSetClipboardString(program.window, program.area->rows[program.textY].c_str());
 
+	// RS: Copied to line [line]
 	program.RenderStatus("Copied line " + std::to_string(program.textY + 1));
 }
 
@@ -734,10 +764,18 @@ void Command::Paste(const std::vector<std::string> args)
 	: pastes text into new line
 	*/
 
+	if (args.size() > 0)
+	{
+		// RS: Command paste does not take any arguemnts
+		program.RenderStatus("Command 'paste' does not take any arguments");
+		return;
+	}
+
 	program.area->rows.insert(program.area->rows.begin() + program.textY, glfwGetClipboardString(program.window));
 	Refresh(std::vector<std::string>());
 	program.area->AddLeftMargin();
 
+	// RS: Pasted to line [line]
 	program.RenderStatus("Pasted to line " + std::to_string(program.textY + 1));
 }
 
@@ -750,6 +788,7 @@ void Command::Cut(const std::vector<std::string> args)
 	
 	if (args.size() > 0)
 	{
+		// RS: Command cut does not take any arguments
 		program.RenderStatus("Command 'cut' does not take any arguments");
 		return;
 	}
@@ -763,6 +802,7 @@ void Command::Cut(const std::vector<std::string> args)
 	if (program.textX > program.area->rows[program.textY].size())
 		program.area->MoveEnd();
 
+	// RS: Cut line [line]
 	program.RenderStatus("Cut line " + std::to_string(program.textY + 1));
 }
 
@@ -773,7 +813,9 @@ void Command::Undo(const std::vector<std::string> args)
 	: undos the last change
 	*/
 
-	if (args.size() > 0) {
+	if (args.size() > 0) 
+	{
+		// RS: Command undo does not take any arguemnts
 		program.RenderStatus("Command 'undo' does not take any arguments");
 		return;
 	}
@@ -802,7 +844,9 @@ void Command::Redo(const std::vector<std::string> args)
 	: redos the last change
 	*/
 
-	if (args.size() > 0) {
+	if (args.size() > 0) 
+	{
+		// RS: Command redo does not take any arguments
 		program.RenderStatus("Command 'redo' does not take any arguments");
 		return;
 	}
@@ -839,6 +883,7 @@ void Command::Scroll(const std::vector<std::string> args)
 
 	if (args.size() < 1 || args.size() > 1) 
 	{
+		// RS: Command scroll takes only 1 arguemnt
 		program.RenderStatus("Command 'scroll' takes only 1 argument");
 		return;
 	}
@@ -848,6 +893,7 @@ void Command::Scroll(const std::vector<std::string> args)
 		if (program.rowIndex > 0)
 			program.rowIndex--;
 
+		// RS: Scroll set to [scroll]
 		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 		return;
@@ -857,6 +903,7 @@ void Command::Scroll(const std::vector<std::string> args)
 		if (program.rowIndex + 1 < program.area->rows.size())
 			program.rowIndex++;
 
+		// RS: Scroll set to [scroll]
 		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 		return;
@@ -870,11 +917,13 @@ void Command::Scroll(const std::vector<std::string> args)
 		if (size > program.area->rows.size() - 1) size = program.area->rows.size();
 
 		program.rowIndex = size - 1;
+		// RS: Scroll set to [scroll]
 		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
 	catch (std::exception)
 	{
+		// RS: Invalid argument for command scroll
 		program.RenderStatus("Invalid argument for command 'scroll'");
 	}
 
@@ -895,12 +944,14 @@ void Command::Refresh(const std::vector<std::string> args)
 		if (documentPath.empty())
 		{
 			// No document folder found, note command unavailable
+			// RS: Notebook is unavaiable at the moment
 			program.RenderStatus("Notebook is unavailable at the moment");
 			return;
 		}
 
 		program.OpenNoteViewer(noteViewer->folderPath);
 
+		// RS: refresh completed
 		program.RenderStatus("Refresh completed");
 		return;
 	}
@@ -935,6 +986,7 @@ void Command::Refresh(const std::vector<std::string> args)
 	else if (program.textX >= program.area->rows[program.textY].size())
 		program.area->MoveEnd();
 
+	// RS: Refresh completed
 	program.RenderStatus("Refresh completed");
 }
 
@@ -961,6 +1013,7 @@ void Command::Note(const std::vector<std::string> args)
 	if (documentsPath.empty())
 	{
 		// No document folder found, note command unavailable
+		// RS: Notebook is unavailable at the momnents
 		program.RenderStatus("Notebook is unavailable at the moment");
 		return;
 	}
@@ -977,6 +1030,7 @@ void Command::Note(const std::vector<std::string> args)
 	{
 		if (args.size() <= 1)
 		{
+			// RS: Command aguments invalid
 			program.RenderStatus("Command arguments invalid");
 			return;
 		}
@@ -989,6 +1043,7 @@ void Command::Note(const std::vector<std::string> args)
 	{
 		if (args.size() <= 1)
 		{
+			// RS: Command aguments invalid
 			program.RenderStatus("Command arguments invalid");
 			return;
 		}
@@ -1014,6 +1069,7 @@ void Command::Note(const std::vector<std::string> args)
 			}
 			catch (std::exception)
 			{
+				// RS: Unable to create folder
 				program.RenderStatus("Unable to create folder");
 				return;
 			}
@@ -1027,6 +1083,7 @@ void Command::Note(const std::vector<std::string> args)
 	{
 		if (args.size() <= 1)
 		{
+			// RS: Command arguments invalid
 			program.RenderStatus("Command arguments invalid");
 			return;
 		}
@@ -1054,9 +1111,11 @@ void Command::Note(const std::vector<std::string> args)
 			file.close(); 
 			Refresh(std::vector<std::string>());
 
+			// RS: Created not successfully
 			program.RenderStatus("Created note successfully");
 		}
 		else 
+			// RS: Unable to create note
 			program.RenderStatus("Unable to create note");
 		
 		return;
@@ -1067,12 +1126,14 @@ void Command::Note(const std::vector<std::string> args)
 
 		if (args.size() <= 1)
 		{
+			// RS: Command arguemnts invalid
 			program.RenderStatus("Command arguments invalid");
 			return;
 		}
 
 		if (noteViewer == NULL)
 		{
+			// RS: Command not available
 			program.RenderStatus("Command not available");
 			return;
 		}
@@ -1104,20 +1165,24 @@ void Command::Note(const std::vector<std::string> args)
 					throw std::exception();
 
 				Refresh(std::vector<std::string>());
+				// RS: [filename] deleted successfully
 				program.RenderStatus(argsStr.str() + " deleted Successfully");
 				return;
 			}
 			catch (const std::exception& ex) 
 			{
+				// RS: Error deleting [filename]
 				program.RenderStatus("Error deleting " + argsStr.str());
 				return;
 			}
 		}
 
+		// RS: [filename] not found
 		program.RenderStatus(argsStr.str() + " not found");
 		return;
 	}
 
+	// RS: Invalid argument(s) for command 'note'
 	program.RenderStatus("Invalid argument(s) for command 'note'");
 }
 
@@ -1130,6 +1195,7 @@ void Command::Quit(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
+		// RS: Command 'quit' does not take any arguments
 		program.RenderStatus("Command 'quit' does not take any arguments");
 		return;
 	}

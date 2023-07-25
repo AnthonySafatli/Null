@@ -25,6 +25,7 @@ TextEditor::TextEditor() : fileDirectory(""), fileName(""), isNote(false)
 	type = EDITOR;
 
 	ConstructorStart(4, true);
+	// RS: New editor loaded successfully
 	program.RenderStatus("New Editor Loaded Successfully");
 }
 
@@ -57,6 +58,7 @@ TextEditor::TextEditor(const std::string text, const std::string directory, cons
 	if (program.openGL.init)
 		UpdateUniform1i(program.openGL.u_cursorRow.location, rows.size());
 
+	// RS: [filename] loaded successfully
 	program.RenderStatus(fileName + " Loaded Successfully");
 }
 

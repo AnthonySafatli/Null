@@ -482,6 +482,7 @@ void Program::OpenFile(const std::string path)
 {
 	if (!std::filesystem::is_regular_file(std::filesystem::path(path)))
 	{
+		// RS: Error occured while opeing [path]
 		RenderStatus("Error occurred while opening " + path);
 		return;
 	}
@@ -489,6 +490,7 @@ void Program::OpenFile(const std::string path)
 	std::ifstream file(path);
 	if (!file.is_open())
 	{
+		// RS: Error occured while opeing [path]
 		RenderStatus("Error occurred while opening " + path);
 		return;
 	}
@@ -517,6 +519,7 @@ void Program::OpenNoteViewer()
 
 	if (documents.empty())
 	{
+		// RS: Notebook is unavailable at the moment
 		RenderStatus("Notebook is unavailable at the moment");
 		return;
 	}
@@ -539,6 +542,7 @@ void Program::OpenNoteViewer(std::vector<std::string> folders)
 	std::filesystem::path documents = NoteViewer::GetDocumentsFolder();
 	if (documents.empty())
 	{
+		// RS: NOtebook is unavailable at the moemnt
 		RenderStatus("Notebook is unavailable at the moment");
 		return;
 	}
@@ -561,6 +565,7 @@ void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
 {
 	if (!std::filesystem::is_regular_file(notePath))
 	{
+		// RS: Error occurred while opeing [note]
 		RenderStatus("Error occurred while opening " + noteName);
 		return;
 	}
@@ -568,6 +573,7 @@ void Program::OpenNote(std::filesystem::path notePath, std::string noteName)
 	std::ifstream file(notePath);
 	if (!file.is_open())
 	{
+		// RS: Error occurred while opeing [note]
 		RenderStatus("Error occurred while opening " + noteName);
 		return;
 	}
