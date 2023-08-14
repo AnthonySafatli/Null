@@ -109,8 +109,7 @@ void Command::TextSize(const std::vector<std::string> args)
 
 	if (args.size() != 1)
 	{
-		// RS: 4
-		program.RenderStatus("Command 'size' only takes one argument");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'size' does not take any arguments.");
 		return;
 	}
 
@@ -121,15 +120,13 @@ void Command::TextSize(const std::vector<std::string> args)
 		program.textSize = 24;
 		UpdateUniform1f(program.openGL.u_size.location, program.textSize * 0.001);
 		UpdateMaxHeightWidth();
-		// RS: 8
-		program.RenderStatus("Text Size set to 24");
+		program.RenderStatus("SUCCESS: Text size set to 24");
 		return;
 	}
 	else if (sizeStr == "+")
 	{
 		UpdateUniform1f(program.openGL.u_size.location, ++program.textSize * 0.001);
-		// RS: 8
-		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
+		program.RenderStatus("SUCCESS: Text size set to " + FloatToString(program.textSize));
 		UpdateMaxHeightWidth();
 		return;
 	}
@@ -140,8 +137,7 @@ void Command::TextSize(const std::vector<std::string> args)
 
 		UpdateUniform1f(program.openGL.u_size.location, --program.textSize * 0.001);
 		UpdateMaxHeightWidth();
-		// RS: 8
-		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
+		program.RenderStatus("SUCCESS: Text Size set to " + FloatToString(program.textSize));
 		return;
 	}
 
@@ -151,8 +147,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		program.textSize = std::abs(size);
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 		UpdateMaxHeightWidth();
-		// RS: 8
-		program.RenderStatus("Text Size set to " + FloatToString(program.textSize));
+		program.RenderStatus("SUCCESS: Text Size set to " + FloatToString(program.textSize));
 	}
 	catch (const std::exception& e)
 	{
@@ -179,8 +174,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 
 	if (args.size() != 1)
 	{
-		// RS: 7
-		program.RenderStatus("Command 'speed' only takes one argument");
+		program.RenderStatus("ARGUMENT ERROR: Command 'speed' needs 1 argument(s)");
 		return;
 	}
 
@@ -189,14 +183,12 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	if (speedStr == "default")
 	{
 		program.cursorSpeed = 50;
-		// RS: 8
-		program.RenderStatus("Cursor Speed set to 50");
+		program.RenderStatus("SUCCESS: Cursor Speed set to 50");
 		return;
 	}
 	else if (speedStr == "+")
 	{
-		// RS: 8
-		program.RenderStatus("Cursor Speed set to " + FloatToString(++program.cursorSpeed));
+		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(++program.cursorSpeed));
 		return;
 	}
 	else if (speedStr == "-")
@@ -204,8 +196,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 		if (program.cursorSpeed <= 1)
 			return;
 
-		// RS: 8
-		program.RenderStatus("Cursor Speed set to " + FloatToString(--program.cursorSpeed));
+		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(--program.cursorSpeed));
 		return;
 	}
 
@@ -213,8 +204,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	{
 		float speed = std::stof(speedStr);
 		program.cursorSpeed = std::abs(speed);
-		// RS: 8
-		program.RenderStatus("Cursor Speed set to " + FloatToString(program.cursorSpeed));
+		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(program.cursorSpeed));
 	}
 	catch (const std::exception& e)
 	{
@@ -299,8 +289,7 @@ void Command::Help(const std::vector<std::string> args)
 
 	if (args.size() > 1)
 	{
-		// RS: 7
-		program.RenderStatus("Command 'help' cannot take more than one argument");
+		program.RenderStatus("ARGUMENT ERROR: Command 'help' needs 0 or 1 argument(s)");
 		return;
 	}
 	
@@ -565,16 +554,14 @@ quit
 		}
 		else
 		{
-			// RS: 6
-			program.RenderStatus("Command not found");
+			program.RenderStatus("ARGUEMNT ERROR: Command '" + args[0] + "' not found");
 			return;
 		}
 
 		program.OpenTextViewer(help, "Help", HELP);
 	}
 
-	// RS: 8
-	program.RenderStatus("Help page loaded");
+	program.RenderStatus("SUCCESS: Help page loaded");
 }
 
 void Command::Settings(const std::vector<std::string> args)
@@ -586,14 +573,12 @@ void Command::Settings(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
-		// RS: 4
-		program.RenderStatus("Command 'settings' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'settings' does not take any arguments.");
 		return;
 	}
 
 	program.LoadSettings();
-	// RS: 8
-	program.RenderStatus("Settings page loaded");
+	program.RenderStatus("SUCCESS: Settings page loaded");
 }
 
 void Command::Open(const std::vector<std::string> args)
@@ -634,8 +619,7 @@ void Command::Open(const std::vector<std::string> args)
 		return;
 	}
 
-	// RS: 2
-	program.RenderStatus("Argument(s) invalid");
+	program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help open' command for more details.");
 }
 
 void Command::Save(const std::vector<std::string> args)
@@ -664,8 +648,7 @@ void Command::Save(const std::vector<std::string> args)
 		file << editor->GetText();
 
 		if (SavedSuccessfully(editor->fileDirectory))
-			// RS: 8
-			program.RenderStatus(editor->fileName + " saved successfully");
+			program.RenderStatus("SUCCESS: " + editor->fileName + " saved successfully");
 		else
 			// RS: 11
 			program.RenderStatus("Error occurred while saving " + editor->fileName);
@@ -685,8 +668,7 @@ void Command::Save(const std::vector<std::string> args)
 		return;
 	}
 
-	// RS: 2
-	program.RenderStatus("Argument(s) invalid");
+	program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help save' command for more details.");
 }
 
 void Command::Rename(const std::vector<std::string> args)
@@ -702,8 +684,7 @@ void Command::Rename(const std::vector<std::string> args)
 
 	if (args.size() == 0)
 	{
-		// RS: 7
-		program.RenderStatus("Command 'rename' needs at least one argument");
+		program.RenderStatus("ARGUMENT ERROR: Command 'rename' needs 1 or more argument(s)");
 		return;
 	}
 
@@ -719,8 +700,7 @@ void Command::Rename(const std::vector<std::string> args)
 		editor->fileDirectory = fileDir.string();
 		editor->fileName = fileDir.filename().string();
 
-		// RS: 8
-		program.RenderStatus("File renamed to: " + argStr.str());
+		program.RenderStatus("SUCCESS: File renamed to: " + argStr.str());
 	}
 	catch (const std::filesystem::filesystem_error& error)
 	{
@@ -738,15 +718,13 @@ void Command::Copy(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
-		// RS: 4
-		program.RenderStatus("Command 'copy' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'copy' does not take any arguments.");
 		return;
 	}
 
 	glfwSetClipboardString(program.window, program.area->rows[program.textY].c_str());
 
-	// RS: 8
-	program.RenderStatus("Copied line " + std::to_string(program.textY + 1));
+	program.RenderStatus("SUCCESS: Copied line " + std::to_string(program.textY + 1));
 }
 
 void Command::Paste(const std::vector<std::string> args)
@@ -758,8 +736,7 @@ void Command::Paste(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
-		// RS: 4
-		program.RenderStatus("Command 'paste' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'paste' does not take any arguments.");
 		return;
 	}
 
@@ -767,8 +744,7 @@ void Command::Paste(const std::vector<std::string> args)
 	Refresh(std::vector<std::string>());
 	program.area->AddLeftMargin();
 
-	// RS: 8
-	program.RenderStatus("Pasted to line " + std::to_string(program.textY + 1));
+	program.RenderStatus("SUCCESS: Pasted to line " + std::to_string(program.textY + 1));
 }
 
 void Command::Cut(const std::vector<std::string> args)
@@ -780,8 +756,7 @@ void Command::Cut(const std::vector<std::string> args)
 	
 	if (args.size() > 0)
 	{
-		// RS: 4
-		program.RenderStatus("Command 'cut' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'cut' does not take any arguments.");
 		return;
 	}
 
@@ -794,8 +769,7 @@ void Command::Cut(const std::vector<std::string> args)
 	if (program.textX > program.area->rows[program.textY].size())
 		program.area->MoveEnd();
 
-	// RS: 8
-	program.RenderStatus("Cut line " + std::to_string(program.textY + 1));
+	program.RenderStatus("SUCCESS: Cut line " + std::to_string(program.textY + 1));
 }
 
 void Command::Undo(const std::vector<std::string> args)
@@ -807,8 +781,7 @@ void Command::Undo(const std::vector<std::string> args)
 
 	if (args.size() > 0) 
 	{
-		// RS: 4
-		program.RenderStatus("Command 'undo' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'undo' does not take any arguments.");
 		return;
 	}
 
@@ -838,8 +811,7 @@ void Command::Redo(const std::vector<std::string> args)
 
 	if (args.size() > 0) 
 	{
-		// RS: 4
-		program.RenderStatus("Command 'redo' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'redo' does not take any arguments.");
 		return;
 	}
 	
@@ -875,8 +847,7 @@ void Command::Scroll(const std::vector<std::string> args)
 
 	if (args.size() < 1 || args.size() > 1) 
 	{
-		// RS: 7
-		program.RenderStatus("Command 'scroll' takes only 1 argument");
+		program.RenderStatus("ARGUMENT ERROR: Command 'scroll' needs 1 argument(s)");
 		return;
 	}
 
@@ -885,8 +856,7 @@ void Command::Scroll(const std::vector<std::string> args)
 		if (program.rowIndex > 0)
 			program.rowIndex--;
 
-		// RS: 8
-		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
+		program.RenderStatus("SUCCESS: Scroll set to " + std::to_string((int)program.rowIndex + 1));
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 		return;
 	}
@@ -895,8 +865,7 @@ void Command::Scroll(const std::vector<std::string> args)
 		if (program.rowIndex + 1 < program.area->rows.size())
 			program.rowIndex++;
 
-		// RS: 8
-		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
+		program.RenderStatus("SUCCESS: Scroll set to " + std::to_string((int)program.rowIndex + 1));
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 		return;
 	}
@@ -909,8 +878,7 @@ void Command::Scroll(const std::vector<std::string> args)
 		if (size > program.area->rows.size() - 1) size = program.area->rows.size();
 
 		program.rowIndex = size - 1;
-		// RS: 8
-		program.RenderStatus("Scroll set to " + std::to_string((int)program.rowIndex + 1));
+		program.RenderStatus("SUCCESS: Scroll set to " + std::to_string((int)program.rowIndex + 1));
 		UpdateUniform1i(program.openGL.u_rowIndex.location, (int)program.rowIndex);
 	}
 	catch (std::exception)
@@ -943,8 +911,7 @@ void Command::Refresh(const std::vector<std::string> args)
 
 		program.OpenNoteViewer(noteViewer->folderPath);
 
-		// RS: 8
-		program.RenderStatus("Refresh completed");
+		program.RenderStatus("SUCCESS: Refresh completed");
 		return;
 	}
 
@@ -978,8 +945,7 @@ void Command::Refresh(const std::vector<std::string> args)
 	else if (program.textX >= program.area->rows[program.textY].size())
 		program.area->MoveEnd();
 
-	// RS: 8
-	program.RenderStatus("Refresh completed");
+	program.RenderStatus("SUCCESS: Refresh completed");
 }
 
 void Command::Note(const std::vector<std::string> args)
@@ -1022,8 +988,7 @@ void Command::Note(const std::vector<std::string> args)
 	{
 		if (args.size() <= 1)
 		{
-			// RS: 2
-			program.RenderStatus("Command arguments invalid");
+			program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help note' command for more details.");
 			return;
 		}
 
@@ -1035,8 +1000,7 @@ void Command::Note(const std::vector<std::string> args)
 	{
 		if (args.size() <= 1)
 		{
-			// RS: 2
-			program.RenderStatus("Command arguments invalid");
+			program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help note' command for more details.");
 			return;
 		}
 
@@ -1075,8 +1039,7 @@ void Command::Note(const std::vector<std::string> args)
 	{
 		if (args.size() <= 1)
 		{
-			// RS: 2
-			program.RenderStatus("Command arguments invalid");
+			program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help note' command for more details.");
 			return;
 		}
 
@@ -1103,12 +1066,10 @@ void Command::Note(const std::vector<std::string> args)
 			file.close(); 
 			Refresh(std::vector<std::string>());
 
-			// RS: 8
-			program.RenderStatus("Created note successfully");
+			program.RenderStatus("SUCCESS: Created note successfully");
 		}
 		else 
-			// RS: 8
-			program.RenderStatus("Unable to create note");
+			program.RenderStatus("SUCCESS: Unable to create note");
 		
 		return;
 	}
@@ -1118,15 +1079,13 @@ void Command::Note(const std::vector<std::string> args)
 
 		if (args.size() <= 1)
 		{
-			// RS: 2
-			program.RenderStatus("Command arguments invalid");
+			program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help note' command for more details.");
 			return;
 		}
 
 		if (noteViewer == NULL)
 		{
-			// RS: 5
-			program.RenderStatus("Command not available");
+			program.RenderStatus("ERROR: Unable to complete command on this page");
 			return;
 		}
 
@@ -1157,14 +1116,12 @@ void Command::Note(const std::vector<std::string> args)
 					throw std::exception();
 
 				Refresh(std::vector<std::string>());
-				// RS: 8
-				program.RenderStatus(argsStr.str() + " deleted Successfully");
+				program.RenderStatus("SUCCESS: " + argsStr.str() + " deleted Successfully");
 				return;
 			}
 			catch (const std::exception& ex) 
 			{
-				// RS: 9
-				program.RenderStatus("Error deleting " + argsStr.str());
+				program.RenderStatus("ERROR: An error occurred deleting " + argsStr.str());
 				return;
 			}
 		}
@@ -1173,9 +1130,8 @@ void Command::Note(const std::vector<std::string> args)
 		program.RenderStatus(argsStr.str() + " not found");
 		return;
 	}
-
-	// RS: 2
-	program.RenderStatus("Invalid argument(s) for command 'note'");
+	
+	program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help note' command for more details.");
 }
 
 void Command::Quit(const std::vector<std::string> args)
@@ -1187,8 +1143,7 @@ void Command::Quit(const std::vector<std::string> args)
 
 	if (args.size() > 0)
 	{
-		// RS: 4 
-		program.RenderStatus("Command 'quit' does not take any arguments");
+		program.RenderStatus("ARGUEMNT ERROR: Command 'quit' does not take any arguments.");
 		return;
 	}
 

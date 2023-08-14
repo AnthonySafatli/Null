@@ -20,8 +20,7 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 	if (args.size() > 4 || args.size() < 1)
 	{
 		colour.error = true;
-		// RS: 7
-		program.RenderStatus("Command '" + commandName + "' can only take 1-4 arguments");
+		program.RenderStatus("ARGUMENT ERROR: Command '" + commandName + "' needs 1-4 argument(s)");
 		return colour;
 	}
 
@@ -44,8 +43,7 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 				if (!isFloat(args[1]))
 				{
 					colour.error = true;
-					// RS: 2
-					program.RenderStatus("Error invalid argument after colour value");
+					program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help " + commandName + "' command for more details.");
 					return colour;
 				}
 
@@ -57,8 +55,7 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		}
 
 		colour.error = true;
-		// RS: 3
-		program.RenderStatus("Colour " + args[0] + " not found");
+		program.RenderStatus("ARGUMENT ERROR: Colour " + args[0] + " not found.");
 		return colour;
 	}
 
@@ -108,15 +105,13 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 
 		if (colour.error)
 		{
-			// RS: 2
-			program.RenderStatus("Error Invalid Argument(s)"); // invalid amount of numbers
+			program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help " + commandName + "' command for more details."); // invalid amount of numbers
 			return colour;
 		}
 	}
 	catch (const std::exception& e)
 	{
-		// RS: 2
-		program.RenderStatus("Error Invalid Argument(s)");     // not all args are numbers
+		program.RenderStatus("ARGUMENT ERROR: Invalid argument(s). Use 'help " + commandName + "' command for more details.");    // not all args are numbers
 		return colour;
 	}
 
@@ -339,8 +334,7 @@ void SaveFile(TextEditor** editor)
 		return;
 	}
 
-	// RS: 8
-	program.RenderStatus(fileName + " saved successfully");
+	program.RenderStatus("SUCCESS: " + fileName + " saved successfully");
 
 	(*(*editor)).fileName = fileName;
 	(*(*editor)).fileDirectory = ss.str();
@@ -381,8 +375,7 @@ void SaveNote(TextEditor** editor)
 		return;
 	}
 
-	// RS: 8
-	program.RenderStatus(fileName + " saved successfully");
+	program.RenderStatus("SUCCESS: " + fileName + " saved successfully");
 
 	(*(*editor)).fileName = fileName;
 	(*(*editor)).fileDirectory = ss.str();
@@ -419,9 +412,8 @@ bool isFloat(const std::string number)
 void PrintColour(const std::string commandName, const Colour colour)
 {
 	std::stringstream ss;
-	ss << commandName << " has been changed to " << FloatToString(colour.r) << " " << FloatToString(colour.g) << " " << FloatToString(colour.b) << " " << FloatToString(colour.a);
+	ss << "SUCCESS: " << commandName << " has been changed to " << FloatToString(colour.r) << " " << FloatToString(colour.g) << " " << FloatToString(colour.b) << " " << FloatToString(colour.a);
 
-	// RS: 8
 	program.RenderStatus(ss.str());
 }
 
