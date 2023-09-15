@@ -313,8 +313,7 @@ void SaveFile(TextEditor** editor)
 	if (result != NFD_OKAY)
 	{
 		if (result != NFD_CANCEL)
-			// RS: 1 (but save file dialog)
-			program.RenderStatus("An error occurred opening the file dialog");
+			program.RenderStatus("ERROR: An error occurred while opening the save menu");
 
 		return;
 	}
@@ -328,8 +327,7 @@ void SaveFile(TextEditor** editor)
 
 	if (!SavedSuccessfully(path))
 	{
-		// RS: 11
-		program.RenderStatus("Error occurred while saving " + fileName);
+		program.RenderStatus("ERROR: An error occurred saving " + fileName);
 		NFD_FreePath(path);
 		return;
 	}
@@ -354,8 +352,7 @@ void SaveNote(TextEditor** editor)
 	if (result != NFD_OKAY)
 	{
 		if (result != NFD_CANCEL)
-			// RS: 1
-			program.RenderStatus("An error occurred opening the file dialog");
+			program.RenderStatus("ERROR: An error occurred while opening the file explorer");
 
 		return;
 	}
@@ -369,8 +366,7 @@ void SaveNote(TextEditor** editor)
 
 	if (!SavedSuccessfully(path))
 	{
-		// RS: 11
-		program.RenderStatus("Error occurred while saving " + fileName);
+		program.RenderStatus("ERROR: An error occurred saving " + fileName);
 		NFD_FreePath(path);
 		return;
 	}

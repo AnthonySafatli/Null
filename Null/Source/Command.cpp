@@ -151,8 +151,7 @@ void Command::TextSize(const std::vector<std::string> args)
 	}
 	catch (const std::exception& e)
 	{
-		// RS: 15
-		program.RenderStatus("Invalid Argument: must be a number");
+		program.RenderStatus("ARGUMENT ERROR: Argument must be a number)");
 	}
 }
 
@@ -208,7 +207,6 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	}
 	catch (const std::exception& e)
 	{
-		// RS: 15
 		program.RenderStatus("Invalid Argument: must be a unsigned integer");
 	}
 }
@@ -599,8 +597,7 @@ void Command::Open(const std::vector<std::string> args)
 		if (result != NFD_OKAY)
 		{
 			if (result != NFD_CANCEL)
-				// RS: 1
-				program.RenderStatus("An error occurred opening the file dialog");
+				program.RenderStatus("ERROR: An error occurred while opening the file explorer");
 
 			return;
 		}
@@ -650,8 +647,7 @@ void Command::Save(const std::vector<std::string> args)
 		if (SavedSuccessfully(editor->fileDirectory))
 			program.RenderStatus("SUCCESS: " + editor->fileName + " saved successfully");
 		else
-			// RS: 11
-			program.RenderStatus("Error occurred while saving " + editor->fileName);
+			program.RenderStatus("ERROR: An error occurred saving " + editor->fileName);
 
 		return;
 	}
@@ -704,8 +700,7 @@ void Command::Rename(const std::vector<std::string> args)
 	}
 	catch (const std::filesystem::filesystem_error& error)
 	{
-		// RS: 12
-		program.RenderStatus("Error renaming file: " + editor->fileName);
+		program.RenderStatus("ERROR: An error occurred renaming " + editor->fileName);
 	}
 }
 
@@ -872,7 +867,7 @@ void Command::Scroll(const std::vector<std::string> args)
 	
 	try 
 	{
-		int size = std::stof(args[0]);
+		unsigned int size = std::stof(args[0]);
 
 		if (size < 0) size = 0;
 		if (size > program.area->rows.size() - 1) size = program.area->rows.size();
@@ -883,8 +878,7 @@ void Command::Scroll(const std::vector<std::string> args)
 	}
 	catch (std::exception)
 	{
-		// RS: 15
-		program.RenderStatus("Invalid argument for command 'scroll'");
+		program.RenderStatus("ARGUMENT ERROR: Argument must be an unsigned integer");
 	}
 
 	return;
@@ -904,8 +898,7 @@ void Command::Refresh(const std::vector<std::string> args)
 		if (documentPath.empty())
 		{
 			// No document folder found, note command unavailable
-			// RS: 16
-			program.RenderStatus("Notebook is unavailable at the moment");
+			program.RenderStatus("ERROR: An error occurred loading the notebook");
 			return;
 		}
 
@@ -971,8 +964,7 @@ void Command::Note(const std::vector<std::string> args)
 	if (documentsPath.empty())
 	{
 		// No document folder found, note command unavailable
-		// RS: 16
-		program.RenderStatus("Notebook is unavailable at the moment");
+		program.RenderStatus("ERROR: An error occurred loading the notebook");
 		return;
 	}
 
@@ -1025,8 +1017,7 @@ void Command::Note(const std::vector<std::string> args)
 			}
 			catch (std::exception)
 			{
-				// RS: 17
-				program.RenderStatus("Unable to create folder");
+				program.RenderStatus("ERROR: An error occurred creating the folder");
 				return;
 			}
 		}
@@ -1126,8 +1117,7 @@ void Command::Note(const std::vector<std::string> args)
 			}
 		}
 
-		// RS: 18
-		program.RenderStatus(argsStr.str() + " not found");
+		program.RenderStatus("ARGUMENT ERROR: " + argsStr.str() + " not found");
 		return;
 	}
 	

@@ -296,8 +296,7 @@ void NoteViewer::OpenItem()
 		if (!std::filesystem::is_directory(itemPaths[i].path))
 		{
 			Command::Execute("refresh");
-			// RS: 14
-			program.RenderStatus("File not found Error");
+			program.RenderStatus("ERROR: File not found");
 			return;
 		}
 
@@ -323,8 +322,7 @@ void NoteViewer::OpenItem()
 		if (!std::filesystem::is_regular_file(itemPaths[i].path))
 		{
 			Command::Execute("refresh");
-			// RS: 14
-			program.RenderStatus("File not found Error");
+			program.RenderStatus("ERROR: File not found");
 			return;
 		}
 
