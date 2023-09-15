@@ -11,12 +11,6 @@
 
 void Draw();
 
-// TODO: Read over help texts, make sure [this in brackets] are clearly explained
-
-// TODO: Make sure speed and size (and other commands) have proper bounds (>= 1 and float checking)
-
-// TODO: Make status bar messages dissapear after a while
-
 Program program = Program(1800, 1100, 24, 4);
 
 int main(void)
@@ -110,7 +104,7 @@ int main(void)
     return 0;
 }
 
-// TODO: Add max amount of vertices so computer dont explode
+// END: Add max amount of vertices so computer don't explode
 void Draw()
 {
     std::vector<Vertex> vertices = program.GetVertices();

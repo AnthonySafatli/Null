@@ -117,6 +117,9 @@ public:
 	const int idealHeight;
 	bool shouldClose;
 
+	/* Misc */
+	double statusBarTimer;
+
 private:
 	void AddCommandSymbol();
 };

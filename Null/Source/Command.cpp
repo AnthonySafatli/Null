@@ -144,6 +144,9 @@ void Command::TextSize(const std::vector<std::string> args)
 	try
 	{
 		float size = std::stof(sizeStr);
+		if (size == 0)
+			size = 1;
+
 		program.textSize = std::abs(size);
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 		UpdateMaxHeightWidth();
@@ -151,7 +154,7 @@ void Command::TextSize(const std::vector<std::string> args)
 	}
 	catch (const std::exception& e)
 	{
-		program.RenderStatus("ARGUMENT ERROR: Argument must be a number)");
+		program.RenderStatus("ARGUMENT ERROR: Argument must be a number");
 	}
 }
 
@@ -201,13 +204,13 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 
 	try
 	{
-		float speed = std::stof(speedStr);
-		program.cursorSpeed = std::abs(speed);
+		unsigned int speed = std::stof(speedStr);
+		program.cursorSpeed = speed;
 		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(program.cursorSpeed));
 	}
 	catch (const std::exception& e)
 	{
-		program.RenderStatus("Invalid Argument: must be a unsigned integer");
+		program.RenderStatus("Invalid Argument: Argument must be a unsigned integer");
 	}
 }
 
@@ -327,7 +330,7 @@ Enter 'help [command name]' to see more details for each command
 Prints a line of text to the status bar
 
 echo [text]
--> Prints text to status bar)"""";
+-> Prints [text] to status bar)"""";
 		}
 		else if (args[0] == "size")
 		{
@@ -341,7 +344,7 @@ size -
 -> decreases the text size by one
 
 size [n]
--> sets the text size to n
+-> sets the text size to [n]
 
 size default
 -> sets the text size to the default value)"""";
@@ -352,22 +355,26 @@ size default
 Changes the background colour
 
 background [n]
--> sets red, green, blue channels of background to n and alpha channel to 1
+-> sets red, green, blue channels of background to [n] and alpha channel to 1
 
 background [r] [g] [b]
--> sets the red, green, blue channels of the background to r g b and alpha channel to 1
+-> sets the red, green, blue channels of the background to [r] [g] [b] and alpha channel to 1
 
 background [r] [g] [b] [a]
--> sets the red, green, blue, alpha channels of the background to r g b a
+-> sets the red, green, blue, alpha channels of the background to [r] [g] [b] [a]
 
 background default
 -> sets the background to the default value
 
 background [colour]
--> sets the background to the css colour, the alpha channel remains unchanged
+-> sets the background to the [colour], the alpha channel remains unchanged
 
 background [colour] [a]
--> sets the background to the css colour and the alpha channel to a)"""";
+-> sets the background to the [colour] and the alpha channel to [a]
+
+
+
+** colours have to be css colours)"""";
 		}
 		else if (args[0] == "foreground")
 		{
@@ -375,22 +382,22 @@ background [colour] [a]
 Changes the foreground colour
 
 foreground [n]
--> sets red, green, blue channels of foreground to n and alpha channel to 1
+-> sets red, green, blue channels of foreground to [n] and alpha channel to 1
 
 foreground [r] [g] [b]
--> sets the red, green, blue channels of the foreground to r g b and alpha channel to 1
+-> sets the red, green, blue channels of the foreground to [r] [g] [b] and alpha channel to 1
 
 foreground [r] [g] [b] [a]
--> sets the red, green, blue, alpha channels of the foreground to r g b a
+-> sets the red, green, blue, alpha channels of the foreground to [r] [g] [b] [a]
 
 foreground default
 -> sets the foreground to the default value
 
 foreground [colour]
--> sets the foreground to the css colour, the alpha channel remains unchanged
+-> sets the foreground to the [colour], the alpha channel remains unchanged
 
 foreground [colour] [a]
--> sets the foreground to the css colour and the alpha channel to a)"""";
+-> sets the foreground to the [colour] and the alpha channel to [a])"""";
 		}
 		else if (args[0] == "speed")
 		{
@@ -404,7 +411,7 @@ speed -
 -> decreases the cursor speed by one
 
 speed [n]
--> sets the cursor speed to n
+-> sets the cursor speed to [n]
 
 speed default
 -> sets the cursor speed to the default value)"""";
@@ -426,7 +433,7 @@ help
 -> opens help page
 
 help [command]
--> opens help page for command)"""";
+-> opens help page for [command])"""";
 		}
 		else if (args[0] == "open")
 		{
@@ -456,7 +463,7 @@ save as
 Renames a file
 
 rename [name]
--> renames the file to name)"""";
+-> renames the file to [name])"""";
 		}
 		else if (args[0] == "copy")
 		{
@@ -511,7 +518,7 @@ scroll -
 -> scrolls down a line
 
 scroll [n]
--> scrolls to line n)"""";
+-> scrolls to line [n])"""";
 		}
 		else if (args[0] == "refresh")
 		{
@@ -530,17 +537,17 @@ note
 -> opens notebook to view notes and folders
 
 note open [folder]
--> opens notebook to view notes and folders at folder (multiple folders to view nested folders)
+-> opens notebook to view notes and folders at [folder] (multiple folders to view nested folders)
 
 note folder [name]
--> creates folder with name in the current open folder (multiple folders to view nested folders)
+-> creates folder with [name] in the current open folder (multiple folders to view nested folders)
 * folder names cannot contain spaces
 
 note new [name]
--> creates a new note in current folder with name
+-> creates a new note in current folder with [name]
 
 note del [name]
--> deletes folder or note with name)"""";
+-> deletes folder or note with [name])"""";
 		}
 		else if (args[0] == "quit")
 		{

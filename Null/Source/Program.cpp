@@ -26,7 +26,7 @@ Program::Program(const int width, const int height, const float textSize, const 
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT), 
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(50),
 	  rowIndex(0), columnIndex(0), textX(0), textY(0), commandX(0), commandSelected(false), shouldClose(false),
-	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1), window(0)
+	  background(0.03, 0.05, 0.09, 0.85), foreground(1, 1, 1), window(0), statusBarTimer(0)
 {
 	// Add > to Command Line
 	AddCommandSymbol();
@@ -180,6 +180,15 @@ void Program::OnScroll(double xOffset, double yOffset)
 
 void Program::Update(const double deltaTime)
 {
+	/* Status Bar Timer */
+	if (statusBarTimer > 0)
+	{
+		statusBarTimer -= deltaTime;
+
+		if (statusBarTimer <= 0)
+			RenderStatus("");
+	}
+
 	/* Cursor Animations */
 	float targetRow = commandSelected ? (float)(((int)rowIndex) - 1) : textY + 1;
 	float targetColumn = commandSelected ? (float)(commandX + 4 - area->leftMargin + ((int)columnIndex)) : textX + 1;
@@ -224,6 +233,7 @@ void Program::Update(const double deltaTime)
 			cursorVertices[i].column += deltaColumn;
 	}
 
+	/* Indices */
 	UpdateIndices();
 }
 
@@ -231,6 +241,9 @@ void Program::Update(const double deltaTime)
 
 void Program::RenderStatus(const std::string message)
 {
+	if (Trim(message) != "")
+		statusBarTimer = 5.0;
+
 	statusText = message;
 
 	for (int i = 0; i < statusVertices.size(); i++)

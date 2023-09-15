@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
 
 #include "NFD/nfd.h"
 
@@ -65,8 +66,7 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		if (args.size() == 1)      // x
 		{
 			float x = std::stof(args[0]);
-			if (x > 1)
-				x = 1;
+			x = std::max(0.0f, std::min(1.0f, x));
 
 			colour.error = false;
 			colour.r = x;
@@ -77,14 +77,11 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		else if (args.size() >= 3) // r g b
 		{
 			float r = std::stof(args[0]);
-			if (r > 1)
-				r = 1;
+			r = std::max(0.0f, std::min(1.0f, r));
 			float g = std::stof(args[1]);
-			if (g > 1)
-				g = 1;
+			g = std::max(0.0f, std::min(1.0f, g));
 			float b = std::stof(args[2]);
-			if (b > 1)
-				g = 1;
+			b = std::max(0.0f, std::min(1.0f, b));
 			
 
 			colour.error = false;
@@ -97,8 +94,8 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		if (args.size() == 4)      // r g b a
 		{
 			float a = std::stof(args[3]);
-			if (a > 1)
-				a = 1;
+			a = std::max(0.0f, std::min(1.0f, a));
+
 
 			colour.a = a;
 		}
