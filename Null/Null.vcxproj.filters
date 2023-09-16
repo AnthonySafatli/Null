@@ -62,11 +62,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\fragment.glsl" />
-    <None Include="Resources\Shaders\vertex.glsl" />
+    <None Include="res\fragment.glsl" />
+    <None Include="res\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Textures\font texture.png">
+    <Image Include="res\font texture.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -113,5 +113,13 @@
     <ClInclude Include="Source\Headers\UndoObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Null.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

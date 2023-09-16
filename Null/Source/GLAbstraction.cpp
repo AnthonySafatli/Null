@@ -9,6 +9,12 @@
 #include "Headers/GLAbstraction.h"
 #include "Headers/Character.h"
 #include "Headers/Program.h"
+#include "Headers/Misc.h"
+
+#ifdef _WIN32
+#include <Windows.h>
+#include "resource.h"
+#endif
 
 extern Program program;
 
@@ -209,6 +215,15 @@ Shaders::Shaders(const char* vertexPath, const char* fragmentPath)
 
 void Shaders::CompileVertex(const char* vertexPath)
 {
+#ifdef _WIN32
+	HRSRC hRes = FindResource(GCM(), MAKEINTRESOURCE(VERTEX_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL hData = LoadResource(GCM(), hRes);
+	DWORD hSize = SizeofResource(GCM(), hRes);
+	char* hFinal = (char*)LockResource(hData);
+
+	std::string sourceString;
+	sourceString.assign(hFinal, hSize);
+#else
 	std::string line;
 
 	std::ifstream vertexStream(vertexPath);
@@ -217,6 +232,7 @@ void Shaders::CompileVertex(const char* vertexPath)
 		vertexStringStream << line << '\n';
 
 	std::string sourceString = vertexStringStream.str();
+#endif
 
 	vertexHandle = glCreateShader(GL_VERTEX_SHADER);
 	const char* source = sourceString.c_str();
@@ -244,6 +260,15 @@ void Shaders::CompileVertex(const char* vertexPath)
 
 void Shaders::CompileFragment(const char* fragmentPath)
 {
+#ifdef _WIN32
+	HRSRC hRes = FindResource(GCM(), MAKEINTRESOURCE(FRAGMENT_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL hData = LoadResource(GCM(), hRes);
+	DWORD hSize = SizeofResource(GCM(), hRes);
+	char* hFinal = (char*)LockResource(hData);
+
+	std::string sourceString;
+	sourceString.assign(hFinal, hSize);
+#else
 	std::string line;
 
 	std::ifstream fragmentStream(fragmentPath);
@@ -252,6 +277,7 @@ void Shaders::CompileFragment(const char* fragmentPath)
 		fragmentStringStream << line << '\n';
 
 	std::string sourceString = fragmentStringStream.str();
+#endif
 
 	fragmentHandle = glCreateShader(GL_FRAGMENT_SHADER);
 	const char* source = sourceString.c_str();
@@ -270,8 +296,10 @@ void Shaders::CompileFragment(const char* fragmentPath)
 
 		glGetShaderInfoLog(fragmentHandle, length, &length, message);
 
+#if _DEBUG
 		std::cout << "Failed to compile fragment shader:" << std::endl;
 		std::cout << message << std::endl;
+#endif
 
 		glDeleteShader(fragmentHandle);
 	}

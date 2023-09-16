@@ -66,7 +66,10 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		if (args.size() == 1)      // x
 		{
 			float x = std::stof(args[0]);
-			x = std::max(0.0f, std::min(1.0f, x));
+			if (x > 1.0)
+				x = 1.0;
+			else if (x < 0.0)
+				x = 0.0;
 
 			colour.error = false;
 			colour.r = x;
@@ -77,11 +80,22 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		else if (args.size() >= 3) // r g b
 		{
 			float r = std::stof(args[0]);
-			r = std::max(0.0f, std::min(1.0f, r));
+			if (r > 1.0)
+				r = 1.0;
+			else if (r < 0.0)
+				r = 0.0;
+
 			float g = std::stof(args[1]);
-			g = std::max(0.0f, std::min(1.0f, g));
+			if (g > 1.0)
+				g = 1.0;
+			else if (g < 0.0)
+				g = 0.0;
+
 			float b = std::stof(args[2]);
-			b = std::max(0.0f, std::min(1.0f, b));
+			if (b > 1.0)
+				b = 1.0;
+			else if (b < 0.0)
+				b = 0.0;
 			
 
 			colour.error = false;
@@ -94,7 +108,10 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 		if (args.size() == 4)      // r g b a
 		{
 			float a = std::stof(args[3]);
-			a = std::max(0.0f, std::min(1.0f, a));
+			if (a > 1.0)
+				a = 1.0;
+			else if (a < 0.0)
+				a = 0.0;
 
 
 			colour.a = a;
@@ -446,3 +463,19 @@ std::string FloatToString(float value)
 
 	return result;
 }
+
+#ifdef _WIN32
+#include <Windows.h>
+
+HMODULE GCM()
+{
+	HMODULE hModue = NULL;
+	GetModuleHandleEx(
+		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+		(LPCTSTR)GCM,
+		&hModue
+	);
+
+	return hModue;
+}
+#endif

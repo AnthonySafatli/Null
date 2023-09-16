@@ -20,3 +20,9 @@ bool isFloat(const std::string number);
 void PrintColour(const std::string commandName, const Colour colour);
 std::string Trim(const std::string& str, const std::string& whitespace = " \t");
 std::string FloatToString(float f);
+
+#ifdef _WIN32
+#include <Windows.h>
+
+HMODULE GCM();
+#endif

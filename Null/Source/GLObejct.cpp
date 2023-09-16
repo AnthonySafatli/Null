@@ -15,11 +15,11 @@ void GLObject::Init()
 
 	// END: Fix paths / resource management before deployment
 	shaderProgram.Init(
-		"Resources\\Shaders\\vertex.glsl",
-		"Resources\\Shaders\\fragment.glsl"
+		"res\\vertex.glsl",
+		"res\\fragment.glsl"
 	);
 
-	texture.Init("Resources\\Textures\\font texture.png");
+	texture.Init("res\\font texture.png");
 
 	u_idealRatio.Init(shaderProgram.handle, "idealRatio");
 	u_size.Init(shaderProgram.handle, "size");

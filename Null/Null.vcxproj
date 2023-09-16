@@ -176,14 +176,14 @@
     <ClCompile Include="Source\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\fragment.glsl">
+    <None Include="res\fragment.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
       <FileType>Document</FileType>
     </None>
-    <None Include="Resources\Shaders\vertex.glsl">
+    <None Include="res\vertex.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
@@ -192,7 +192,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Textures\font texture.png">
+    <Image Include="res\font texture.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
@@ -200,6 +200,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\resource.h" />
     <ClInclude Include="Source\Headers\CallBack.h" />
     <ClInclude Include="Source\Headers\Character.h" />
     <ClInclude Include="Source\Headers\Command.h" />
@@ -214,6 +215,9 @@
     <ClInclude Include="Source\Headers\TextViewer.h" />
     <ClInclude Include="Source\Headers\UndoObject.h" />
     <ClInclude Include="Source\Headers\Uniforms.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Null.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
