@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CallBack.cpp" />
+    <ClCompile Include="Source\Platform.cpp" />
     <ClCompile Include="Source\NoteViewer.cpp" />
     <ClCompile Include="Source\GLObejct.cpp" />
     <ClCompile Include="Source\Command.cpp" />
@@ -200,6 +201,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Headers\Platform.h" />
     <ClInclude Include="Source\resource.h" />
     <ClInclude Include="Source\Headers\CallBack.h" />
     <ClInclude Include="Source\Headers\Character.h" />

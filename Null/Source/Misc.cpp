@@ -464,18 +464,3 @@ std::string FloatToString(float value)
 	return result;
 }
 
-#ifdef _WIN32
-#include <Windows.h>
-
-HMODULE GCM()
-{
-	HMODULE hModue = NULL;
-	GetModuleHandleEx(
-		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-		(LPCTSTR)GCM,
-		&hModue
-	);
-
-	return hModue;
-}
-#endif

@@ -8,6 +8,7 @@
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
+#include "Headers/Platform.h"
 
 void Draw();
 
@@ -15,6 +16,8 @@ Program program = Program(1800, 1100, 24, 4);
 
 int main(void)
 {
+    Platform::HideConsole();
+
     /* Initialize NFD */
     NFD_Init();
     
