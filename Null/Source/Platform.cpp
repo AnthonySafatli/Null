@@ -4,6 +4,8 @@
 #include <fstream>
 #include <string>
 #include <Windows.h>
+#include <filesystem>
+#include <shlobj.h>
 
 #include "resource.h"
 
@@ -23,6 +25,15 @@ std::string Platform::LoadShader(const char* shaderPath, int shaderType)
 #else
 	return LoadShaderUnix(shaderPath);
 #endif 
+}
+
+std::filesystem::path Platform::GetDocumentsFolder()
+{
+#ifdef _WIN32
+	return GetDocumentsFolderWindows();
+#else
+	return GetDocumentsFolderUnix();
+#endif
 }
 
 
@@ -53,14 +64,14 @@ std::string Platform::LoadShaderWindows(int shaderType)
 
 	return sourceString;
 #else
-	return NULL;
+	return std::string();
 #endif
 }
 
 std::string Platform::LoadShaderUnix(const char* shaderPath)
 {
 #ifdef _WIN32
-	return NULL;
+	return std::string();
 #else
 	std::string line;
 
@@ -74,6 +85,39 @@ std::string Platform::LoadShaderUnix(const char* shaderPath)
 	return sourceString;
 #endif
 }
+
+
+std::filesystem::path Platform::GetDocumentsFolderWindows()
+{
+#ifdef _WIN32
+	std::filesystem::path documentsPath;
+
+	TCHAR path[MAX_PATH];
+	if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, 0, path)))
+	{
+		documentsPath = path;
+		return documentsPath;
+	}
+	else
+		return std::filesystem::path();
+#else
+	return std::filesystem::path();
+#endif
+}
+
+std::filesystem::path Platform::GetDocumentsFolderUnix()
+{
+#ifdef _WIN32
+	return std::filesystem::path();
+#else
+	const char* homeDir = std::getenv("HOME");
+	if (homeDir == nullptr)
+		return std::filesystem::path();
+	else
+		return std::filesystem::path(homeDir) / "Documents";
+#endif
+}
+
 
 
 HMODULE Platform::GCM()

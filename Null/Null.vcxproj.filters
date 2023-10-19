@@ -72,6 +72,9 @@
     <Image Include="res\font texture.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\pixel cursor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Headers\GLAbstraction.h">

@@ -7,8 +7,6 @@
 #include <vector>
 #include <windows.h>
 #include <shlobj.h>
-#include <chrono>
-#include <ctime>
 
 #include "GLFW/glfw3.h"
 
@@ -16,6 +14,7 @@
 #include "Headers/Program.h"
 #include "Headers/Character.h"
 #include "Headers/Uniforms.h"
+#include "Headers/Platform.h"
 
 std::vector<std::string> Split(const std::string str, const char separator);
 
@@ -152,30 +151,7 @@ void NoteViewer::RemoveLeftMargin()
 
 std::filesystem::path NoteViewer::GetDocumentsFolder()
 {
-
-#ifdef _WIN32
-
-	std::filesystem::path documentsPath;
-
-	TCHAR path[MAX_PATH];
-	if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, 0, path)))
-	{
-		documentsPath = path;
-		return documentsPath;
-	}
-	else
-		return std::filesystem::path();
-
-#else
-	
-	const char* homeDir = std::getenv("HOME");
-	if (homeDir == nullptr)
-		return std::filesystem::path();
-	else
-		return std::filesystem::path(homeDir) / "Documents";
-
-#endif
-
+	return Platform::GetDocumentsFolder();
 }
 
 std::vector<NoteItem> NoteViewer::GetAllPaths(const std::string initPath)
