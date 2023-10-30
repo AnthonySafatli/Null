@@ -36,6 +36,18 @@ std::filesystem::path Platform::GetDocumentsFolder()
 #endif
 }
 
+// TODO: Implement
+std::string Platform::LoadSettingsFile()
+{
+	return std::string();
+}
+
+// TODO: Implement
+bool Platform::SaveSettingsFile()
+{
+	return false;
+}
+
 
 
 void Platform::HideConsoleWindows()
@@ -116,6 +128,28 @@ std::filesystem::path Platform::GetDocumentsFolderUnix()
 	else
 		return std::filesystem::path(homeDir) / "Documents";
 #endif
+}
+
+
+std::string Platform::LoadSettingsFileWindows()
+{
+	return std::string();
+}
+
+std::string Platform::LoadSettingsFileUnix()
+{
+	return std::string();
+}
+
+
+bool Platform::SaveSettingsFileWindows()
+{
+	return false;
+}
+
+bool Platform::SaveSettingsFileUnix()
+{
+	return false;
 }
 
 

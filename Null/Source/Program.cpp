@@ -21,6 +21,7 @@
 #include "Headers/Misc.h"
 #include "Headers/Shortcut.h"
 #include "Headers/UndoObject.h"
+#include "Headers/Platform.h"
 
 Program::Program(const int width, const int height, const float textSize, const int tabAmount)
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT), 
@@ -55,6 +56,20 @@ Program::Program(const int width, const int height, const float textSize, const 
 Program::~Program()
 {
 	delete area;
+}
+
+void Program::LoadSettingsFile()
+{
+	std::string settings = Platform::LoadSettingsFile();
+
+	// TODO: Get json settings text and parse to get/set settings
+}
+
+void Program::SaveSettingsFile()
+{
+	bool success = Platform::SaveSettingsFile();
+
+	// TODO: Save settings to json and to file
 }
 
 void Program::GLInit()

@@ -25,6 +25,10 @@ public:
 	/* Window */
 	GLFWwindow* window;
 
+	/* Settings File */
+	void LoadSettingsFile();
+	void SaveSettingsFile();
+
 	/* OpenGL */
 	GLObject openGL;
 	void GLInit();

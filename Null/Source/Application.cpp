@@ -71,6 +71,7 @@ int main(void)
     glClearColor(0.03, 0.05, 0.09, 0.85);
 
     program.GLInit();
+    program.LoadSettingsFile();
 
     glUniform2f(program.openGL.u_idealRatio.location, (float) program.idealWidth / (float) program.width, (float) program.idealHeight / (float) program.height);
     glUniform1f(program.openGL.u_size.location, 0.001 * program.textSize);

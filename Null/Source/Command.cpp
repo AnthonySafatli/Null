@@ -121,6 +121,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		UpdateUniform1f(program.openGL.u_size.location, program.textSize * 0.001);
 		UpdateMaxHeightWidth();
 		program.RenderStatus("SUCCESS: Text size set to 24");
+		program.SaveSettingsFile();
 		return;
 	}
 	else if (sizeStr == "+")
@@ -128,6 +129,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		UpdateUniform1f(program.openGL.u_size.location, ++program.textSize * 0.001);
 		program.RenderStatus("SUCCESS: Text size set to " + FloatToString(program.textSize));
 		UpdateMaxHeightWidth();
+		program.SaveSettingsFile();
 		return;
 	}
 	else if (sizeStr == "-")
@@ -138,6 +140,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		UpdateUniform1f(program.openGL.u_size.location, --program.textSize * 0.001);
 		UpdateMaxHeightWidth();
 		program.RenderStatus("SUCCESS: Text Size set to " + FloatToString(program.textSize));
+		program.SaveSettingsFile();
 		return;
 	}
 
@@ -151,6 +154,7 @@ void Command::TextSize(const std::vector<std::string> args)
 		UpdateUniform1f(program.openGL.u_size.location, size * 0.001);
 		UpdateMaxHeightWidth();
 		program.RenderStatus("SUCCESS: Text Size set to " + FloatToString(program.textSize));
+		program.SaveSettingsFile();
 	}
 	catch (const std::exception& e)
 	{
@@ -186,11 +190,13 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 	{
 		program.cursorSpeed = 50;
 		program.RenderStatus("SUCCESS: Cursor Speed set to 50");
+		program.SaveSettingsFile();
 		return;
 	}
 	else if (speedStr == "+")
 	{
 		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(++program.cursorSpeed));
+		program.SaveSettingsFile();
 		return;
 	}
 	else if (speedStr == "-")
@@ -199,6 +205,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 			return;
 
 		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(--program.cursorSpeed));
+		program.SaveSettingsFile();
 		return;
 	}
 
@@ -207,6 +214,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 		unsigned int speed = std::stof(speedStr);
 		program.cursorSpeed = speed;
 		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(program.cursorSpeed));
+		program.SaveSettingsFile();
 	}
 	catch (const std::exception& e)
 	{
@@ -243,6 +251,7 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	{
 		program.background = colour;
 		UpdateBackground(colour.r, colour.g, colour.b, colour.a);
+		program.SaveSettingsFile();
 	}
 }
 
@@ -275,6 +284,7 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	{
 		program.foreground = colour;
 		UpdateUniform4f(program.openGL.u_foreground.location, colour.r, colour.g, colour.b, colour.a);
+		program.SaveSettingsFile();
 	}
 }
 

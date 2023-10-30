@@ -10,6 +10,8 @@ public:
 	static void HideConsole();
 	static std::string LoadShader(const char* shaderPath, int shaderType);
 	static std::filesystem::path GetDocumentsFolder();
+	static std::string LoadSettingsFile();
+	static bool SaveSettingsFile();
 
 private:
 	Platform();
@@ -22,6 +24,12 @@ private:
 	
 	static std::filesystem::path GetDocumentsFolderWindows();
 	static std::filesystem::path GetDocumentsFolderUnix();
+
+	static std::string LoadSettingsFileWindows();
+	static std::string LoadSettingsFileUnix();
+
+	static bool SaveSettingsFileWindows();
+	static bool SaveSettingsFileUnix();
 
 	static HMODULE GCM();
 };
