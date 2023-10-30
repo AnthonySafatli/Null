@@ -3,16 +3,15 @@
 #include <NFD/nfd.h>
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
+#include <STB/stb_image.h>
 
 #include "Headers/GLAbstraction.h"
 #include "Headers/CallBack.h"
 #include "Headers/Uniforms.h"
 #include "Headers/Program.h"
 #include "Headers/Platform.h"
-#include <STB/stb_image.h>
 
 void Draw();
-GLFWcursor* CreatePixelCursor();
 
 Program program = Program(1800, 1100, 24, 4);
 
@@ -45,8 +44,15 @@ int main(void)
 
     glfwMakeContextCurrent(window);
 
-    GLFWcursor* pixelCursor = CreatePixelCursor();
-    glfwSetCursor(window, pixelCursor);
+    int width, height, numColourChannels;
+    unsigned char* iconBytes = stbi_load("res\\icon.png", &width, &height, &numColourChannels, 4);
+ 
+    GLFWimage icon;
+    icon.width = width;
+    icon.height = height;
+    icon.pixels = iconBytes;
+
+    glfwSetWindowIcon(window, 1, &icon);
 
     /* Setup Callbacks */
     glfwSetKeyCallback(window, CallBack::KeyCallBack);
@@ -108,7 +114,6 @@ int main(void)
     /* Terminate */
     NFD_Quit();
     glfwTerminate();
-    glfwDestroyCursor(pixelCursor);
 
     return 0;
 }
@@ -122,20 +127,6 @@ void Draw()
     program.openGL.indexBuffer.SetData(&program.indices[0], program.indices.size());
 
     glDrawElements(GL_TRIANGLES, program.indices.size(), GL_UNSIGNED_INT, nullptr);
-}
-
-GLFWcursor* CreatePixelCursor()
-{
-    int cursorWidth, cursorHeight, numColourChannels;
-    unsigned char* bytes = stbi_load("res/pixel cursor.png", &cursorWidth, &cursorHeight, &numColourChannels, 4);
-
-    // TODO: Test with other sizes
-    GLFWimage image;
-    image.width = 12;
-    image.height = 19;
-    image.pixels = bytes;
-
-    return glfwCreateCursor(&image, 0, 0);
 }
 
 void UpdateUniform2f(const unsigned int location, const float v1, const float v2)

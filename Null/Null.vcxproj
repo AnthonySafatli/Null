@@ -199,7 +199,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
     </Image>
-    <Image Include="res\pixel cursor.png" />
+    <Image Include="res\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Headers\Platform.h" />

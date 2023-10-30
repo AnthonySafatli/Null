@@ -28,7 +28,7 @@ TextEditor::TextEditor() : fileDirectory(""), fileName(""), isNote(false)
 	program.RenderStatus("SUCCESS: New editor loaded successfully");
 }
 
-TextEditor::TextEditor(const std::string text, const std::string directory, const std::string fileName, bool isNote) : fileName(fileName), fileDirectory(directory), isNote(isNote)
+TextEditor::TextEditor(std::string text, std::string directory, std::string fileName, bool isNote) : fileName(fileName), fileDirectory(directory), isNote(isNote)
 {
 	type = EDITOR;
 
