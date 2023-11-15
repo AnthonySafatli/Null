@@ -60,9 +60,9 @@ Program::~Program()
 
 void Program::LoadSettingsFile()
 {
-	std::string settings = Platform::LoadSettingsFile();
+	std::string settingsString = Platform::LoadSettingsFile();
 
-	// TODO: Get json settings text and parse to get/set settings
+	// TODO: Get settings file and parse to get/set settings
 }
 
 void Program::SaveSettingsFile()

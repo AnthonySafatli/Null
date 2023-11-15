@@ -8,6 +8,9 @@
 #include <shlobj.h>
 
 #include "resource.h"
+#include "Headers/Program.h"
+
+extern Program program;
 
 void Platform::HideConsole()
 {
@@ -36,16 +39,22 @@ std::filesystem::path Platform::GetDocumentsFolder()
 #endif
 }
 
-// TODO: Implement
 std::string Platform::LoadSettingsFile()
 {
-	return std::string();
+#ifdef _WIN32
+	return LoadSettingsFileWindows();
+#else
+	return LoadSettingsFileUnix();
+#endif
 }
 
-// TODO: Implement
 bool Platform::SaveSettingsFile()
 {
-	return false;
+#ifdef _WIN32
+	return SaveSettingsFileWindows();
+#else
+	return SaveSettingsFileUnix();
+#endif
 }
 
 
@@ -130,10 +139,35 @@ std::filesystem::path Platform::GetDocumentsFolderUnix()
 #endif
 }
 
+// TODO: Get settings file path
+#ifdef _WIN32
+std::string Platform::settingsFilePath = "C:/";
+#else
+std::string Platform::settingsFilePath = "";
+#endif
 
 std::string Platform::LoadSettingsFileWindows()
 {
-	return std::string();
+	std::filesystem::path settingsPath(settingsFilePath);
+	if (settingsPath.empty() || !std::filesystem::exists(settingsPath))
+		return std::string();
+
+	std::ifstream file(settingsPath);
+
+	if (!file.is_open() || !file.good() || file.bad())
+		return std::string();
+
+	std::string settings;
+	try {
+		file >> settings;
+	} 
+	catch (std::exception e) {
+		return std::string();
+	}
+
+	file.close();
+
+	return settings;
 }
 
 std::string Platform::LoadSettingsFileUnix()
@@ -144,7 +178,37 @@ std::string Platform::LoadSettingsFileUnix()
 
 bool Platform::SaveSettingsFileWindows()
 {
-	return false;
+	std::stringstream settings;
+	settings << program.textSize;
+	settings << "\n" << program.background.r << "\n" << program.background.g << "\n" << program.background.b << "\n" << program.background.a;
+	settings << "\n" << program.foreground.r << "\n" << program.foreground.g << "\n" << program.foreground.b << "\n" << program.foreground.a;
+	settings << "\n" << program.cursorSpeed;
+
+	std::filesystem::path settingsPath(settingsFilePath);
+	if (!std::filesystem::exists(settingsPath))
+	{
+		if (!std::filesystem::create_directories(settingsPath.parent_path()))
+			return false;
+	}
+
+	std::ofstream file(settingsPath);
+
+	if (!file.is_open() || !file.good() || file.bad()) 
+		return false;
+
+	try {
+		file << settings.str();
+	}
+	catch (std::exception e) {
+		return false;
+	}
+
+	file.close();
+
+	if (!file.good() || file.bad())
+		return false;
+
+	return true;
 }
 
 bool Platform::SaveSettingsFileUnix()

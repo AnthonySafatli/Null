@@ -16,6 +16,8 @@ public:
 private:
 	Platform();
 
+	static std::string settingsFilePath;
+
 	static void HideConsoleWindows();
 	static void HideConsoleUnix();
 
