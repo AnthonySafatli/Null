@@ -68,10 +68,10 @@ int main(void)
         return -3;
     }
 
-    glClearColor(0.03, 0.05, 0.09, 0.85);
-
     program.GLInit();
     program.LoadSettingsFile();
+
+    glClearColor(program.background.r, program.background.g, program.background.b, program.background.a);
 
     glUniform2f(program.openGL.u_idealRatio.location, (float) program.idealWidth / (float) program.width, (float) program.idealHeight / (float) program.height);
     glUniform1f(program.openGL.u_size.location, 0.001 * program.textSize);
@@ -82,7 +82,7 @@ int main(void)
     glUniform1i(program.openGL.u_maxWidth.location,  ((1.0 / (program.textSize * 0.001)) * ((float)program.width / (float)IDEAL_WIDTH)) - program.area->leftMargin);
 
     glUniform1i(program.openGL.u_tex.location, 0);
-    glUniform4f(program.openGL.u_foreground.location, 1.0, 1.0, 1.0, 1.0);
+    glUniform4f(program.openGL.u_foreground.location, program.foreground.r, program.foreground.g, program.foreground.b, program.foreground.a);
     glUniform1i(program.openGL.u_cursorRow.location, 1);
 
     double currentFrame = glfwGetTime();

@@ -113,7 +113,6 @@ Colour ParseColour(const std::vector<std::string> args, const std::string comman
 			else if (a < 0.0)
 				a = 0.0;
 
-
 			colour.a = a;
 		}
 

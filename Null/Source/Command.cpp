@@ -22,6 +22,9 @@ Colour::Colour()                                   : error(false), r(0), g(0), b
 Colour::Colour(float r, float g, float b)          : error(false), r(r), g(g), b(b), a(1) {}
 Colour::Colour(float r, float g, float b, float a) : error(false), r(r), g(g), b(b), a(a) {}
 
+Colour Colour::defaultBackground = Colour(0.03, 0.05, 0.09, 0.85);
+Colour Colour::defaultForeground = Colour(1.0, 1.0, 1.0);
+
 void Command::Execute(const std::string input)
 {
 	std::string cleanInput = Trim(input, " ");
@@ -117,7 +120,7 @@ void Command::TextSize(const std::vector<std::string> args)
 
 	if (sizeStr == "default")
 	{
-		program.textSize = 24;
+		program.textSize = Program::defaultTextSize;
 		UpdateUniform1f(program.openGL.u_size.location, program.textSize * 0.001);
 		UpdateMaxHeightWidth();
 		program.RenderStatus("SUCCESS: Text size set to 24");
@@ -188,7 +191,7 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 
 	if (speedStr == "default")
 	{
-		program.cursorSpeed = 50;
+		program.cursorSpeed = Program::defaultCursorSpeed;
 		program.RenderStatus("SUCCESS: Cursor Speed set to 50");
 		program.SaveSettingsFile();
 		return;
@@ -211,7 +214,14 @@ void Command::CursorSpeed(const std::vector<std::string> args)
 
 	try
 	{
-		unsigned int speed = std::stof(speedStr);
+		int speedInt = std::stof(speedStr);
+		if (speedInt <= 0)
+		{
+			program.RenderStatus("Invalid Argument: Argument must be a unsigned integer");
+			return;
+		}
+
+		unsigned int speed = (unsigned int)speedInt;
 		program.cursorSpeed = speed;
 		program.RenderStatus("SUCCESS: Cursor Speed set to " + FloatToString(program.cursorSpeed));
 		program.SaveSettingsFile();
@@ -244,7 +254,7 @@ void Command::BackgroundColour(const std::vector<std::string> args)
 	: sets the background colour to a css colour and the a channel to a
 	*/
 
-	Colour colour = ParseColour(args, "background", Colour(0.03, 0.05, 0.09, 0.85), program.background.a);
+	Colour colour = ParseColour(args, "background", Colour::defaultBackground, program.background.a);
 	program.background = colour;
 
 	if (!colour.error)
@@ -277,7 +287,7 @@ void Command::ForegroundColour(const std::vector<std::string> args)
 	: sets the foreground colour to a css colour and the a channel to a
 	*/
 
-	Colour colour = ParseColour(args, "foreground", Colour(1.0, 1.0, 1.0), program.foreground.a);
+	Colour colour = ParseColour(args, "foreground", Colour::defaultForeground, program.foreground.a);
 	program.foreground = colour;
 
 	if (!colour.error)

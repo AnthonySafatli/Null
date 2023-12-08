@@ -16,8 +16,6 @@ public:
 private:
 	Platform();
 
-	static std::string settingsFilePath;
-
 	static void HideConsoleWindows();
 	static void HideConsoleUnix();
 
@@ -26,6 +24,9 @@ private:
 	
 	static std::filesystem::path GetDocumentsFolderWindows();
 	static std::filesystem::path GetDocumentsFolderUnix();
+
+	static std::filesystem::path GetSettingsFolderWindows();
+	static std::filesystem::path GetSettingsFolderUnix();
 
 	static std::string LoadSettingsFileWindows();
 	static std::string LoadSettingsFileUnix();

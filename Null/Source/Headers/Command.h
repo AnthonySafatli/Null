@@ -57,4 +57,7 @@ struct Colour
 {
 	bool error; float r; float g; float b; float a;
 	Colour(); Colour(float r, float g, float b); Colour(float r, float g, float b, float a);
+
+	static Colour defaultBackground;
+	static Colour defaultForeground;
 };

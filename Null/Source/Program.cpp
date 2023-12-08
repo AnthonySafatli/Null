@@ -23,6 +23,9 @@
 #include "Headers/UndoObject.h"
 #include "Headers/Platform.h"
 
+float Program::defaultTextSize = 24;
+unsigned int Program::defaultCursorSpeed = 50;
+
 Program::Program(const int width, const int height, const float textSize, const int tabAmount)
 	: idealWidth(IDEAL_WIDTH), idealHeight(IDEAL_HEIGHT), 
 	  height(height), width(width), textSize(textSize), tabAmount(tabAmount), showCursor(false), cursorSpeed(50),
@@ -62,14 +65,160 @@ void Program::LoadSettingsFile()
 {
 	std::string settingsString = Platform::LoadSettingsFile();
 
-	// TODO: Get settings file and parse to get/set settings
+	std::vector<std::string> settings = Split(settingsString, '\n');
+
+	float textSize;
+	Colour background;
+	Colour foreground;
+	unsigned int cursorSpeed;
+
+
+	// Text Size
+	if (settings.size() < 1) 
+	{
+		SetDefaultSettings();
+		return;
+	}
+	else 
+	{
+		try 
+		{
+			textSize = std::stof(settings[0]);
+			if (textSize < 0)
+			{
+				SetDefaultSettings();
+				return;
+			}
+		}
+		catch (const std::exception& e) 
+		{
+			SetDefaultSettings();
+			return;
+		}
+	}
+
+	// Background
+	if (settings.size() < 5)
+	{
+		SetDefaultSettings();
+		return;
+	} 
+	else
+	{
+		try 
+		{
+			float r = std::stof(settings[1]);
+			float g = std::stof(settings[2]);
+			float b = std::stof(settings[3]);
+			float a = std::stof(settings[4]);
+
+			if (r < 0 || g < 0 || b < 0 || a < 0) 
+			{
+				SetDefaultSettings();
+				return;
+			}
+			else if (r > 1.0f || g > 1.0f || b > 1.0f || a > 1.0f)
+			{
+				SetDefaultSettings();
+				return;
+			}
+
+			background = Colour(r, g, b, a);
+		}
+		catch (const std::exception& e) 
+		{
+			SetDefaultSettings();
+			return;
+		}
+	}
+
+	// Foreground
+	if (settings.size() < 9)
+	{
+		SetDefaultSettings();
+		return;
+	}
+	else
+	{
+		try
+		{
+			float r = std::stof(settings[5]);
+			float g = std::stof(settings[6]);
+			float b = std::stof(settings[7]);
+			float a = std::stof(settings[8]);
+
+			if (r < 0 || g < 0 || b < 0 || a < 0)
+			{
+				SetDefaultSettings();
+				return;
+			}
+			else if (r > 1.0f || g > 1.0f || b > 1.0f || a > 1.0f)
+			{
+				SetDefaultSettings();
+				return;
+			}
+
+			foreground = Colour(r, g, b, a);
+		}
+		catch (const std::exception& e)
+		{
+			SetDefaultSettings();
+			return;
+		}
+	}
+
+	// Cursor Speed
+	if (settings.size() < 10)
+	{
+		SetDefaultSettings();
+		return;
+	}
+	else
+	{
+		try
+		{
+			cursorSpeed = std::stof(settings[9]);
+
+			if (cursorSpeed <= 0) 
+			{
+				SetDefaultSettings();
+				return;
+			}
+		}
+		catch (const std::exception& e)
+		{
+			SetDefaultSettings();
+			return;
+		}
+	}
+
+	this->textSize = textSize;
+	this->background = background;
+	this->foreground = foreground;
+	this->cursorSpeed = cursorSpeed;
 }
 
 void Program::SaveSettingsFile()
 {
-	bool success = Platform::SaveSettingsFile();
+	bool success = false;
+	for (int i = 0; i < 10; i++)
+	{
+		success = Platform::SaveSettingsFile();
+		if (success) break;
+	}
 
-	// TODO: Save settings to json and to file
+	if (!success)
+		RenderStatus("ERROR: Error occurred saving settings to disc");
+}
+
+void Program::SetDefaultSettings()
+{
+	this->textSize = defaultTextSize;
+	this->background = Colour::defaultBackground;
+	this->foreground = Colour::defaultForeground;
+	this->cursorSpeed = defaultCursorSpeed;
+
+	SaveSettingsFile();
 }
 
 void Program::GLInit()

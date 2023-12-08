@@ -1,6 +1,7 @@
 #include "Headers/Platform.h"
 
 #include <sstream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <Windows.h>
@@ -139,16 +140,32 @@ std::filesystem::path Platform::GetDocumentsFolderUnix()
 #endif
 }
 
-// TODO: Get settings file path
+std::filesystem::path Platform::GetSettingsFolderWindows()
+{
 #ifdef _WIN32
-std::string Platform::settingsFilePath = "C:/";
+	std::filesystem::path appDataPath;
+
+	TCHAR path[MAX_PATH];
+	if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, path)))
+	{
+		appDataPath = path;
+		return appDataPath.parent_path() / "Local" / "Null";
+	}
+	else
+		return std::filesystem::path();
 #else
-std::string Platform::settingsFilePath = "";
+	return std::filesystem::path();
 #endif
+}
+
+std::filesystem::path Platform::GetSettingsFolderUnix()
+{
+	return std::filesystem::path();
+}
 
 std::string Platform::LoadSettingsFileWindows()
 {
-	std::filesystem::path settingsPath(settingsFilePath);
+	std::filesystem::path settingsPath = GetSettingsFolderWindows() / "settings";
 	if (settingsPath.empty() || !std::filesystem::exists(settingsPath))
 		return std::string();
 
@@ -158,10 +175,16 @@ std::string Platform::LoadSettingsFileWindows()
 		return std::string();
 
 	std::string settings;
-	try {
-		file >> settings;
+	std::string settingsLine;
+	try 
+	{
+		while (file >> settingsLine) 
+		{
+			settings.append(settingsLine + "\n");
+		}
 	} 
-	catch (std::exception e) {
+	catch (std::exception e) 
+	{
 		return std::string();
 	}
 
@@ -184,22 +207,24 @@ bool Platform::SaveSettingsFileWindows()
 	settings << "\n" << program.foreground.r << "\n" << program.foreground.g << "\n" << program.foreground.b << "\n" << program.foreground.a;
 	settings << "\n" << program.cursorSpeed;
 
-	std::filesystem::path settingsPath(settingsFilePath);
+	std::filesystem::path settingsPath = GetSettingsFolderWindows();
 	if (!std::filesystem::exists(settingsPath))
 	{
-		if (!std::filesystem::create_directories(settingsPath.parent_path()))
+		if (!std::filesystem::create_directory(settingsPath))
 			return false;
 	}
 
-	std::ofstream file(settingsPath);
+	std::ofstream file(settingsPath / "settings");
 
 	if (!file.is_open() || !file.good() || file.bad()) 
 		return false;
 
-	try {
+	try 
+	{
 		file << settings.str();
 	}
-	catch (std::exception e) {
+	catch (const std::exception& e) 
+	{
 		return false;
 	}
 

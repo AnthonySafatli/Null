@@ -28,6 +28,7 @@ public:
 	/* Settings File */
 	void LoadSettingsFile();
 	void SaveSettingsFile();
+	void SetDefaultSettings();
 
 	/* OpenGL */
 	GLObject openGL;
@@ -110,9 +111,12 @@ public:
 
 	/* Settings */
 	float textSize;
+	static float defaultTextSize;
 	Colour background;
 	Colour foreground;
 	unsigned int cursorSpeed;
+	static unsigned int defaultCursorSpeed;
+
 
 	/* Window Properties */
 	int width;
