@@ -1,7 +1,15 @@
-# Null
+# Null Text Editor
 
-Simple Journal, Notepad and Text Editor with a unique command line style interface
+A simple journal, notepad, and text editor with a unique command-line style interface.
 
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+## Features
 
-This will be updated eventually btw
+- Aesthetic and minimal UI/UX
+- Virtual "notebook" with its own folder and file structure
+- Open any file on your PC
+- Customizable settings, including theme color changes
+- Extensive keyboard shortcut support
+
+## Build and Deployment
+
+This project uses the default MSBuild process.
